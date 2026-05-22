@@ -1,84 +1,70 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.41115</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{7D5C266F-D6FF-4D14-B315-0C0FC6C4EF51}</ProjectGuid>
     <AssemblyName>StartPage</AssemblyName>
-    <OutputTarget>Library</OutputTarget>
-    <WarningLevel>4</WarningLevel>
-    <NoStdLib>False</NoStdLib>
-    <NoConfig>False</NoConfig>
-    <RunPostBuildEvent>OnSuccessfulBuild</RunPostBuildEvent>
-    <OutputType>Library</OutputType>
     <RootNamespace>ICSharpCode.StartPage</RootNamespace>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>126877696</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <BaseAddress>126877696</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
-    <Optimize>False</Optimize>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\StartPage\</OutputPath>
     <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
     <DefineConstants>DEBUG</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <Optimize>True</Optimize>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <OutputPath>..\..\..\..\..\AddIns\Misc\StartPage\</OutputPath>
-    <DebugType>None</DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\StartPage\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="Src\RecentProjectsControl.xaml.cs">
-      <DependentUpon>RecentProjectsControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\RecentProjectsControl.xaml.cs" DependentUpon="RecentProjectsControl.xaml" />
     <Compile Include="Src\ShowStartPageCommand.cs" />
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
+    <Compile Include="Src\StartPageControl.xaml.cs" DependentUpon="StartPageControl.xaml" />
+    <Compile Include="Src\StartPageViewContent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\RecentProjectsControl.xaml" />
+    <Page Include="Src\StartPageControl.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="StartPage.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\balken_links.gif" />
     <Resource Include="Resources\balken_mitte.gif" />
     <Resource Include="Resources\balken_rechts.gif" />
-    <None Include="StartPage.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Src\StartPageControl.xaml.cs">
-      <DependentUpon>StartPageControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\StartPageViewContent.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.XML" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -95,9 +81,7 @@
       <Name>ICSharpCode.Core.Presentation</Name>
       <Private>False</Private>
     </ProjectReference>
-    <Folder Include="Resources" />
-    <Page Include="Src\RecentProjectsControl.xaml" />
-    <Page Include="Src\StartPageControl.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+
 </Project>

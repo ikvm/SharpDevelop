@@ -1,91 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.CodeCoverage</RootNamespace>
-    <AssemblyName>CodeCoverage</AssemblyName>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{08CE9972-283B-44F4-82FA-966F7DFA6B7A}</ProjectGuid>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>112197632</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
+    <AssemblyName>CodeCoverage</AssemblyName>
+    <RootNamespace>ICSharpCode.CodeCoverage</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <Prefer32Bit>False</Prefer32Bit>
+    <BaseAddress>112197632</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>..\..\..\..\..\AddIns\Analysis\CodeCoverage\</OutputPath>
-    <Optimize>False</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\..\..\AddIns\Analysis\CodeCoverage\</OutputPath>
-    <Optimize>True</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Analysis\CodeCoverage\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <Prefer32Bit>False</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsFormsIntegration">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Src\CodeCoverageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Src\CodeCoverageControl.cs" />
     <Compile Include="Src\CodeCoverageMethodElement.cs" />
-    <Compile Include="Src\CodeCoverageOptionsPanel.xaml.cs">
-      <DependentUpon>CodeCoverageOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\CodeCoverageProjectOptionsPanel.xaml.cs">
-      <DependentUpon>CodeCoverageProjectOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\CodeCoverageOptionsPanel.xaml.cs" DependentUpon="CodeCoverageOptionsPanel.xaml" />
+    <Compile Include="Src\CodeCoverageProjectOptionsPanel.xaml.cs" DependentUpon="CodeCoverageProjectOptionsPanel.xaml" />
     <Compile Include="Src\CodeCoveragePad.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\CodeCoverageModule.cs" />
@@ -100,9 +58,7 @@
     <Compile Include="Src\CodeCoverageTestRunner.cs" />
     <Compile Include="Src\CodeCoverageTestRunnerContext.cs" />
     <Compile Include="Src\CodeCoverageTestRunnerFactory.cs" />
-    <Compile Include="Src\CodeCoverageTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Src\CodeCoverageTreeView.cs" />
     <Compile Include="Src\CodeCoverageModuleTreeNode.cs" />
     <Compile Include="Src\CodeCoverageTreeNode.cs" />
     <Compile Include="Src\CodeCoverageMethodTreeNode.cs" />
@@ -124,20 +80,35 @@
     <Compile Include="Src\ColorPickerComboBox.cs" />
     <Compile Include="Src\CodeCoverageService.cs" />
     <Compile Include="Src\RunTestWithCodeCoverageCommand.cs" />
-    <None Include="CodeCoverage.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Compile Include="Src\CodeCoverageImageList.cs" />
     <Compile Include="Src\GrayScaleBitmap.cs" />
     <Compile Include="Src\CodeCoverageMethodsTreeNode.cs" />
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Src\ShowVisitCountCommand.cs" />
     <Compile Include="Src\ShowSourceCodeCommand.cs" />
     <Compile Include="Src\ShowDisplayOptionsDropDown.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\CodeCoverageOptionsPanel.xaml" />
+    <Page Include="Src\CodeCoverageProjectOptionsPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="CodeCoverage.addin" CopyToOutputDirectory="Always" />
     <None Include="packages.config" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -170,9 +141,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\CodeCoverageOptionsPanel.xaml" />
-    <Page Include="Src\CodeCoverageProjectOptionsPanel.xaml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
 </Project>

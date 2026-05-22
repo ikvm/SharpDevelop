@@ -1,44 +1,72 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{8AA421C8-D7AF-4957-9F43-5135328ACB24}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.ILSpyAddIn</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{8AA421C8-D7AF-4957-9F43-5135328ACB24}</ProjectGuid>
     <AssemblyName>ILSpyAddIn</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <OutputPath>..\..\..\..\AddIns\DisplayBindings\Decompiler\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.ILSpyAddIn</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\DisplayBindings\Decompiler\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\DisplayBindings\Decompiler\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs" Link="Properties\GlobalAssemblyInfo.cs" />
+    <Compile Include="DebuggerTextOutput.cs" />
+    <Compile Include="DecompiledViewContent.cs" />
+    <Compile Include="ILSpyDecompilerService.cs" />
+    <Compile Include="ILSpyDisplayBinding.cs" />
+    <Compile Include="ILSpyFullParseInformation.cs" />
+    <Compile Include="ILSpyParser.cs" />
+    <Compile Include="ILSpySymbolSource.cs" />
+    <Compile Include="ILSpyUnresolvedFile.cs" />
+    <Compile Include="NavigateToDecompiledEntityService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LaunchILSpy\ILSpyController.cs" />
+    <Compile Include="LaunchILSpy\SetILSpyPathDialog.cs" />
+    <Compile Include="LaunchILSpy\SetILSpyPathDialog.Designer.cs" DependentUpon="SetILSpyPathDialog.cs" />
+    <Compile Include="LaunchILSpy\OpenInILSpyCommand.cs" />
+    <Compile Include="XmlDocKeyProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LaunchILSpy\SetILSpyPathDialog.resx" DependentUpon="SetILSpyPathDialog.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ILSpyAddIn.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -56,60 +84,11 @@
     <Reference Include="ICSharpCode.NRefactory.CSharp">
       <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil">
       <HintPath>..\..\..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="DebuggerTextOutput.cs" />
-    <Compile Include="DecompiledViewContent.cs" />
-    <Compile Include="ILSpyDecompilerService.cs" />
-    <Compile Include="ILSpyDisplayBinding.cs" />
-    <Compile Include="ILSpyFullParseInformation.cs" />
-    <Compile Include="ILSpyParser.cs" />
-    <Compile Include="ILSpySymbolSource.cs" />
-    <Compile Include="ILSpyUnresolvedFile.cs" />
-    <Compile Include="NavigateToDecompiledEntityService.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LaunchILSpy\ILSpyController.cs" />
-    <Compile Include="LaunchILSpy\SetILSpyPathDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LaunchILSpy\SetILSpyPathDialog.Designer.cs">
-      <DependentUpon>SetILSpyPathDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LaunchILSpy\OpenInILSpyCommand.cs" />
-    <Compile Include="XmlDocKeyProvider.cs" />
-    <EmbeddedResource Include="LaunchILSpy\SetILSpyPathDialog.resx">
-      <DependentUpon>SetILSpyPathDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="ILSpyAddIn.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -132,5 +111,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+
 </Project>

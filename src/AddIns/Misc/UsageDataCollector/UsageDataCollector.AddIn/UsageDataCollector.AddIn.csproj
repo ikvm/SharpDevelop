@@ -1,87 +1,71 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{0008FCE9-9EB4-4E2E-979B-553278E5BBA6}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.UsageDataCollector</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{0008FCE9-9EB4-4E2E-979B-553278E5BBA6}</ProjectGuid>
     <AssemblyName>UsageDataCollector.AddIn</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\UsageDataCollector\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.UsageDataCollector</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
     <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\UsageDataCollector\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\UsageDataCollector\</OutputPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AnalyticsMonitor.AppProperties.cs">
-      <DependentUpon>AnalyticsMonitor.AppProperties.template</DependentUpon>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
+    <Compile Include="AnalyticsMonitor.AppProperties.cs" DependentUpon="AnalyticsMonitor.AppProperties.template" />
     <Compile Include="AnalyticsMonitor.cs" />
     <Compile Include="CollectedDataView.xaml.cs" />
     <Compile Include="OptionPage.xaml.cs" />
     <Compile Include="StartPageMessage.xaml.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Page Include="CollectedDataView.xaml" />
     <Page Include="OptionPage.xaml" />
     <Page Include="StartPageMessage.xaml" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="AnalyticsMonitor.AppProperties.template" />
     <None Include="packages.config" />
-    <None Include="UsageDataCollector.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="UsageDataCollector.addin" CopyToOutputDirectory="Always" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -109,5 +93,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
 </Project>

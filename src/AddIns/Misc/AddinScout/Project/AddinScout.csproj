@@ -1,73 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50215</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4B8F0F98-8BE1-402B-AA8B-C8D548577B38}</ProjectGuid>
-    <RootNamespace>AddInScout</RootNamespace>
-    <AssemblyName>AddinScout</AssemblyName>
-    <OutputTarget>Library</OutputTarget>
-    <WarningLevel>4</WarningLevel>
-    <NoStdLib>False</NoStdLib>
-    <NoConfig>False</NoConfig>
-    <RunPostBuildEvent>OnSuccessfulBuild</RunPostBuildEvent>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{4B8F0F98-8BE1-402B-AA8B-C8D548577B38}</ProjectGuid>
+    <AssemblyName>AddinScout</AssemblyName>
+    <RootNamespace>AddInScout</RootNamespace>
+    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>111673344</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <BaseAddress>111673344</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <DefineConstants>DEBUG</DefineConstants>
     <OutputPath>..\..\..\..\..\AddIns\Misc\AddinScout\</OutputPath>
-    <DebugType>Full</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <Optimize>True</Optimize>
     <OutputPath>..\..\..\..\..\AddIns\Misc\AddinScout\</OutputPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Src\Gui\AddInDetailsPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Src\Gui\AddinTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Src\Gui\CodonListPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Src\Gui\TreeTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Src\Gui\AddInDetailsPanel.cs" />
+    <Compile Include="Src\Gui\AddinTreeView.cs" />
+    <Compile Include="Src\Gui\CodonListPanel.cs" />
+    <Compile Include="Src\Gui\TreeTreeView.cs" />
     <Compile Include="Src\AddInScoutCommand.cs" />
     <Compile Include="Src\AddInScoutViewContent.cs" />
     <Compile Include="Src\AssemblyInfo.cs" />
-    <None Include="AddInScout.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Src\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Src\GlobalAssemblyInfo.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AddInScout.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Core\Project\ICSharpCode.Core.csproj">
       <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
@@ -81,4 +60,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+
 </Project>

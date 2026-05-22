@@ -1,43 +1,77 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{9196DD8A-B4D4-4780-8742-C5762E547FC2}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>SearchAndReplace</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{9196DD8A-B4D4-4780-8742-C5762E547FC2}</ProjectGuid>
     <AssemblyName>SearchAndReplace</AssemblyName>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\SearchAndReplace\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>SearchAndReplace</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\SearchAndReplace\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\SearchAndReplace\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
+    <Compile Include="Commands\SearchMainMenuCommands.cs" />
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="Engine\Enums.cs" />
+    <Compile Include="Engine\SearchLocation.cs" />
+    <Compile Include="Engine\SearchManager.cs" />
+    <Compile Include="Gui\DefaultSearchResult.cs" />
+    <Compile Include="Gui\ObserverSearchResult.cs" />
+    <Compile Include="Gui\ResultsTreeView.cs" DependentUpon="ResultsTreeView.xaml" />
+    <Compile Include="Gui\SearchAndReplaceDialog.cs" />
+    <Compile Include="Gui\SearchAndReplacePanel.cs" />
+    <Compile Include="Gui\SearchFileNode.cs" />
+    <Compile Include="Gui\SearchNode.cs" />
+    <Compile Include="Gui\SearchResultNode.cs" />
+    <Compile Include="Gui\SearchRootNode.cs" />
+    <Compile Include="SearchOptions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Gui\ResultsTreeView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FindPanel.xfrm" />
+    <EmbeddedResource Include="Resources\ReplacePanel.xfrm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="SearchAndReplace.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -46,58 +80,8 @@
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\FindPanel.xfrm" />
-    <EmbeddedResource Include="Resources\ReplacePanel.xfrm" />
-    <None Include="packages.config" />
-    <None Include="SearchAndReplace.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Commands\SearchMainMenuCommands.cs" />
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="Engine\Enums.cs" />
-    <Compile Include="Engine\SearchLocation.cs" />
-    <Compile Include="Engine\SearchManager.cs" />
-    <Compile Include="Gui\DefaultSearchResult.cs" />
-    <Compile Include="Gui\ObserverSearchResult.cs" />
-    <Compile Include="Gui\ResultsTreeView.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>ResultsTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Gui\SearchAndReplaceDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\SearchAndReplacePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Gui\SearchFileNode.cs" />
-    <Compile Include="Gui\SearchNode.cs" />
-    <Compile Include="Gui\SearchResultNode.cs" />
-    <Compile Include="Gui\SearchRootNode.cs" />
-    <Compile Include="SearchOptions.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -119,12 +103,11 @@
       <Name>ICSharpCode.Core.WinForms</Name>
       <Private>False</Private>
     </ProjectReference>
-    <Page Include="Gui\ResultsTreeView.xaml">
-    </Page>
     <ProjectReference Include="..\..\..\..\Main\ICSharpCode.SharpDevelop.Widgets\Project\ICSharpCode.SharpDevelop.Widgets.csproj">
       <Project>{8035765F-D51F-4A0C-A746-2FD100E19419}</Project>
       <Name>ICSharpCode.SharpDevelop.Widgets</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+
 </Project>

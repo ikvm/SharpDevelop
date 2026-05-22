@@ -1,83 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50215</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{7D7E92DF-ACEB-4B69-92C8-8AC7A703CD57}</ProjectGuid>
     <AssemblyName>FormsDesigner</AssemblyName>
-    <OutputTarget>Library</OutputTarget>
-    <WarningLevel>4</WarningLevel>
-    <NoStdLib>False</NoStdLib>
-    <NoConfig>False</NoConfig>
-    <RunPostBuildEvent>OnSuccessfulBuild</RunPostBuildEvent>
-    <OutputType>Library</OutputType>
     <RootNamespace>ICSharpCode.FormsDesigner</RootNamespace>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\FormsDesigner\</OutputPath>
-    <BaseAddress>108003328</BaseAddress>
-    <FileAlignment>4096</FileAlignment>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\..\Main\ICSharpCode.SharpDevelop.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>False</DelaySign>
-    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <BaseAddress>108003328</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\FormsDesigner\</OutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DebugType>None</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\FormsDesigner\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG</DefineConstants>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.XML" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsFormsIntegration">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\AddSidebarComponentsDialog.xfrm" />
-    <EmbeddedResource Include="Resources\ConfigureSidebarDialog.xfrm" />
-    <EmbeddedResource Include="Resources\RenameSidebarCategoryDialog.xfrm" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\Commands\FormsCommands.cs" />
     <Compile Include="Src\Commands\SideBarCommands.cs" />
@@ -89,34 +51,17 @@
     <Compile Include="Src\DesignerLoader\NRefactoryDesignerLoader.cs" />
     <Compile Include="Src\DesignerSourceCodeStorage.cs" />
     <Compile Include="Src\Gui\ImageResourceEditorDialog.cs" />
-    <Compile Include="Src\Gui\ImageResourceEditorDialog.Designer.cs">
-      <DependentUpon>ImageResourceEditorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Src\Gui\OptionPanels\GeneralOptionsPanel.xaml.cs">
-      <DependentUpon>GeneralOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Gui\OptionPanels\GridOptionsPanel.xaml.cs">
-      <DependentUpon>GridOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Gui\OptionPanels\LocalizationModelOptionsPanel.xaml.cs">
-      <DependentUpon>LocalizationModelOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Gui\ImageResourceEditorDialog.Designer.cs" DependentUpon="ImageResourceEditorDialog.cs" />
+    <Compile Include="Src\Gui\OptionPanels\GeneralOptionsPanel.xaml.cs" DependentUpon="GeneralOptionsPanel.xaml" />
+    <Compile Include="Src\Gui\OptionPanels\GridOptionsPanel.xaml.cs" DependentUpon="GridOptionsPanel.xaml" />
+    <Compile Include="Src\Gui\OptionPanels\LocalizationModelOptionsPanel.xaml.cs" DependentUpon="LocalizationModelOptionsPanel.xaml" />
     <Compile Include="Src\DesignerViewContent.cs" />
     <Compile Include="Src\FormKeyHandler.cs" />
-    <Compile Include="Src\Gui\AddComponentsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Src\Gui\AddComponentsDialog.cs" />
     <Compile Include="Src\Gui\ComponentLibraryLoader.cs" />
-    <Compile Include="Src\Gui\ConfigureSideBarDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Src\Gui\ConfigureSideBarDialog.cs" />
     <Compile Include="Src\Gui\CustomComponentsSideTab.cs" />
-    <Compile Include="Src\Gui\RenameCategoryDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Src\Gui\RenameCategoryDialog.cs" />
     <Compile Include="Src\Gui\SideTabDesigner.cs" />
     <Compile Include="Src\Gui\SideTabItemDesigner.cs" />
     <Compile Include="Src\Services\DefaultMemberRelationshipService.cs" />
@@ -138,24 +83,50 @@
     <Compile Include="Src\Services\UIService.cs" />
     <Compile Include="Src\Services\XmlDesignerNameCreationService.cs" />
     <Compile Include="Src\ToolboxProvider.cs" />
-    <None Include="FormsDesigner.addin">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <Compile Include="Src\DesignerGenerator\VBNetDesignerGenerator.cs" />
     <Compile Include="Src\DesignerLoader\DesignerLoaderProvider.cs" />
     <Compile Include="Src\DesignerLoader\FormsDesignerLoadException.cs" />
     <Compile Include="Src\DesignerGenerator\AbstractDesignerGenerator.cs" />
     <Compile Include="Src\Services\TypeDiscoveryService.cs" />
     <Compile Include="Src\UndoRedo\UndoEngine.cs" />
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <EmbeddedResource Include="Src\Gui\ImageResourceEditorDialog.resx">
-      <DependentUpon>ImageResourceEditorDialog.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Src\Services\DesignerSerializationService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\Gui\OptionPanels\GeneralOptionsPanel.xaml" />
+    <Page Include="Src\Gui\OptionPanels\GridOptionsPanel.xaml" />
+    <Page Include="Src\Gui\OptionPanels\LocalizationModelOptionsPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AddSidebarComponentsDialog.xfrm" />
+    <EmbeddedResource Include="Resources\ConfigureSidebarDialog.xfrm" />
+    <EmbeddedResource Include="Resources\RenameSidebarCategoryDialog.xfrm" />
+    <EmbeddedResource Include="Src\Gui\ImageResourceEditorDialog.resx" DependentUpon="ImageResourceEditorDialog.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="PostBuildEvent.proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FormsDesigner.addin" CopyToOutputDirectory="Never" />
     <None Include="packages.config" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -167,7 +138,6 @@
       <Name>ICSharpCode.Core</Name>
       <Private>False</Private>
     </ProjectReference>
-    <Content Include="PostBuildEvent.proj" />
     <ProjectReference Include="..\..\..\..\Main\ICSharpCode.Core.Presentation\ICSharpCode.Core.Presentation.csproj">
       <Project>{7E4A7172-7FF5-48D0-B719-7CD959DD1AC9}</Project>
       <Name>ICSharpCode.Core.Presentation</Name>
@@ -184,11 +154,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\Gui\OptionPanels\GeneralOptionsPanel.xaml" />
-    <Page Include="Src\Gui\OptionPanels\GridOptionsPanel.xaml" />
-    <Page Include="Src\Gui\OptionPanels\LocalizationModelOptionsPanel.xaml" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <Import Project="PostBuildEvent.proj" />
+
 </Project>

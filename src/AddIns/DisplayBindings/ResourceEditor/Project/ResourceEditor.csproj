@@ -1,63 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50215</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{CBC6C247-747B-4908-B09A-4D2E0F640B6B}</ProjectGuid>
     <AssemblyName>ResourceEditor</AssemblyName>
-    <OutputTarget>Library</OutputTarget>
-    <NoStdLib>False</NoStdLib>
-    <NoConfig>False</NoConfig>
-    <OutputType>Library</OutputType>
-    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
     <RootNamespace>ResourceEditor</RootNamespace>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>109576192</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <BaseAddress>109576192</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
+    <DefineConstants>DEBUG</DefineConstants>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\ResourceEditor\</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <DebugType>Full</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\ResourceEditor\</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\BitmapExtensions.cs" />
@@ -72,45 +50,40 @@
     <Compile Include="Src\ResourceEditorDisplayBinding.cs" />
     <Compile Include="Src\ViewModels\ResourceEditorViewModel.cs" />
     <Compile Include="Src\ViewModels\ResourceItem.cs" />
-    <Compile Include="Src\Views\BinaryView.xaml.cs">
-      <DependentUpon>BinaryView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Views\BooleanView.xaml.cs">
-      <DependentUpon>BooleanView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Views\ImageViewBase.xaml.cs">
-      <DependentUpon>ImageViewBase.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Views\InPlaceEditLabel.xaml.cs">
-      <DependentUpon>InPlaceEditLabel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Views\BinaryView.xaml.cs" DependentUpon="BinaryView.xaml" />
+    <Compile Include="Src\Views\BooleanView.xaml.cs" DependentUpon="BooleanView.xaml" />
+    <Compile Include="Src\Views\ImageViewBase.xaml.cs" DependentUpon="ImageViewBase.xaml" />
+    <Compile Include="Src\Views\InPlaceEditLabel.xaml.cs" DependentUpon="InPlaceEditLabel.xaml" />
     <Compile Include="Src\Views\IResourceEditorView.cs" />
     <Compile Include="Src\Views\IResourceItemView.cs" />
-    <Compile Include="Src\Views\ResourceEditorView.xaml.cs">
-      <DependentUpon>ResourceEditorView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Views\ResourceEditorView.xaml.cs" DependentUpon="ResourceEditorView.xaml" />
     <Compile Include="Src\Views\ResourceItemIcons.cs" />
-    <Compile Include="Src\Views\RichTextBlock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\Views\TextView.xaml.cs">
-      <DependentUpon>TextView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <None Include="packages.config" />
-    <None Include="ResourceEditor.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="Src\Views\RichTextBlock.cs" />
+    <Compile Include="Src\Views\TextView.xaml.cs" DependentUpon="TextView.xaml" />
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Src\ResourceCodeGeneratorTool.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\Views\BinaryView.xaml" />
+    <Page Include="Src\Views\BooleanView.xaml" />
+    <Page Include="Src\Views\ImageViewBase.xaml" />
+    <Page Include="Src\Views\InPlaceEditLabel.xaml" />
+    <Page Include="Src\Views\ResourceEditorView.xaml" />
+    <Page Include="Src\Views\TextView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="ResourceEditor.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -137,17 +110,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Src\ViewModels" />
-    <Folder Include="Src\Views" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\Views\BinaryView.xaml" />
-    <Page Include="Src\Views\BooleanView.xaml" />
-    <Page Include="Src\Views\ImageViewBase.xaml" />
-    <Page Include="Src\Views\InPlaceEditLabel.xaml" />
-    <Page Include="Src\Views\ResourceEditorView.xaml" />
-    <Page Include="Src\Views\TextView.xaml" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+
 </Project>

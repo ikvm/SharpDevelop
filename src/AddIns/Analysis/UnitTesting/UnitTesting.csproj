@@ -1,59 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.UnitTesting</RootNamespace>
-    <AssemblyName>UnitTesting</AssemblyName>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{1F261725-6318-4434-A1B1-6C70CE4CD324}</ProjectGuid>
-    <OutputPath>..\..\..\..\AddIns\Analysis\UnitTesting\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>127401984</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
+    <AssemblyName>UnitTesting</AssemblyName>
+    <RootNamespace>ICSharpCode.UnitTesting</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <BaseAddress>127401984</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Optimize>False</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\Analysis\UnitTesting\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>True</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\Analysis\UnitTesting\</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Commands\PadCommands.cs" />
     <Compile Include="Commands\RunningTestsCondition.cs" />
@@ -104,24 +87,35 @@
     <Compile Include="NUnit\NUnitTestFramework.cs" />
     <Compile Include="NUnit\NUnitTestResult.cs" />
     <Compile Include="Options\UnitTestingOptions.cs" />
-    <Compile Include="Options\UnitTestingOptionsPanel.xaml.cs">
-      <DependentUpon>UnitTestingOptionsPanel.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Options\UnitTestingOptionsPanel.xaml.cs" DependentUpon="UnitTestingOptionsPanel.xaml" />
     <Compile Include="Resources\Images.cs" />
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Options\UnitTestingOptionsPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="packages.config" />
     <None Include="PostBuildEvent.proj" />
-    <None Include="UnitTesting.addin">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <None Include="UnitTesting.addin" CopyToOutputDirectory="Never" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Red.png" />
     <Resource Include="Resources\Green.png" />
     <Resource Include="Resources\Yellow.png" />
     <Resource Include="Resources\Grey.png" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\SharpTreeView\ICSharpCode.TreeView\ICSharpCode.TreeView.csproj">
       <Project>{DDE2A481-8271-4EAC-A330-8FA6A38D13D1}</Project>
@@ -149,19 +143,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands" />
-    <Folder Include="Service" />
-    <Folder Include="Pad" />
-    <Folder Include="Interfaces" />
-    <Folder Include="Model" />
-    <Folder Include="Options" />
-    <Folder Include="NUnit" />
-    <Folder Include="TestRunner" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Options\UnitTestingOptionsPanel.xaml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <Import Project="PostBuildEvent.proj" />
+
 </Project>

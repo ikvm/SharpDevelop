@@ -1,97 +1,46 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{AE4AB0FA-6087-4480-AF37-0FA1452B3DA1}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.PackageManagement</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{AE4AB0FA-6087-4480-AF37-0FA1452B3DA1}</ProjectGuid>
     <AssemblyName>PackageManagement</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.PackageManagement</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\PackageManagement\</OutputPath>
-    <TargetFrameworkProfile />
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
     <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\PackageManagement\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\PackageManagement\</OutputPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory.CSharp">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Web.XmlTransform, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Web.Xdt.3.1.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Console.Types">
-      <HintPath>..\..\..\..\Libraries\NuGet\NuGet.Console.Types.dll</HintPath>
-    </Reference>
-    <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration" />
-    <Folder Include="Scripts" />
-    <Folder Include="Resources" />
-    <Folder Include="Src" />
-    <Folder Include="Src\Design" />
-    <Folder Include="Src\EnvDTE" />
-    <Folder Include="Src\VisualStudio" />
-    <Folder Include="Src\Scripting" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\AcceptLicensesEventArgs.cs" />
     <Compile Include="Src\ConfigSettingsFileSystem.cs" />
@@ -158,10 +107,7 @@
     <Compile Include="Src\EnvDTE\TextPoint.cs" />
     <Compile Include="Src\EnvDTE\Window.cs" />
     <Compile Include="Src\FileConflictResolver.cs" />
-    <Compile Include="Src\FileConflictView.xaml.cs">
-      <DependentUpon>FileConflictView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\FileConflictView.xaml.cs" DependentUpon="FileConflictView.xaml" />
     <Compile Include="Src\FileConflictViewModel.cs" />
     <Compile Include="Src\ICodeGenerator.cs" />
     <Compile Include="Src\IDocumentView.cs" />
@@ -312,10 +258,7 @@
     <Compile Include="Src\ProjectBrowserUpdater.cs" />
     <Compile Include="Src\ProjectTemplatePackagesSettingsFileName.cs" />
     <Compile Include="Src\RegisteredPackageRepositories.cs" />
-    <Compile Include="Src\ManagePackagesView.cs">
-      <DependentUpon>ManagePackagesView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\ManagePackagesView.cs" DependentUpon="ManagePackagesView.xaml" />
     <Compile Include="Src\ManagePackagesViewModel.cs" />
     <Compile Include="Src\AvailablePackagesViewModel.cs" />
     <Compile Include="Src\BooleanToFontWeightConverter.cs" />
@@ -354,10 +297,7 @@
     <Compile Include="Src\MachinePackageCache.cs" />
     <Compile Include="Src\PackageManagementCompilerMessageView.cs" />
     <Compile Include="Src\PackageManagementMessageViewCategory.cs" />
-    <Compile Include="Src\PackageManagementOptionsView.xaml.cs">
-      <DependentUpon>PackageManagementOptionsView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\PackageManagementOptionsView.xaml.cs" DependentUpon="PackageManagementOptionsView.xaml" />
     <Compile Include="Src\PackageManagementOptionsViewModel.cs" />
     <Compile Include="Src\PackageManagementOutputMessagesView.cs" />
     <Compile Include="Src\PackageOperationsResolverFactory.cs" />
@@ -376,10 +316,7 @@
     <Compile Include="Src\ITask.cs" />
     <Compile Include="Src\ITaskFactory.cs" />
     <Compile Include="Src\LicenseAcceptanceService.cs" />
-    <Compile Include="Src\LicenseAcceptanceView.xaml.cs">
-      <DependentUpon>LicenseAcceptanceView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\LicenseAcceptanceView.xaml.cs" DependentUpon="LicenseAcceptanceView.xaml" />
     <Compile Include="Src\LicenseAcceptanceViewModel.cs" />
     <Compile Include="Src\ListBoxBehaviour.cs" />
     <Compile Include="Src\OpenHyperlinkCommand.cs" />
@@ -387,14 +324,8 @@
     <Compile Include="Src\PackageManagementOptions.cs" />
     <Compile Include="Src\Process.cs" />
     <Compile Include="Src\RegisteredPackageSourceSettings.cs" />
-    <Compile Include="Src\RegisteredPackageSourcesUserControl.xaml.cs">
-      <DependentUpon>RegisteredPackageSourcesUserControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\RegisteredPackageSourcesView.xaml.cs">
-      <DependentUpon>RegisteredPackageSourcesView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\RegisteredPackageSourcesUserControl.xaml.cs" DependentUpon="RegisteredPackageSourcesUserControl.xaml" />
+    <Compile Include="Src\RegisteredPackageSourcesView.xaml.cs" DependentUpon="RegisteredPackageSourcesView.xaml" />
     <Compile Include="Src\RegisteredPackageSourcesViewModel.cs" />
     <Compile Include="Src\PackageManagementProjectService.cs" />
     <Compile Include="Src\PackageManagementEnumerableExtensions.cs" />
@@ -417,19 +348,13 @@
     <Compile Include="Src\SelectedProjectsForUpdatedPackages.cs" />
     <Compile Include="Src\SelectProjectsEventArgs.cs" />
     <Compile Include="Src\SelectProjectsService.cs" />
-    <Compile Include="Src\SelectProjectsView.xaml.cs">
-      <DependentUpon>SelectProjectsView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\SelectProjectsView.xaml.cs" DependentUpon="SelectProjectsView.xaml" />
     <Compile Include="Src\SelectProjectsViewModel.cs" />
     <Compile Include="Src\SolutionPackageRepositoryFactory.cs" />
     <Compile Include="Src\SolutionPackageRepositoryPath.cs" />
     <Compile Include="Src\PackageSourceConverter.cs" />
     <Compile Include="Src\PackageSourceViewModel.cs" />
-    <Compile Include="Src\PackagesView.xaml.cs">
-      <DependentUpon>PackagesView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\PackagesView.xaml.cs" DependentUpon="PackagesView.xaml" />
     <Compile Include="Src\PackagesViewModel.cs" />
     <Compile Include="Src\ProcessPackageAction.cs" />
     <Compile Include="Src\Scripting\ClearPackageManagementConsoleHostCommand.cs" />
@@ -465,10 +390,7 @@
     <Compile Include="Src\PackageViewModel.cs" />
     <Compile Include="Src\PackageViewModelFactory.cs" />
     <Compile Include="Src\Page.cs" />
-    <Compile Include="Src\PagedResultsView.xaml.cs">
-      <DependentUpon>PagedResultsView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\PagedResultsView.xaml.cs" DependentUpon="PagedResultsView.xaml" />
     <Compile Include="Src\Pages.cs" />
     <Compile Include="Src\ProjectTargetFramework.cs" />
     <Compile Include="Src\RecentPackageInfo.cs" />
@@ -482,10 +404,7 @@
     <Compile Include="Src\Scripting\PackageManagementConsole.cs" />
     <Compile Include="Src\Scripting\PackageManagementConsoleHost.cs" />
     <Compile Include="Src\Scripting\PackageManagementConsolePad.cs" />
-    <Compile Include="Src\Scripting\PackageManagementConsoleView.xaml.cs">
-      <DependentUpon>PackageManagementConsoleView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Scripting\PackageManagementConsoleView.xaml.cs" DependentUpon="PackageManagementConsoleView.xaml" />
     <Compile Include="Src\Scripting\PackageManagementConsoleViewModel.cs" />
     <Compile Include="Src\Scripting\PackageManagementThread.cs" />
     <Compile Include="Src\SelectedListBoxItemScrollingBehaviour.cs" />
@@ -523,6 +442,7 @@
     <Compile Include="Src\VisualStudio\VsPackageMetadata.cs" />
     <Compile Include="Src\VisualStudio\VsSolution.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Page Include="Src\FileConflictView.xaml" />
     <Page Include="Src\ManagePackagesView.xaml" />
@@ -535,6 +455,52 @@
     <Page Include="Src\Scripting\PackageManagementConsoleView.xaml" />
     <Page Include="Src\SelectProjectsView.xaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Libraries\NuGet\about_NuGet.Cmdlets.help.txt" CopyToOutputDirectory="Always" Link="about_NuGet.Cmdlets.help.txt" />
+    <None Include="..\..\..\..\Libraries\NuGet\LICENSE.txt" CopyToOutputDirectory="Always" Link="NuGet-LICENSE.txt" />
+    <None Include="..\..\..\..\Libraries\NuGet\NuGet.Cmdlets.dll-Help.xml" CopyToOutputDirectory="Always" Link="PackageManagement.Cmdlets.dll-Help.xml" />
+    <None Include="PackageManagement.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+    <None Include="Scripts\Package.Format.ps1xml" CopyToOutputDirectory="Always" />
+    <None Include="Resources\license.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\packageicon.png" />
+    <Resource Include="Resources\magnifier.png" />
+    <Resource Include="Resources\resultset_next.png" />
+    <Resource Include="Resources\resultset_previous.png" />
+    <Resource Include="Resources\accept.png" />
+    <Resource Include="Resources\exclamation.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory.CSharp">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Web.XmlTransform, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Web.Xdt.3.1.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NuGet.Console.Types">
+      <HintPath>..\..\..\..\Libraries\NuGet\NuGet.Console.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -571,34 +537,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Libraries\NuGet\about_NuGet.Cmdlets.help.txt">
-      <Link>about_NuGet.Cmdlets.help.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\..\Libraries\NuGet\LICENSE.txt">
-      <Link>NuGet-LICENSE.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\..\Libraries\NuGet\NuGet.Cmdlets.dll-Help.xml">
-      <Link>PackageManagement.Cmdlets.dll-Help.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="PackageManagement.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Scripts\Package.Format.ps1xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Resource Include="Resources\packageicon.png" />
-    <Resource Include="Resources\magnifier.png" />
-    <Resource Include="Resources\resultset_next.png" />
-    <Resource Include="Resources\resultset_previous.png" />
-    <Resource Include="Resources\accept.png" />
-    <Resource Include="Resources\exclamation.png" />
-    <None Include="Resources\license.txt" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <Import Project="PostBuildEvent.proj" />
+
 </Project>

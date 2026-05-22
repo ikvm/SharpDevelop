@@ -1,97 +1,46 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{60480C2F-F228-4D86-B98F-AF75A7DCEC34}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.AddInManager2</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{60480C2F-F228-4D86-B98F-AF75A7DCEC34}</ProjectGuid>
     <AssemblyName>ICSharpCode.AddInManager2</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>ICSharpCode.AddInManager2</RootNamespace>
     <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <FileAlignment>4096</FileAlignment>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\WheizWork\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
-    <TargetFrameworkProfile />
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\AddInManager2\</OutputPath>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <StartAction>Project</StartAction>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\AddInManager2\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
-    <StartAction>Project</StartAction>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\AddInManager2\</OutputPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Web.Xdt.3.1.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="AddInManager2.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Resource Include="Resources\packageicon_small.png" />
-    <Resource Include="Resources\sd_packageicon.png" />
-    <Resource Include="Resources\accept.png" />
-    <Resource Include="Resources\exclamation.png" />
-    <Resource Include="Resources\external_addin_small.png" />
-    <None Include="packages.config" />
-    <None Include="Resources\license.txt" />
-    <Resource Include="Resources\magnifier.png" />
-    <Resource Include="Resources\packageicon.png" />
-    <Resource Include="Resources\resultset_next.png" />
-    <Resource Include="Resources\resultset_previous.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\AddInManagerServices.cs" />
     <Compile Include="Src\AddInManagerTask.cs" />
@@ -140,28 +89,55 @@
     <Compile Include="Src\ViewModel\PackageOptionsViewModel.cs" />
     <Compile Include="Src\ViewModel\PackageRepositoriesViewModel.cs" />
     <Compile Include="Src\ViewModel\UpdatedAddInsViewModel.cs" />
-    <Compile Include="Src\View\AddInManagerView.xaml.cs">
-      <DependentUpon>AddInManagerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\View\AddInsView.xaml.cs">
-      <DependentUpon>AddInsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\View\LicenseAcceptanceView.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>LicenseAcceptanceView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\View\PackageOptionsView.xaml.cs">
-      <DependentUpon>PackageOptionsView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\View\PagedResultsView.xaml.cs">
-      <DependentUpon>PagedResultsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\View\PackageRepositoriesView.xaml.cs">
-      <DependentUpon>PackageRepositoriesView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\View\AddInManagerView.xaml.cs" DependentUpon="AddInManagerView.xaml" />
+    <Compile Include="Src\View\AddInsView.xaml.cs" DependentUpon="AddInsView.xaml" />
+    <Compile Include="Src\View\LicenseAcceptanceView.xaml.cs" DependentUpon="LicenseAcceptanceView.xaml" />
+    <Compile Include="Src\View\PackageOptionsView.xaml.cs" DependentUpon="PackageOptionsView.xaml" />
+    <Compile Include="Src\View\PagedResultsView.xaml.cs" DependentUpon="PagedResultsView.xaml" />
+    <Compile Include="Src\View\PackageRepositoriesView.xaml.cs" DependentUpon="PackageRepositoriesView.xaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\View\AddInManagerView.xaml" />
+    <Page Include="Src\View\AddInsView.xaml" />
+    <Page Include="Src\View\LicenseAcceptanceView.xaml" />
+    <Page Include="Src\View\PackageOptionsView.xaml" />
+    <Page Include="Src\View\PagedResultsView.xaml" />
+    <Page Include="Src\View\PackageRepositoriesView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AddInManager2.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+    <None Include="Resources\license.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\packageicon_small.png" />
+    <Resource Include="Resources\sd_packageicon.png" />
+    <Resource Include="Resources\accept.png" />
+    <Resource Include="Resources\exclamation.png" />
+    <Resource Include="Resources\external_addin_small.png" />
+    <Resource Include="Resources\magnifier.png" />
+    <Resource Include="Resources\packageicon.png" />
+    <Resource Include="Resources\resultset_next.png" />
+    <Resource Include="Resources\resultset_previous.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Web.Xdt.3.1.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -179,21 +155,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources" />
-    <Folder Include="Src" />
-    <Folder Include="Src\Model" />
-    <Folder Include="Src\Model\Interfaces" />
-    <Folder Include="Src\ViewModel" />
-    <Folder Include="Src\View" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\View\AddInManagerView.xaml" />
-    <Page Include="Src\View\AddInsView.xaml" />
-    <Page Include="Src\View\LicenseAcceptanceView.xaml" />
-    <Page Include="Src\View\PackageOptionsView.xaml" />
-    <Page Include="Src\View\PagedResultsView.xaml" />
-    <Page Include="Src\View\PackageRepositoriesView.xaml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
 </Project>

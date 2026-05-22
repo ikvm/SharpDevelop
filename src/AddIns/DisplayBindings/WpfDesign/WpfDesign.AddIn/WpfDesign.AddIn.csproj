@@ -1,42 +1,89 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{9A9D6FD4-6A2E-455D-ACC3-DDA775FE9865}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.WpfDesign.AddIn</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{9A9D6FD4-6A2E-455D-ACC3-DDA775FE9865}</ProjectGuid>
     <AssemblyName>ICSharpCode.WpfDesign.AddIn</AssemblyName>
-    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\WpfDesign\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.WpfDesign.AddIn</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\WpfDesign\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\WpfDesign\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
+  <ItemGroup>
+    <Compile Include="Src\Options\WpfEditorOptionPanel.xaml.cs" DependentUpon="WpfEditorOptionPanel.xaml" />
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="Src\AbstractEventHandlerService.cs" />
+    <Compile Include="Src\Commands\CutCopyPaste.cs" />
+    <Compile Include="Src\Commands\Pads.cs" />
+    <Compile Include="Src\Commands\Remove.cs" />
+    <Compile Include="Src\Commands\UndoRedo.cs" />
+    <Compile Include="Src\Commands\ViewXaml.cs" />
+    <Compile Include="Src\Options\WpfEditorOptions.cs" />
+    <Compile Include="Src\SharpDevelopTranslations.cs" />
+    <Compile Include="Src\ThumbnailViewPad.cs" />
+    <Compile Include="Src\FileUriContext.cs" />
+    <Compile Include="Src\IdeChooseClassService.cs" />
+    <Compile Include="Src\ImageSourceEditor\ChooseImageDialog.xaml.cs" DependentUpon="ChooseImageDialog.xaml" />
+    <Compile Include="Src\ImageSourceEditor\ImageSourceEditor.xaml.cs" DependentUpon="ImageSourceEditor.xaml" />
+    <Compile Include="Src\MyTypeFinder.cs" />
+    <Compile Include="Src\ObjectEditor.xaml.cs" DependentUpon="ObjectEditor.xaml" />
+    <Compile Include="Src\ProjectTools.cs" />
+    <Compile Include="Src\PropertyDescriptionService.cs" />
+    <Compile Include="Src\WpfAndWinFormsTopLevelWindowService.cs" />
+    <Compile Include="Src\WpfDisplayBinding.cs" />
+    <Compile Include="Src\WpfDocumentError.xaml.cs" DependentUpon="WpfDocumentError.xaml" />
+    <Compile Include="Src\WpfSideTabItem.cs" />
+    <Compile Include="Src\WpfToolbox.cs" />
+    <Compile Include="Src\WpfViewContent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\Options\WpfEditorOptionPanel.xaml" />
+    <Page Include="Src\WpfDocumentError.xaml" />
+    <Page Include="Src\ImageSourceEditor\ChooseImageDialog.xaml" />
+    <Page Include="Src\ImageSourceEditor\ImageSourceEditor.xaml" />
+    <Page Include="Src\ObjectEditor.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="WpfDesign.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Icons.32x32.Error.png" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -54,73 +101,9 @@
     <Reference Include="ICSharpCode.WpfDesign.XamlDom">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.WpfDesigner.8.1.49\lib\net45\ICSharpCode.WpfDesign.XamlDom.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Src\Options\WpfEditorOptionPanel.xaml.cs">
-      <DependentUpon>WpfEditorOptionPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Resource Include="Images\Icons.32x32.Error.png" />
-    <None Include="packages.config" />
-    <None Include="WpfDesign.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="Src\AbstractEventHandlerService.cs" />
-    <Compile Include="Src\Commands\CutCopyPaste.cs" />
-    <Compile Include="Src\Commands\Pads.cs" />
-    <Compile Include="Src\Commands\Remove.cs" />
-    <Compile Include="Src\Commands\UndoRedo.cs" />
-    <Compile Include="Src\Commands\ViewXaml.cs" />
-    <Compile Include="Src\Options\WpfEditorOptions.cs" />
-    <Compile Include="Src\SharpDevelopTranslations.cs" />
-    <Compile Include="Src\ThumbnailViewPad.cs" />
-    <Compile Include="Src\FileUriContext.cs" />
-    <Compile Include="Src\IdeChooseClassService.cs" />
-    <Compile Include="Src\ImageSourceEditor\ChooseImageDialog.xaml.cs">
-      <DependentUpon>ChooseImageDialog.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\ImageSourceEditor\ImageSourceEditor.xaml.cs">
-      <DependentUpon>ImageSourceEditor.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\MyTypeFinder.cs" />
-    <Compile Include="Src\ObjectEditor.xaml.cs">
-      <DependentUpon>ObjectEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\ProjectTools.cs" />
-    <Compile Include="Src\PropertyDescriptionService.cs" />
-    <Compile Include="Src\WpfAndWinFormsTopLevelWindowService.cs" />
-    <Compile Include="Src\WpfDisplayBinding.cs" />
-    <Compile Include="Src\WpfDocumentError.xaml.cs">
-      <DependentUpon>WpfDocumentError.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\WpfSideTabItem.cs" />
-    <Compile Include="Src\WpfToolbox.cs" />
-    <Compile Include="Src\WpfViewContent.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\Options\WpfEditorOptionPanel.xaml" />
-    <Page Include="Src\WpfDocumentError.xaml" />
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
       <Name>ICSharpCode.SharpDevelop</Name>
@@ -146,11 +129,6 @@
       <Name>ICSharpCode.SharpDevelop.Widgets</Name>
       <Private>False</Private>
     </ProjectReference>
-    <Page Include="Src\ImageSourceEditor\ChooseImageDialog.xaml" />
-    <Page Include="Src\ImageSourceEditor\ImageSourceEditor.xaml" />
-    <Page Include="Src\ObjectEditor.xaml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Src\Options" />
-  </ItemGroup>
+
 </Project>

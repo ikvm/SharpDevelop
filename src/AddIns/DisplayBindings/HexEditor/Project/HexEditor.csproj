@@ -1,84 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{E618A9CD-A39F-4925-A538-E8A3FEF24E54}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>HexEditor</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{E618A9CD-A39F-4925-A538-E8A3FEF24E54}</ProjectGuid>
     <AssemblyName>HexEditor</AssemblyName>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RootNamespace>HexEditor</RootNamespace>
     <SignAssembly>True</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\HexEditor\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>False</Optimize>
-    <StartAction>Program</StartAction>
-    <StartProgram>..\..\..\..\..\bin\SharpDevelop.exe</StartProgram>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\HexEditor\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\HexEditor</OutputPath>
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
     <Optimize>False</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\HexEditor</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\Commands\CopyAsBinary.cs" />
     <Compile Include="Src\Commands\CopyAsHexString.cs" />
-    <Compile Include="Src\Editor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Src\Editor.Designer.cs">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Src\Editor.cs" />
+    <Compile Include="Src\Editor.Designer.cs" DependentUpon="Editor.cs" />
     <Compile Include="Src\Util\BufferManager.cs" />
     <Compile Include="Src\Util\Caret.cs" />
     <Compile Include="Src\Util\ClipboardManager.cs" />
@@ -89,31 +57,35 @@
     <Compile Include="Src\Util\SelectionManager.cs" />
     <Compile Include="Src\Util\UndoManager.cs" />
     <Compile Include="Src\Util\ViewMode.cs" />
-    <Compile Include="Src\View\HexEditContainer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Src\View\HexEditContainer.Designer.cs">
-      <DependentUpon>HexEditContainer.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Src\View\HexEditContainer.cs" />
+    <Compile Include="Src\View\HexEditContainer.Designer.cs" DependentUpon="HexEditContainer.cs" />
     <Compile Include="Src\View\HexEditDisplayBinding.cs" />
-    <Compile Include="Src\View\HexEditOptionsPanel.xaml.cs">
-      <DependentUpon>HexEditOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\View\HexEditOptionsPanel.xaml.cs" DependentUpon="HexEditOptionsPanel.xaml" />
     <Compile Include="Src\View\HexEditView.cs" />
-    <None Include="changes.txt" />
-    <None Include="HexEditor.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="Src\View\HexEditContainer.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>HexEditContainer.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="packages.config" />
   </ItemGroup>
+
   <ItemGroup>
+    <Page Include="Src\View\HexEditOptionsPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Src\View\HexEditContainer.resx" DependentUpon="HexEditContainer.cs" />
     <EmbeddedResource Include="Resources\sizefittowindow.bmp" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="changes.txt" />
+    <None Include="HexEditor.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -141,10 +113,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Src\Commands" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\View\HexEditOptionsPanel.xaml" />
-  </ItemGroup>
+
 </Project>

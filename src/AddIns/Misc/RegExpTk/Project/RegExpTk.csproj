@@ -1,70 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.41115</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{64A3E5E6-90BF-47F6-94DF-68C94B62C817}</ProjectGuid>
     <AssemblyName>RegExpTk</AssemblyName>
-    <OutputTarget>Library</OutputTarget>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>False</NoStdLib>
-    <NoConfig>False</NoConfig>
-    <RunPostBuildEvent>OnSuccessfulBuild</RunPostBuildEvent>
-    <OutputType>Library</OutputType>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>122683392</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>False</Optimize>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <BaseAddress>122683392</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG</DefineConstants>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <OutputPath>..\..\..\..\..\AddIns\Misc\RegExpTk\</OutputPath>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugType>Full</DebugType>
-    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <OutputPath>..\..\..\..\..\AddIns\Misc\RegExpTk\</OutputPath>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugType>None</DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Src\Commands\MenuCommand.cs" />
-    <Compile Include="Src\Dialogs\MainWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Src\Dialogs\GroupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Src\Dialogs\MainWindow.cs" />
+    <Compile Include="Src\Dialogs\GroupForm.cs" />
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\RegExpTkGroupForm.xfrm" />
     <EmbeddedResource Include="Resources\RegExpTkMainForm.xfrm" />
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <None Include="RegExpTk.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="RegExpTk.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.XML" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -83,4 +73,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+
 </Project>

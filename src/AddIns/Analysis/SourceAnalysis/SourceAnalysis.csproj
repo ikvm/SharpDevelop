@@ -1,87 +1,67 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.SourceAnalysis</RootNamespace>
-    <AssemblyName>SourceAnalysis</AssemblyName>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <ProjectGuid>{C16BEA37-FEE8-4792-B860-48F5BFBD39A9}</ProjectGuid>
-    <OutputPath>..\..\..\..\AddIns\Analysis\SourceAnalysis</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>134217728</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
+    <AssemblyName>SourceAnalysis</AssemblyName>
+    <RootNamespace>ICSharpCode.SourceAnalysis</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <RunSourceAnalysis>False</RunSourceAnalysis>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <NoWin32Manifest>False</NoWin32Manifest>
+    <Prefer32Bit>False</Prefer32Bit>
+    <BaseAddress>134217728</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
-    <Optimize>False</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <OutputPath>..\..\..\..\AddIns\Analysis\SourceAnalysis</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
-    <Optimize>True</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\Analysis\SourceAnalysis</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <Prefer32Bit>False</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <EmbeddedResource Include="Resources\Settings.SourceAnalysis">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <None Include="SharpDevelop.SourceAnalysis.targets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SourceAnalysis.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="Src\AnalysisIdeOptionsPanel.xaml.cs">
-      <DependentUpon>AnalysisIdeOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\AnalysisOptionsPanel.xaml.cs">
-      <DependentUpon>AnalysisOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\AnalysisIdeOptionsPanel.xaml.cs" DependentUpon="AnalysisIdeOptionsPanel.xaml" />
+    <Compile Include="Src\AnalysisOptionsPanel.xaml.cs" DependentUpon="AnalysisOptionsPanel.xaml" />
     <Compile Include="Src\StyleCopWrapper.cs" />
     <Compile Include="Src\CheckCurrentProjectCommand.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Src\AnalysisIdeOptionsPanel.xaml" />
+    <Page Include="Src\AnalysisOptionsPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Settings.SourceAnalysis" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SharpDevelop.SourceAnalysis.targets" CopyToOutputDirectory="Always" />
+    <None Include="SourceAnalysis.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -99,9 +79,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="Src\AnalysisIdeOptionsPanel.xaml" />
-    <Page Include="Src\AnalysisOptionsPanel.xaml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
 </Project>

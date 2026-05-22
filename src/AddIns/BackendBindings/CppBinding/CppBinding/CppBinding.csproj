@@ -1,61 +1,80 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{70966F84-74C9-4067-A379-0C674A929233}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{70966F84-74C9-4067-A379-0C674A929233}</ProjectGuid>
     <AssemblyName>CppBinding</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\trecio\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
     <RootNamespace>ICSharpCode.CppBinding</RootNamespace>
-    <OutputPath>..\..\..\..\..\AddIns\BackendBindings\CppBinding\</OutputPath>
+    <SignAssembly>False</SignAssembly>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\BackendBindings\CppBinding\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\BackendBindings\CppBinding\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+
+  <ItemGroup>
+    <Compile Include="CppFormattingStrategy.cs" />
+    <Compile Include="CppLanguageBinding.cs" />
+    <Compile Include="Project\ApplicationOptions.cs" DependentUpon="ApplicationOptions.xaml" />
+    <Compile Include="Project\DependencyRelation.cs" />
+    <Compile Include="Project\LinkerOptions.xaml.cs" DependentUpon="LinkerOptions.xaml" />
+    <Compile Include="Project\PreprocessorOptions.xaml.cs" DependentUpon="PreprocessorOptions.xaml" />
+    <Compile Include="Project\ProjectConfigurationProjectItem.cs" />
+    <Compile Include="Project\ResourceScript.cs" />
+    <Compile Include="Project\SpecifyCliRuntimeLibraryCommand.cs" />
+    <Compile Include="Project\CppProject.cs" />
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="CppProjectBinding.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Project\ApplicationOptions.xaml" />
+    <Page Include="Project\LinkerOptions.xaml" />
+    <Page Include="Project\PreprocessorOptions.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\ConsoleProject.xpt" />
+    <EmbeddedResource Include="Templates\Empty.xft" />
+    <EmbeddedResource Include="Templates\EmptyClass.xft" />
+    <EmbeddedResource Include="Templates\Library.xpt" />
+    <EmbeddedResource Include="Templates\UnmanagedConsoleProject.xpt" />
+    <EmbeddedResource Include="Templates\DefaultAssemblyInfo.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="CppBinding.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
@@ -64,68 +83,8 @@
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CppFormattingStrategy.cs" />
-    <Compile Include="CppLanguageBinding.cs" />
-    <Compile Include="Project\ApplicationOptions.cs">
-      <DependentUpon>ApplicationOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Project\DependencyRelation.cs" />
-    <Compile Include="Project\LinkerOptions.xaml.cs">
-      <DependentUpon>LinkerOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Project\PreprocessorOptions.xaml.cs">
-      <DependentUpon>PreprocessorOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Project\ProjectConfigurationProjectItem.cs" />
-    <Compile Include="Project\ResourceScript.cs" />
-    <Compile Include="Project\SpecifyCliRuntimeLibraryCommand.cs" />
-    <Compile Include="Project\CppProject.cs" />
-    <None Include="CppBinding.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="Configuration\AssemblyInfo.cs" />
-    <Compile Include="CppProjectBinding.cs" />
-    <EmbeddedResource Include="Templates\ConsoleProject.xpt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\Empty.xft">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\EmptyClass.xft">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\Library.xpt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Templates\UnmanagedConsoleProject.xpt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\DefaultAssemblyInfo.cpp">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
@@ -148,9 +107,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="Project\ApplicationOptions.xaml" />
-    <Page Include="Project\LinkerOptions.xaml" />
-    <Page Include="Project\PreprocessorOptions.xaml" />
-  </ItemGroup>
+
 </Project>

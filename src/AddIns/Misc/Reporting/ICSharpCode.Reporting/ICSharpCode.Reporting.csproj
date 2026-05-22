@@ -1,93 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{40CA84D4-ACFC-4646-9CDD-B87262D34093}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.Reporting</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{40CA84D4-ACFC-4646-9CDD-B87262D34093}</ProjectGuid>
     <AssemblyName>ICSharpCode.Reporting</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <RootNamespace>ICSharpCode.Reporting</RootNamespace>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>..\..\..\..\..\AddIns\Misc\SharpDevelopReporting\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\SharpDevelopReporting\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\SharpDevelopReporting\</OutputPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Irony, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47">
-      <HintPath>..\..\..\..\..\packages\Irony.1.2.0\lib\netstandard2.0\Irony.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Irony.Interpreter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47">
-      <HintPath>..\..\..\..\..\packages\Irony.Interpreter.1.2.0\lib\netstandard2.0\Irony.Interpreter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="netstandard" />
-    <Reference Include="PdfSharp">
-      <HintPath>..\..\..\..\..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="PdfSharp.Charting">
-      <HintPath>..\..\..\..\..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Presentation">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Src\Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Src\Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Src\Arrange\ArrangeStrategy.cs" />
     <Compile Include="Src\Arrange\MeasurementStrategy.cs" />
     <Compile Include="Src\BaseClasses\AbstractColumn.cs" />
@@ -193,50 +145,36 @@
     <Compile Include="Src\Wpf\Visitor\Graphics\ExtendedLine.cs" />
     <Compile Include="Src\Wpf\Visitor\WpfExporter.cs" />
     <Compile Include="Src\Wpf\Visitor\WpfVisitor.cs" />
-    <Compile Include="Src\Wpf\WpfReportViewer\WpfReportViewer.xaml.cs">
-      <DependentUpon>WpfReportViewer.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Wpf\WpfReportViewer\WpfReportViewer.xaml.cs" DependentUpon="WpfReportViewer.xaml" />
     <Compile Include="Src\Xml\ModelLoader.cs" />
     <Compile Include="Src\Xml\MycroParser.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Src\Exporter\Visitors" />
-    <Folder Include="Src\Expressions\Irony" />
-    <Folder Include="Src\Expressions\Irony\Ast" />
-    <Folder Include="Src\Expressions\Irony\Imports" />
-    <Folder Include="Src\Interfaces" />
-    <Folder Include="Src\Globals" />
-    <Folder Include="Src" />
-    <Folder Include="Src" />
-    <Folder Include="Src\Interfaces\Export" />
-    <Folder Include="Src\Interfaces\Data" />
-    <Folder Include="Src\Items" />
-    <Folder Include="Src\BaseClasses" />
-    <Folder Include="Src\Factories" />
-    <Folder Include="Src\Exporter" />
-    <Folder Include="Src\Arrange" />
-    <Folder Include="Src\DataSource" />
-    <Folder Include="Src\DataManager" />
-    <Folder Include="Src\DataManager\Listhandling" />
-    <Folder Include="Src\Expressions" />
-    <Folder Include="Src\Items\Graphics" />
-    <Folder Include="Src\Events" />
-    <Folder Include="Src\Pdf" />
-    <Folder Include="Src\Wpf" />
-    <Folder Include="Src\PageBuilder" />
-    <Folder Include="Src\PageBuilder\Converter" />
-    <Folder Include="Src\PageBuilder\ExportColumns" />
-    <Folder Include="Src\Wpf\Visitor" />
-    <Folder Include="Src\Wpf\Visitor\Graphics" />
-    <Folder Include="Src\Wpf\WpfReportViewer" />
-    <Folder Include="Src\Xml" />
-  </ItemGroup>
+
   <ItemGroup>
     <Page Include="Src\Wpf\WpfReportViewer\WpfReportViewer.xaml" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <Reference Include="Irony, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47">
+      <HintPath>..\..\..\..\..\packages\Irony.1.2.0\lib\netstandard2.0\Irony.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Irony.Interpreter, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47">
+      <HintPath>..\..\..\..\..\packages\Irony.Interpreter.1.2.0\lib\netstandard2.0\Irony.Interpreter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="netstandard" />
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\..\..\..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting">
+      <HintPath>..\..\..\..\..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Presentation" />
+  </ItemGroup>
+
 </Project>

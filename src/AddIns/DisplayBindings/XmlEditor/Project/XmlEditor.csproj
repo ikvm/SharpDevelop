@@ -1,94 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{DCA2703D-250A-463E-A68A-07ED105AE6BD}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.XmlEditor</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{DCA2703D-250A-463E-A68A-07ED105AE6BD}</ProjectGuid>
     <AssemblyName>XmlEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.XmlEditor</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\XmlEditor\</OutputPath>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\XmlEditor\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\DisplayBindings\XmlEditor\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
-  <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Presentation">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Src\CollapseAllCommand.cs" />
     <Compile Include="Src\ExpandAllCommand.cs" />
     <Compile Include="Src\XslTransformUrlResolver.cs" />
-    <None Include="packages.config" />
-    <None Include="XmlEditor.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\AddAttributeCommand.cs" />
     <Compile Include="Src\AddChildCommentCommand.cs" />
     <Compile Include="Src\AddChildElementCommand.cs" />
     <Compile Include="Src\AddChildTextNodeCommand.cs" />
-    <Compile Include="Src\AddXmlNodeDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Src\AddXmlNodeDialog.cs" />
     <Compile Include="Src\AssignStylesheetCommand.cs" />
     <Compile Include="Src\CopyXmlTreeNode.cs" />
     <Compile Include="Src\CreateSchemaCommand.cs" />
@@ -126,10 +87,7 @@
     <Compile Include="Src\RunXslTransformCommand.cs" />
     <Compile Include="Src\SchemaDocumentation.cs" />
     <Compile Include="Src\SelectedXmlElement.cs" />
-    <Compile Include="Src\SelectXmlSchemaWindow.xaml.cs">
-      <DependentUpon>SelectXmlSchemaWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\SelectXmlSchemaWindow.xaml.cs" DependentUpon="SelectXmlSchemaWindow.xaml" />
     <Compile Include="Src\ValidateXmlCommand.cs" />
     <Compile Include="Src\XmlAttributePropertyDescriptor.cs" />
     <Compile Include="Src\XmlAttributeTypeDescriptor.cs" />
@@ -141,10 +99,7 @@
     <Compile Include="Src\XmlCompletionItemCollection.cs" />
     <Compile Include="Src\XmlDisplayBinding.cs" />
     <Compile Include="Src\XmlEditorOptions.cs" />
-    <Compile Include="Src\XmlEditorOptionsPanel.xaml.cs">
-      <DependentUpon>XmlEditorOptionsPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\XmlEditorOptionsPanel.xaml.cs" DependentUpon="XmlEditorOptionsPanel.xaml" />
     <Compile Include="Src\XmlEditorService.cs" />
     <Compile Include="Src\XmlElementPath.cs" />
     <Compile Include="Src\XmlElementPathsByNamespace.cs" />
@@ -153,8 +108,7 @@
     <Compile Include="Src\XmlFoldingManager.cs" />
     <Compile Include="Src\XmlFoldParser.cs" />
     <Compile Include="Src\XmlElementFold.cs" />
-    <Compile Include="Src\XmlFormattingStrategy.cs">
-    </Compile>
+    <Compile Include="Src\XmlFormattingStrategy.cs" />
     <Compile Include="Src\StylesheetAssignedCondition.cs" />
     <Compile Include="Src\XmlLanguageBinding.cs" />
     <Compile Include="Src\XmlNamespace.cs" />
@@ -170,35 +124,51 @@
     <Compile Include="Src\RegisteredXmlSchemas.cs" />
     <Compile Include="Src\XmlSchemaObjectLocation.cs" />
     <Compile Include="Src\XmlSchemaPicker.cs" />
-    <Compile Include="Src\XmlSchemasPanel.xaml.cs">
-      <DependentUpon>XmlSchemasPanel.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\XmlSchemasPanel.xaml.cs" DependentUpon="XmlSchemasPanel.xaml" />
     <Compile Include="Src\XmlTextTreeNode.cs" />
     <Compile Include="Src\XmlTreeEditor.cs" />
     <Compile Include="Src\XmlTreeNodeClipboardCommand.cs" />
     <Compile Include="Src\XmlTreeView.cs" />
-    <Compile Include="Src\XmlTreeViewContainerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Src\XmlTreeViewContainerControl.cs" />
     <Compile Include="Src\XmlTreeViewControl.cs" />
     <Compile Include="Src\XmlView.cs" />
     <Compile Include="Src\XPathNodeMatch.cs" />
     <Compile Include="Src\XPathNodeTextMarker.cs" />
     <Compile Include="Src\XPathQuery.cs" />
-    <Compile Include="Src\XPathQueryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Src\XPathQueryControl.cs" />
     <Compile Include="Src\XPathQueryPad.cs" />
     <Compile Include="Src\XslOutputView.cs" />
-    <EmbeddedResource Include="Resources\XmlCommentTreeNodeIcon.png" />
-    <EmbeddedResource Include="Resources\XmlElementTreeNodeIcon.png" />
-    <EmbeddedResource Include="Resources\XmlTextTreeNodeIcon.png" />
   </ItemGroup>
+
   <ItemGroup>
     <Page Include="Src\SelectXmlSchemaWindow.xaml" />
     <Page Include="Src\XmlEditorOptionsPanel.xaml" />
     <Page Include="Src\XmlSchemasPanel.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\XmlCommentTreeNodeIcon.png" />
+    <EmbeddedResource Include="Resources\XmlElementTreeNodeIcon.png" />
+    <EmbeddedResource Include="Resources\XmlTextTreeNodeIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="XmlEditor.addin" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Presentation" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
       <Name>ICSharpCode.SharpDevelop</Name>
@@ -225,4 +195,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+
 </Project>

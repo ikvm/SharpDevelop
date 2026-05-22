@@ -1,93 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <ProjectGuid>{0162E499-42D0-409B-AA25-EED21F75336B}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>ICSharpCode.AvalonEdit.AddIn</RootNamespace>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <ProjectGuid>{0162E499-42D0-409B-AA25-EED21F75336B}</ProjectGuid>
     <AssemblyName>ICSharpCode.AvalonEdit.AddIn</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\Daniel\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
-    <OutputPath>..\..\..\..\AddIns\DisplayBindings\AvalonEdit\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
+    <RootNamespace>ICSharpCode.AvalonEdit.AddIn</RootNamespace>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <CodeAnalysisRules>-Microsoft.Design#CA1014;-Microsoft.Design#CA2210</CodeAnalysisRules>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\DisplayBindings\AvalonEdit\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\AddIns\DisplayBindings\AvalonEdit\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
-  <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
-      <HintPath>..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework.Aero">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="ReachFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Printing">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsFormsIntegration">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Src\ChangeMarkerMargin\ChangeMarkerMargin.cs" />
     <Compile Include="Src\ChangeMarkerMargin\DefaultChangeWatcher.cs" />
-    <Compile Include="Src\ChangeMarkerMargin\DiffControl.xaml.cs">
-      <DependentUpon>DiffControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\ChangeMarkerMargin\DiffControl.xaml.cs" DependentUpon="DiffControl.xaml" />
     <Compile Include="Src\ChangeMarkerMargin\DocumentSequence.cs" />
     <Compile Include="Src\ChangeMarkerMargin\IChangeWatcher.cs" />
     <Compile Include="Src\ChangeMarkerMargin\LineChangeInfo.cs" />
@@ -95,21 +50,12 @@
     <Compile Include="Src\ContextActions\ClipboardRingAction.cs" />
     <Compile Include="Src\ContextActions\ClipboardRingPopup.cs" />
     <Compile Include="Src\ContextActions\ContextActionOptionPanelDoozer.cs" />
-    <Compile Include="Src\ContextActions\ContextActionOptions.xaml.cs">
-      <DependentUpon>ContextActionOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Src\ContextActions\ContextActionsBulbControl.xaml.cs">
-      <DependentUpon>ContextActionsBulbControl.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Src\ContextActions\ContextActionOptions.xaml.cs" DependentUpon="ContextActionOptions.xaml" />
+    <Compile Include="Src\ContextActions\ContextActionsBulbControl.xaml.cs" DependentUpon="ContextActionsBulbControl.xaml" />
     <Compile Include="Src\ContextActions\ContextActionsBulbPopup.cs" />
     <Compile Include="Src\ContextActions\ContextActionsBulbViewModel.cs" />
-    <Compile Include="Src\ContextActions\ContextActionsControl.xaml.cs">
-      <DependentUpon>ContextActionsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Src\ContextActions\ContextActionsHeaderedControl.xaml.cs">
-      <DependentUpon>ContextActionsHeaderedControl.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Src\ContextActions\ContextActionsControl.xaml.cs" DependentUpon="ContextActionsControl.xaml" />
+    <Compile Include="Src\ContextActions\ContextActionsHeaderedControl.xaml.cs" DependentUpon="ContextActionsHeaderedControl.xaml" />
     <Compile Include="Src\ContextActions\ContextActionsPopup.cs" />
     <Compile Include="Src\ContextActions\ContextActionsRenderer.cs" />
     <Compile Include="Src\ContextActions\EditorActionsProvider.cs" />
@@ -126,22 +72,14 @@
     <Compile Include="Src\TextMarkerToolTipProvider.cs" />
     <Compile Include="Src\Utils.cs" />
     <Compile Include="Src\XmlDoc\XmlDocTooltipProvider.cs" />
-    <None Include="AvalonEdit.AddIn.addin">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs">
-      <Link>Configuration\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="..\..\..\Main\GlobalAssemblyInfo.cs" Link="Configuration\GlobalAssemblyInfo.cs" />
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\AvalonEditDisplayBinding.cs" />
     <Compile Include="Src\AvalonEditEditorUIService.cs" />
     <Compile Include="Src\AvalonEditorControlService.cs" />
     <Compile Include="Src\AvalonEditViewContent.cs" />
     <Compile Include="Src\BracketHighlightRenderer.cs" />
-    <Compile Include="Src\ChooseEncodingDialog.xaml.cs">
-      <DependentUpon>ChooseEncodingDialog.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\ChooseEncodingDialog.xaml.cs" DependentUpon="ChooseEncodingDialog.xaml" />
     <Compile Include="Src\CodeCompletionEditorAdapter.cs" />
     <Compile Include="Src\CodeEditor.cs" />
     <Compile Include="Src\CodeEditorAdapter.cs" />
@@ -152,10 +90,7 @@
     <Compile Include="Src\SharpDevelopTextEditor.cs" />
     <Compile Include="Src\Commands\FoldingCommands.cs" />
     <Compile Include="Src\Commands\SaveFileWithEncoding.cs" />
-    <Compile Include="Src\Commands\SortOptionsDialog.xaml.cs">
-      <DependentUpon>SortOptionsDialog.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Commands\SortOptionsDialog.xaml.cs" DependentUpon="SortOptionsDialog.xaml" />
     <Compile Include="Src\Commands\SortSelectionCommand.cs" />
     <Compile Include="Src\Commands\SurroundWithCommand.cs" />
     <Compile Include="Src\CustomCommands.cs" />
@@ -163,28 +98,16 @@
     <Compile Include="Src\InlineUIElementGenerator.cs" />
     <Compile Include="Src\IconBarManager.cs" />
     <Compile Include="Src\IconBarMargin.cs" />
-    <Compile Include="Src\Options\BehaviorOptions.xaml.cs">
-      <DependentUpon>BehaviorOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Options\BehaviorOptions.xaml.cs" DependentUpon="BehaviorOptions.xaml" />
     <Compile Include="Src\Options\Converters.cs" />
     <Compile Include="Src\Options\CustomizedHighlightingItem.cs" />
-    <Compile Include="Src\Options\GeneralEditorOptions.xaml.cs">
-      <DependentUpon>GeneralEditorOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Options\GeneralEditorOptions.xaml.cs" DependentUpon="GeneralEditorOptions.xaml" />
     <Compile Include="Src\Options\CodeEditorOptions.cs" />
-    <Compile Include="Src\Options\HighlightingOptions.xaml.cs">
-      <DependentUpon>HighlightingOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Options\HighlightingOptions.xaml.cs" DependentUpon="HighlightingOptions.xaml" />
     <Compile Include="Src\Options\IHighlightingItem.cs" />
     <Compile Include="Src\Options\NamedColorHighlightingItem.cs" />
     <Compile Include="Src\Options\SimpleHighlightingItem.cs" />
-    <Compile Include="Src\Options\TextViewOptions.xaml.cs">
-      <DependentUpon>TextViewOptions.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Options\TextViewOptions.xaml.cs" DependentUpon="TextViewOptions.xaml" />
     <Compile Include="Src\PrintPreviewViewContent.cs" />
     <Compile Include="Src\Snippets\AnchorSnippetElementProvider.cs" />
     <Compile Include="Src\Snippets\CodeSnippet.cs" />
@@ -193,35 +116,60 @@
     <Compile Include="Src\Snippets\DefaultSnippetElementProvider.cs" />
     <Compile Include="Src\Snippets\SnippetCompletionItem.cs" />
     <Compile Include="Src\Snippets\SnippetManager.cs" />
-    <Compile Include="Src\Snippets\SnippetOptionPanel.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\Snippets\SnippetOptionPanel.cs" />
     <Compile Include="Src\ParserFoldingStrategy.cs" />
-    <Compile Include="Src\QuickClassBrowser.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Src\QuickClassBrowser.cs" />
     <Compile Include="Src\SharpDevelopCompletionWindow.cs" />
-    <Compile Include="Src\SharpDevelopInsightWindow.cs">
-    </Compile>
+    <Compile Include="Src\SharpDevelopInsightWindow.cs" />
     <Compile Include="Src\StringToVisibilityConverter.cs" />
     <Compile Include="Src\TextMarkerService.cs" />
-    <EmbeddedResource Include="Resources\IncrementalSearchCursor.cur" />
-    <EmbeddedResource Include="Resources\ReverseIncrementalSearchCursor.cur" />
-    <Resource Include="Src\ContextActions\bulb.png" />
-    <None Include="packages.config" />
-    <None Include="Src\ContextActions\license.txt" />
-    <Resource Include="Src\ContextActions\pencil.png" />
   </ItemGroup>
+
   <ItemGroup>
     <Page Include="Src\ChangeMarkerMargin\DiffControl.xaml" />
     <Page Include="Src\ContextActions\ContextActionOptions.xaml" />
     <Page Include="Src\ContextActions\ContextActionsBulbControl.xaml" />
     <Page Include="Src\ContextActions\ContextActionsControl.xaml" />
     <Page Include="Src\ContextActions\ContextActionsHeaderedControl.xaml" />
-    <Page Include="Src\SharpDevelopCompletionWindow.xaml">
-      <DependentUpon>SharpDevelopCompletionWindow.cs</DependentUpon>
-    </Page>
+    <Page Include="Src\SharpDevelopCompletionWindow.xaml" DependentUpon="SharpDevelopCompletionWindow.cs" />
     <Page Include="themes\generic.xaml" />
+    <Page Include="Src\ChooseEncodingDialog.xaml" />
+    <Page Include="Src\Commands\SortOptionsDialog.xaml" />
+    <Page Include="Src\Options\BehaviorOptions.xaml" />
+    <Page Include="Src\Options\GeneralEditorOptions.xaml" />
+    <Page Include="Src\Options\HighlightingOptions.xaml" />
+    <Page Include="Src\Options\TextViewOptions.xaml" />
+    <Page Include="Src\Snippets\SnippetOptionPanel.xaml" DependentUpon="SnippetOptionPanel.cs" />
+    <Page Include="Src\QuickClassBrowser.xaml" DependentUpon="QuickClassBrowser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\IncrementalSearchCursor.cur" />
+    <EmbeddedResource Include="Resources\ReverseIncrementalSearchCursor.cur" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AvalonEdit.AddIn.addin" CopyToOutputDirectory="Always" />
+    <None Include="packages.config" />
+    <None Include="Src\ContextActions\license.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Src\ContextActions\bulb.png" />
+    <Resource Include="Src\ContextActions\pencil.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+      <HintPath>..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
       <Name>ICSharpCode.SharpDevelop</Name>
@@ -242,28 +190,11 @@
       <Name>ICSharpCode.Core.WinForms</Name>
       <Private>False</Private>
     </ProjectReference>
-    <Page Include="Src\ChooseEncodingDialog.xaml" />
-    <Page Include="Src\Commands\SortOptionsDialog.xaml" />
-    <Page Include="Src\Options\BehaviorOptions.xaml" />
-    <Page Include="Src\Options\GeneralEditorOptions.xaml" />
-    <Page Include="Src\Options\HighlightingOptions.xaml" />
-    <Page Include="Src\Options\TextViewOptions.xaml" />
-    <Page Include="Src\Snippets\SnippetOptionPanel.xaml">
-      <DependentUpon>SnippetOptionPanel.cs</DependentUpon>
-    </Page>
-    <Page Include="Src\QuickClassBrowser.xaml">
-      <DependentUpon>QuickClassBrowser.cs</DependentUpon>
-    </Page>
     <ProjectReference Include="..\..\..\Main\ICSharpCode.SharpDevelop.Widgets\Project\ICSharpCode.SharpDevelop.Widgets.csproj">
       <Project>{8035765F-D51F-4A0C-A746-2FD100E19419}</Project>
       <Name>ICSharpCode.SharpDevelop.Widgets</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Src\ContextActions" />
-    <Folder Include="Src\ChangeMarkerMargin" />
-    <Folder Include="Src\SyntaxHighlighting" />
-    <Folder Include="Src\XmlDoc" />
-  </ItemGroup>
+
 </Project>
