@@ -45,7 +45,7 @@ namespace FSharpBinding
 			XmlDocument doc = new XmlDocument();
 			doc.Load(project.FileName);
 			XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
-			nsmgr.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
+			//nsmgr.AddNamespace("proj", "http://schemas.microsoft.com/developer/msbuild/2003");
 			var d = new Dictionary<FileNode, XmlNode>();
 			foreach (FileNode node in getFileNodes(nodes)) {
 				var docNode = doc.SelectSingleNode("//proj:Compile[@Include=\"" + Path.GetFileName(node.FileName) + "\"]", nsmgr);

@@ -194,8 +194,8 @@ namespace ICSharpCode.SharpDevelop.Project
 			this.userProjectFile = ProjectRootElement.Create(MSBuildProjectCollection);
 			
 			projectFile.FullPath = information.FileName;
-			projectFile.ToolsVersion = "Current";
-			projectFile.DefaultTargets = "Build";
+			//projectFile.ToolsVersion = "Current";
+			//projectFile.DefaultTargets = "Build";
 			userProjectFile.FullPath = information.FileName + ".user";
 			
 			projectFile.AddProperty(ProjectGuidPropertyName, IdGuid.ToString("B").ToUpperInvariant());

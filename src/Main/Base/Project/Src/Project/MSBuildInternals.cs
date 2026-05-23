@@ -78,7 +78,7 @@ namespace ICSharpCode.SharpDevelop.Project
 			propertyDict["SolutionPath"] = solution.FileName;
 		}
 		
-		public const string MSBuildXmlNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+		//public const string MSBuildXmlNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
 		
 		#region Escaping
 		/// <summary>

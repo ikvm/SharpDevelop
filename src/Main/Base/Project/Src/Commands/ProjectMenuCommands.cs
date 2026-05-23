@@ -145,10 +145,10 @@ namespace ICSharpCode.SharpDevelop.Project.Commands
 			if (!File.Exists(sandcastleHelpFileBuilderProjectFile)) {
 				using (XmlTextWriter w = new XmlTextWriter(sandcastleHelpFileBuilderProjectFile, Encoding.UTF8)) {
 					w.Formatting = Formatting.Indented;
-					const string ns = "http://schemas.microsoft.com/developer/msbuild/2003";
+					const string ns = "";// "http://schemas.microsoft.com/developer/msbuild/2003";
 					w.WriteStartElement("Project", ns);
-					w.WriteAttributeString("DefaultTargets", "Build");
-					w.WriteAttributeString("ToolsVersion", "3.5");
+					//w.WriteAttributeString("DefaultTargets", "Build");
+					//w.WriteAttributeString("ToolsVersion", "3.5");
 					
 					w.WriteStartElement("PropertyGroup", ns);
 					w.WriteComment("The configuration and platform will be used to determine which\n" +
@@ -164,7 +164,7 @@ namespace ICSharpCode.SharpDevelop.Project.Commands
 					w.WriteValue("AnyCPU");
 					w.WriteEndElement();  // </AnyCPU>
 					
-					w.WriteElementString("SchemaVersion", ns, "2.0");
+					//w.WriteElementString("SchemaVersion", ns, "2.0");
 					w.WriteElementString("ProjectGuid", ns, Guid.NewGuid().ToString("B"));
 					w.WriteElementString("SHFBSchemaVersion", ns, "1.8.0.3");
 					

@@ -31,7 +31,13 @@ namespace ICSharpCode.AiAgent
                 {
                     UpdateStatus();
                 }
+                else if (e.PropertyName == nameof(AiService.Provider))
+                {
+                    UpdateProviderSelection();
+                }
             };
+            
+            UpdateProviderSelection();
         }
 
         private void UpdateStatus()
@@ -40,6 +46,31 @@ namespace ICSharpCode.AiAgent
             _control.StatusText.Foreground = AiService.Instance.IsConfigured 
                 ? System.Windows.Media.Brushes.Green 
                 : System.Windows.Media.Brushes.Orange;
+        }
+
+        private void UpdateProviderSelection()
+        {
+            foreach (System.Windows.Controls.ComboBoxItem item in _control.ProviderComboBox.Items)
+            {
+                string tag = item.Tag?.ToString();
+                if (tag != null && Enum.TryParse(tag, out AiProvider provider))
+                {
+                    item.IsSelected = provider == AiService.Instance.Provider;
+                }
+            }
+        }
+
+        private AiProvider GetSelectedProvider()
+        {
+            var selectedItem = _control.ProviderComboBox.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            if (selectedItem != null && selectedItem.Tag != null)
+            {
+                if (Enum.TryParse(selectedItem.Tag.ToString(), out AiProvider provider))
+                {
+                    return provider;
+                }
+            }
+            return AiProvider.OpenAI;
         }
 
         private void ConfigureButton_Click(object sender, RoutedEventArgs e)
@@ -52,7 +83,8 @@ namespace ICSharpCode.AiAgent
                 return;
             }
             
-            AiService.Instance.Configure(apiKey);
+            AiProvider provider = GetSelectedProvider();
+            AiService.Instance.Configure(apiKey, null, provider);
             UpdateStatus();
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }

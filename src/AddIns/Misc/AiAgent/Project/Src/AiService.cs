@@ -14,6 +14,7 @@ namespace ICSharpCode.AiAgent
         private bool _isConfigured;
         private bool _isProcessing;
         private string _statusMessage;
+        private AiProvider _provider;
 
         public static AiService Instance => _instance ?? (_instance = new AiService());
 
@@ -47,11 +48,20 @@ namespace ICSharpCode.AiAgent
             }
         }
 
+        public AiProvider Provider
+        {
+            get => _provider;
+            private set
+            {
+                _provider = value;
+                OnPropertyChanged(nameof(Provider));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private AiService()
         {
-            // 捕获调用线程的SynchronizationContext
             _synchronizationContext = SynchronizationContext.Current;
             _openAiClient = new OpenAiClient();
             LoadConfiguration();
@@ -63,12 +73,22 @@ namespace ICSharpCode.AiAgent
             {
                 string apiKey = PropertyService.Get("AiAgent.ApiKey", string.Empty);
                 string apiEndpoint = PropertyService.Get("AiAgent.ApiEndpoint", string.Empty);
+                string providerStr = PropertyService.Get("AiAgent.Provider", "OpenAI");
+                
+                if (Enum.TryParse(providerStr, out AiProvider provider))
+                {
+                    Provider = provider;
+                }
+                else
+                {
+                    Provider = AiProvider.OpenAI;
+                }
 
                 if (!string.IsNullOrEmpty(apiKey))
                 {
-                    _openAiClient.Configure(apiKey, apiEndpoint);
+                    _openAiClient.Configure(apiKey, apiEndpoint, Provider);
                     IsConfigured = true;
-                    StatusMessage = "AI Agent configured";
+                    StatusMessage = $"AI Agent configured ({Provider})";
                 }
                 else
                 {
@@ -82,20 +102,22 @@ namespace ICSharpCode.AiAgent
             }
         }
 
-        public void Configure(string apiKey, string apiEndpoint = null)
+        public void Configure(string apiKey, string apiEndpoint = null, AiProvider provider = AiProvider.OpenAI)
         {
             try
             {
-                _openAiClient.Configure(apiKey, apiEndpoint);
+                Provider = provider;
+                _openAiClient.Configure(apiKey, apiEndpoint, provider);
                 IsConfigured = true;
                 
                 PropertyService.Set("AiAgent.ApiKey", apiKey);
+                PropertyService.Set("AiAgent.Provider", provider.ToString());
                 if (!string.IsNullOrEmpty(apiEndpoint))
                 {
                     PropertyService.Set("AiAgent.ApiEndpoint", apiEndpoint);
                 }
                 
-                StatusMessage = "AI Agent configured successfully";
+                StatusMessage = $"AI Agent configured successfully ({provider})";
             }
             catch (Exception ex)
             {
@@ -240,7 +262,6 @@ namespace ICSharpCode.AiAgent
             if (handler == null)
                 return;
 
-            // 如果有SynchronizationContext且当前不在UI线程上，则调度到UI线程
             if (_synchronizationContext != null && SynchronizationContext.Current != _synchronizationContext)
             {
                 _synchronizationContext.Post(_ => handler(this, new PropertyChangedEventArgs(propertyName)), null);
