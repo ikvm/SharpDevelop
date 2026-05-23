@@ -191,6 +191,7 @@
     <None Include="..\..\..\data\resources\StringResources.resx" Link="StringResources.resx" />
     <None Include="..\GlobalAssemblyInfo.cs.template" Link="Configuration\GlobalAssemblyInfo.cs.template" />
     <None Include="..\GlobalAssemblyInfo.vb.template" Link="Configuration\GlobalAssemblyInfo.vb.template" />
+    <None Include="app.config" />
     <None Include="app.manifest" CopyToOutputDirectory="Never" />
     <None Include="packages.config" />
     <None Include="Templates\SharpDevelop.Setup.sln" />
@@ -220,11 +221,11 @@
       <HintPath>..\..\..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>-->
-	<PackageReference Include="Microsoft.Build" Version ="16.11.6" />
-	<PackageReference Include="Microsoft.Build.Framework" Version ="16.11.6" />
+	<PackageReference Include="Microsoft.Build" Version="16.11.6" />
+	<PackageReference Include="Microsoft.Build.Framework" Version="16.11.6" />
     <!--<Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />-->
-	<PackageReference Include="Mono.Cecil" Version ="0.9.6.4" />
+	<PackageReference Include="Mono.Cecil" Version="0.9.6.4" />
     <!--<Reference Include="Mono.Cecil">
       <HintPath>..\..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>-->
