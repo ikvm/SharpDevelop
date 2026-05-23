@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 
 namespace ICSharpCode.Core
@@ -73,7 +74,13 @@ namespace ICSharpCode.Core
 		{
 			if (addInDir == null)
 				throw new ArgumentNullException("addInDir");
-			addInFiles.AddRange(Directory.GetFiles(addInDir, "*.addin", SearchOption.AllDirectories));
+			var path = addInDir;
+			//if(!Directory.Exists(path)) path = path.Replace("AddIns", "..\\AddIns");
+			if (Directory.Exists(path))
+			{
+				var files = Directory.GetFiles(path, "*.addin", SearchOption.AllDirectories);
+				if (files.Any()) addInFiles.AddRange(files);
+			}
 		}
 		
 		/// <summary>
