@@ -170,7 +170,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+	  <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+	  <PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	  <PackageReference Include="Jint" Version="4.9.2" />
+	  <!--<PackageReference Include="Microsoft.ClearScript" Version="7.5.1" />
+	  <PackageReference Include="Microsoft.ClearScript.V8" Version="7.5.1" />-->
+	  <!--<PackageReference Include="Noesis.Javascript" Version="0.7.1" />-->
+    <!--<Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -183,7 +190,7 @@
     </Reference>
     <Reference Include="Noesis.Javascript">
       <HintPath>..\..\..\..\..\packages\Noesis.Javascript.0.7.1.0\lib\net40\x86\Noesis.Javascript.dll</HintPath>
-    </Reference>
+    </Reference>-->
   </ItemGroup>
 
   <ItemGroup>

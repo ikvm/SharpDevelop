@@ -17,22 +17,23 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
-using Noesis.Javascript;
+//using Microsoft.ClearScript.V8;
+//using Noesis.Javascript;
 
 namespace ICSharpCode.TypeScriptBinding.Hosting
 {
 	public class DefaultJavaScriptContext : IJavaScriptContext
 	{
-		readonly JavascriptContext context = new JavascriptContext();
+		readonly Jint.Engine context = new Jint.Engine();
 
 		public void SetParameter(string name, object value)
 		{
-			context.SetParameter(name, value);
+			context.SetValue(name, value);
 		}
 
 		public void Run(string script)
 		{
-			context.Run(script);
+			context.Execute(script);
 		}
 
 		public void Dispose()

@@ -105,9 +105,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Mono.TextTemplating">
+	<PackageReference Include="Mono.TextTemplating" Version ="3.0.0" />
+    <!--<Reference Include="Mono.TextTemplating">
       <HintPath>..\..\..\..\..\packages\Mono.TextTemplating.2.3.1\lib\net472\Mono.TextTemplating.dll</HintPath>
-    </Reference>
+    </Reference>-->
   </ItemGroup>
 
   <ItemGroup>

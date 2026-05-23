@@ -67,14 +67,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+	  <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+	  <PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+	  <PackageReference Include="Microsoft.Build" Version ="16.11.6" />
+    <!--<Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Build" />
+    </Reference>-->
+    <!--<Reference Include="Microsoft.Build" />-->
     <Reference Include="System.Configuration" />
   </ItemGroup>
 
