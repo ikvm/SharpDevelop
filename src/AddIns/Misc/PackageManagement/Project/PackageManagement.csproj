@@ -502,10 +502,10 @@
       <HintPath>..\..\..\..\..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>-->
-    <Reference Include="NuGet.Console.Types">
+    <!--<Reference Include="NuGet.Console.Types">
       <HintPath>..\..\..\..\Libraries\NuGet\NuGet.Console.Types.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </Reference>-->
+    <!--<Reference Include="System.Management.Automation" />-->
   </ItemGroup>
 
   <ItemGroup>
