@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <OutputType>WinExe</OutputType>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -48,12 +48,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ICSharpCode.NRefactory">
+	<PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+    <!--<Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.CSharp">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
-    </Reference>
+    </Reference>-->
   </ItemGroup>
 
 </Project>

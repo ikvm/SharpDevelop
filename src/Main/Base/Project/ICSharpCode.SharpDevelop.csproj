@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <OutputType>Library</OutputType>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -741,7 +741,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
+	<PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+	<PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+    <!--<Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -753,7 +755,7 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.Xml">
       <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.Xml.dll</HintPath>
-    </Reference>
+    </Reference>-->
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.CSharp" />

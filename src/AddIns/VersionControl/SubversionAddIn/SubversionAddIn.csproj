@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <OutputType>Library</OutputType>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -76,12 +76,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SharpSvn">
-      <HintPath>..\..\..\..\packages\SharpSvn.1.14001.156\lib\net40\SharpSvn.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSvn.UI">
-      <HintPath>..\..\..\..\packages\SharpSvn.UI.1.14001.156\lib\net45\SharpSvn.UI.dll</HintPath>
-    </Reference>
+	<PackageReference Include="SharpSvn" Version="1.14005.390" />
+	<PackageReference Include="SharpSvn.UI" Version="1.14005.390" />
   </ItemGroup>
 
   <ItemGroup>
@@ -111,6 +107,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\..\..\packages\SharpSvn.1.14001.156\build\SharpSvn.targets" />
+  <!--<Import Project="..\..\..\..\packages\SharpSvn.1.14001.156\build\SharpSvn.targets" />-->
 
 </Project>
