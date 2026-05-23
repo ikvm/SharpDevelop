@@ -110,7 +110,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <Import Project="..\..\..\..\packages\SharpSvn.1.14001.156\build\SharpSvn.targets" />
 
 </Project>

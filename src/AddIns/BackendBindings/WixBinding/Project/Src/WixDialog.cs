@@ -146,7 +146,7 @@ namespace ICSharpCode.WixBinding
 				return "ProgressBar";
 			} else if (controlType == typeof(MaskedTextBox)) {
 				return "MaskedEdit";
-			} else if (controlType == typeof(TreeView)) {
+			} else if (controlType == typeof(System.Windows.Forms.TreeView)) {
 				return "SelectionTree";
 			} else if (controlType == typeof(RadioButtonGroupBox)) {
 				return "RadioButtonGroup";
@@ -348,7 +348,7 @@ namespace ICSharpCode.WixBinding
 						controls.Add(CreateControl(typeof(MaskedTextBox), controlElement, componentCreator));
 						break;
 					case "SelectionTree":
-						controls.Add(CreateControl(typeof(TreeView), controlElement, componentCreator));
+						controls.Add(CreateControl(typeof(System.Windows.Forms.TreeView), controlElement, componentCreator));
 						break;
 				}
 			}

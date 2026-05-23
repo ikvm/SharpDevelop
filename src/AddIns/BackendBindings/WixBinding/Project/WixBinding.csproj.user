@@ -6,4 +6,39 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartProgram>..\..\..\..\bin\SharpDevelop.exe</StartProgram>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Src\Commands\AddElementCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\ApplicationSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\CompilerParametersPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\NameValueListEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\PreprocessorVariablesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\RadioButtonGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\SetupDialogListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\WixPackageFilesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\WixPackageFilesDiffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\WixPackageFilesTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\PropertyGrid\GuidEditorListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

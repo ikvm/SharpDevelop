@@ -8,4 +8,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <StartProgram>..\..\..\..\..\bin\SharpDevelop.exe</StartProgram>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Src\Gui\AddInDetailsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\AddinTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\CodonListPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Src\Gui\TreeTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

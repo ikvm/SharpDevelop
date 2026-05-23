@@ -5,4 +5,9 @@
     <ProjectView>ShowAllFiles</ProjectView>
     <ProjectTrust>0</ProjectTrust>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Src\RegisterFiletypesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

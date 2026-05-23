@@ -74,6 +74,7 @@
       <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 
   <ItemGroup>

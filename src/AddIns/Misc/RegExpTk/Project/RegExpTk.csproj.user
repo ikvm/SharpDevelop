@@ -11,4 +11,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <StartProgram>..\..\..\..\..\bin\SharpDevelop.exe</StartProgram>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Src\Dialogs\GroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Src\Dialogs\MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
