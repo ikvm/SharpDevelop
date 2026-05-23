@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{E0A5E80A-003B-4335-A9DC-A76E2E46D38D}</ProjectGuid>
     <AssemblyName>PackageManagement.Cmdlets</AssemblyName>
     <RootNamespace>ICSharpCode.PackageManagement.Cmdlets</RootNamespace>

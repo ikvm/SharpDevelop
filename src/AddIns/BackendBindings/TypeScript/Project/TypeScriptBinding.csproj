@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{94BBCA55-A20E-4782-93B0-3566D185F7C1}</ProjectGuid>
     <AssemblyName>TypeScriptBinding</AssemblyName>
     <RootNamespace>ICSharpCode.TypeScriptBinding</RootNamespace>

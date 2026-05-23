@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{8AA421C8-D7AF-4957-9F43-5135328ACB24}</ProjectGuid>
     <AssemblyName>ILSpyAddIn</AssemblyName>
     <RootNamespace>ICSharpCode.ILSpyAddIn</RootNamespace>

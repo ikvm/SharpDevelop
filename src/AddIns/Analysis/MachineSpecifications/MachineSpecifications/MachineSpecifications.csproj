@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{D1DA3B8F-7313-4BDA-8880-461C5F007751}</ProjectGuid>
     <AssemblyName>MachineSpecifications</AssemblyName>
     <RootNamespace>ICSharpCode.MachineSpecifications</RootNamespace>

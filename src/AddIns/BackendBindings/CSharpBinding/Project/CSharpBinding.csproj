@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{1F1AC7CD-D154-45BB-8EAF-804CA8055F5A}</ProjectGuid>
     <AssemblyName>CSharpBinding</AssemblyName>
     <RootNamespace>CSharpBinding</RootNamespace>
@@ -168,6 +169,7 @@
     </Reference>
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="System.Design" />
   </ItemGroup>
 
   <ItemGroup>

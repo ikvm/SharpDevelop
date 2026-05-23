@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{A406803B-C584-43A3-BCEE-A0BB3132CB5F}</ProjectGuid>
     <AssemblyName>PackageManagement.PowerShell</AssemblyName>
     <RootNamespace>ICSharpCode.PackageManagement.PowerShell</RootNamespace>
@@ -48,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <PackageReference Include="System.Management.Automation" Version="7.6.2" />
   </ItemGroup>
 
   <ItemGroup>

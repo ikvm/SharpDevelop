@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{72FFB35A-C9E2-4A31-B4FA-E3E3E28DED5F}</ProjectGuid>
     <AssemblyName>ICSharpCode.Profiler.Controller</AssemblyName>
     <RootNamespace>ICSharpCode.Profiler.Controller</RootNamespace>

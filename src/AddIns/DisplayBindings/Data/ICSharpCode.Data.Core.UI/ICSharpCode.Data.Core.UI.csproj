@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{BAD94D6E-4159-4CB6-B991-486F412D9BB6}</ProjectGuid>
     <AssemblyName>ICSharpCode.Data.Core.UI</AssemblyName>
     <RootNamespace>ICSharpCode.Data.Core.UI</RootNamespace>

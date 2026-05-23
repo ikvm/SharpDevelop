@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{6F273DA5-E10C-45A6-9071-7313ECD98C90}</ProjectGuid>
     <AssemblyName>ICSharpCode.SharpDevelop.BuildWorker120</AssemblyName>
     <RootNamespace>ICSharpCode.SharpDevelop.BuildWorker</RootNamespace>

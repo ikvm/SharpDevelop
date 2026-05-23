@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{DFB936AD-90EE-4B4F-941E-4F4A636F0D92}</ProjectGuid>
     <AssemblyName>ICSharpCode.IconEditor</AssemblyName>
     <RootNamespace>ICSharpCode.IconEditor</RootNamespace>

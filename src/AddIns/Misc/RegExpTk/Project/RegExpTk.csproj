@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{64A3E5E6-90BF-47F6-94DF-68C94B62C817}</ProjectGuid>
     <AssemblyName>RegExpTk</AssemblyName>
     <WarningLevel>4</WarningLevel>

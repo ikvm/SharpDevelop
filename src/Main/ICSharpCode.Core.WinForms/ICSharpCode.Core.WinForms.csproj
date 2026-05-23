@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{857CA1A3-FC88-4BE0-AB6A-D1EE772AB288}</ProjectGuid>
     <AssemblyName>ICSharpCode.Core.WinForms</AssemblyName>
     <RootNamespace>ICSharpCode.Core.WinForms</RootNamespace>

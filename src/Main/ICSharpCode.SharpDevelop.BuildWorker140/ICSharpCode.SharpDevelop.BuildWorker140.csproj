@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{7BA66A6B-1ED8-4B4C-970C-8928E891418B}</ProjectGuid>
     <AssemblyName>ICSharpCode.SharpDevelop.BuildWorker140</AssemblyName>
     <RootNamespace>ICSharpCode.SharpDevelop.BuildWorker</RootNamespace>
@@ -57,8 +58,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.Build.Framework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+	<PackageReference Include="Microsoft.Build" Version ="16.11.6" />
+	<PackageReference Include="Microsoft.Build.Framework" Version ="16.11.6" />
   </ItemGroup>
 
 </Project>

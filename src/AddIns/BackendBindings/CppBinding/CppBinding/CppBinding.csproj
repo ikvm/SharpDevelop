@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{70966F84-74C9-4067-A379-0C674A929233}</ProjectGuid>
     <AssemblyName>CppBinding</AssemblyName>
     <RootNamespace>ICSharpCode.CppBinding</RootNamespace>

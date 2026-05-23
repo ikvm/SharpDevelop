@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{3EAA45A9-735C-4AC7-A799-947B93EA449D}</ProjectGuid>
     <AssemblyName>CodeAnalysis</AssemblyName>
     <RootNamespace>ICSharpCode.CodeAnalysis</RootNamespace>

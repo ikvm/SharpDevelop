@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{3C532D80-32B4-40E5-B5FE-BC6BAE1A00E7}</ProjectGuid>
     <AssemblyName>ICSharpCode.CodeQuality</AssemblyName>
     <RootNamespace>ICSharpCode.CodeQuality</RootNamespace>

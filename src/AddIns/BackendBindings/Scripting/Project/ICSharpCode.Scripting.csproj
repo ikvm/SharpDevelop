@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{7048AE18-EB93-4A84-82D0-DD60EB58ADBD}</ProjectGuid>
     <AssemblyName>ICSharpCode.Scripting</AssemblyName>
     <RootNamespace>ICSharpCode.Scripting</RootNamespace>

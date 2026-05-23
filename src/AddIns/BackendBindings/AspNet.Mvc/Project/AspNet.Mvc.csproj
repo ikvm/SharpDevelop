@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{D781721F-C2A7-4E95-B76F-247170AC3B13}</ProjectGuid>
     <AssemblyName>AspNet.Mvc</AssemblyName>
     <RootNamespace>ICSharpCode.AspNet.Mvc</RootNamespace>

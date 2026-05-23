@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{9196DD8A-B4D4-4780-8742-C5762E547FC2}</ProjectGuid>
     <AssemblyName>SearchAndReplace</AssemblyName>
     <RootNamespace>SearchAndReplace</RootNamespace>

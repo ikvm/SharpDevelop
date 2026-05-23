@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{DDE2A481-8271-4EAC-A330-8FA6A38D13D1}</ProjectGuid>
     <AssemblyName>ICSharpCode.TreeView</AssemblyName>
     <RootNamespace>ICSharpCode.TreeView</RootNamespace>

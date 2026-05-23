@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{FE88FE17-D9FB-4FCC-9A35-6BFFB6B26CC6}</ProjectGuid>
     <AssemblyName>Profiler.X64Converter</AssemblyName>
     <RootNamespace>X64Converter</RootNamespace>

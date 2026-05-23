@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{0502FCF7-72F4-4587-936B-D0238CD0E072}</ProjectGuid>
     <AssemblyName>ICSharpCode.Reporting.Addin</AssemblyName>
     <RootNamespace>ICSharpCode.Reporting.Addin</RootNamespace>
@@ -156,6 +157,7 @@
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\..\..\packages\Extended.Wpf.Toolkit.4.5.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>

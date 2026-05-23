@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{0008FCE9-9EB4-4E2E-979B-553278E5BBA6}</ProjectGuid>
     <AssemblyName>UsageDataCollector.AddIn</AssemblyName>
     <RootNamespace>ICSharpCode.UsageDataCollector</RootNamespace>

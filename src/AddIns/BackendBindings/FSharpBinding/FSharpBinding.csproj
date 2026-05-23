@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{E954F3CB-A446-492F-A664-2B376EBC86E8}</ProjectGuid>
     <AssemblyName>FSharpBinding</AssemblyName>
     <RootNamespace>FSharpBinding</RootNamespace>

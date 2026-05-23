@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{D022A6CE-7438-41E8-AC64-F2DE18EC54C6}</ProjectGuid>
     <AssemblyName>ICSharpCode.FiletypeRegisterer</AssemblyName>
     <RootNamespace>ICSharpCode.FiletypeRegisterer</RootNamespace>

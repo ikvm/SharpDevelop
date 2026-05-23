@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{5C70D6AB-0A33-43F9-B8B5-54558C35BBB1}</ProjectGuid>
     <AssemblyName>ICSharpCode.Data.EDMDesigner.Core</AssemblyName>
     <RootNamespace>ICSharpCode.Data.EDMDesigner.Core</RootNamespace>

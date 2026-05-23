@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{EC06F96A-AEEC-49D6-B03D-AB87C6EB674C}</ProjectGuid>
     <AssemblyName>Debugger.AddIn</AssemblyName>
     <RootNamespace>Debugger.AddIn</RootNamespace>
@@ -179,6 +180,10 @@
     <Content Include="PostBuildEvent.proj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="PresentationFramework.Aero2" Version="1.0.1" />
+	</ItemGroup>
+
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
@@ -194,6 +199,7 @@
     <Reference Include="ICSharpCode.NRefactory.CSharp">
       <HintPath>..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <ItemGroup>
@@ -233,7 +239,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <!--<Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />-->
   <Import Project="PostBuildEvent.proj" />
 
 </Project>

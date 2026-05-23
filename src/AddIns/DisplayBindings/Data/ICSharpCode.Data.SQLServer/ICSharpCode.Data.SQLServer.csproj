@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{AFE34868-AFA1-4E1C-9450-47AB4BE329D5}</ProjectGuid>
     <AssemblyName>ICSharpCode.Data.SQLServer</AssemblyName>
     <RootNamespace>ICSharpCode.Data.SQLServer</RootNamespace>

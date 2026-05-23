@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{83F15BA7-8478-4664-81BB-A82F146D88B3}</ProjectGuid>
     <AssemblyName>GitAddIn</AssemblyName>
     <RootNamespace>ICSharpCode.GitAddIn</RootNamespace>

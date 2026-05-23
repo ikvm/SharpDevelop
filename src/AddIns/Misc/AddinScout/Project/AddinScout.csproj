@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{4B8F0F98-8BE1-402B-AA8B-C8D548577B38}</ProjectGuid>
     <AssemblyName>AddinScout</AssemblyName>
     <RootNamespace>AddInScout</RootNamespace>

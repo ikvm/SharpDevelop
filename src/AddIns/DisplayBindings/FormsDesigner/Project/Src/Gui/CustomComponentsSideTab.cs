@@ -44,18 +44,18 @@ namespace ICSharpCode.FormsDesigner.Gui
 		{
 			this.DisplayName = StringParser.Parse(this.Name);
 			ScanProjectAssemblies();
-			ProjectService.BuildFinished    += RescanProjectAssemblies;
-			ProjectService.SolutionLoaded   += RescanProjectAssemblies;
-			ProjectService.ProjectItemAdded += ProjectItemAdded;
+			SD.BuildService.BuildFinished    += RescanProjectAssemblies;
+			SD.ProjectService.SolutionOpened   += RescanProjectAssemblies;
+			SD.ProjectService.ProjectItemAdded += ProjectItemAdded;
 		}
 		
 		public void Dispose()
 		{
 			if (!disposed) {
 				disposed = true;
-				ProjectService.BuildFinished    -= RescanProjectAssemblies;
-				ProjectService.SolutionLoaded   -= RescanProjectAssemblies;
-				ProjectService.ProjectItemAdded -= ProjectItemAdded;
+				SD.BuildService.BuildFinished    -= RescanProjectAssemblies;
+				SD.ProjectService.SolutionOpened   -= RescanProjectAssemblies;
+				SD.ProjectService.ProjectItemAdded -= ProjectItemAdded;
 			}
 		}
 		

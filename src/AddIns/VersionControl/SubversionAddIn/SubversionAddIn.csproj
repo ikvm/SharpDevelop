@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{17F4D7E0-6933-4C2E-8714-FD7E98D625D5}</ProjectGuid>
     <AssemblyName>SubversionAddIn</AssemblyName>
     <RootNamespace>ICSharpCode.Svn</RootNamespace>

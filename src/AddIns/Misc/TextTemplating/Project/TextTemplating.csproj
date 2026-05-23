@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{B5D8C3E6-42EC-4D4B-AD05-3644B32563EF}</ProjectGuid>
     <AssemblyName>TextTemplating</AssemblyName>
     <RootNamespace>ICSharpCode.TextTemplating</RootNamespace>

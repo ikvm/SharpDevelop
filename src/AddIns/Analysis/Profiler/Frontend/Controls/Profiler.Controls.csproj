@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{BDA49550-5ED1-4C6B-B648-657B2CACD8E0}</ProjectGuid>
     <AssemblyName>ICSharpCode.Profiler.Controls</AssemblyName>
     <RootNamespace>ICSharpCode.Profiler.Controls</RootNamespace>
@@ -73,6 +74,10 @@
   <ItemGroup>
     <Reference Include="UIAutomationProvider" />
   </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="PresentationFramework.Aero2" Version="1.0.1" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Controller\Profiler.Controller.csproj">

@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{4139CCF6-FB49-4A9D-B2CF-331E9EA3198D}</ProjectGuid>
     <AssemblyName>ICSharpCode.Build.Tasks</AssemblyName>
     <RootNamespace>ICSharpCode.Build.Tasks</RootNamespace>

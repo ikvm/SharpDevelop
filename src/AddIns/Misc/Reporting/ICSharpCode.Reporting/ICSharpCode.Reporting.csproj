@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{40CA84D4-ACFC-4646-9CDD-B87262D34093}</ProjectGuid>
     <AssemblyName>ICSharpCode.Reporting</AssemblyName>
     <RootNamespace>ICSharpCode.Reporting</RootNamespace>

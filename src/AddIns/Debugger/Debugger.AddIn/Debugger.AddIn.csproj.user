@@ -19,4 +19,12 @@
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>true</VerifyUploadedFiles>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Service\AttachToProcessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Service\DebuggeeExceptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

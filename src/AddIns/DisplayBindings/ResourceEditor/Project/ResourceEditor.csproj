@@ -7,6 +7,7 @@
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <ProjectGuid>{CBC6C247-747B-4908-B09A-4D2E0F640B6B}</ProjectGuid>
     <AssemblyName>ResourceEditor</AssemblyName>
     <RootNamespace>ResourceEditor</RootNamespace>
@@ -82,6 +83,7 @@
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
   </ItemGroup>
 
   <ItemGroup>
@@ -110,6 +112,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <!--<Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />-->
 
 </Project>
