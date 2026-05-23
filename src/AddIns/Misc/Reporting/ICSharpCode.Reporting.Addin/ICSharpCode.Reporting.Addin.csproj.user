@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="src\DesignableItems\AbstractGraphicItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\AbstractItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseCircleItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseDataItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseGroupHeader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseImageItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseLineItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseRectangleItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseRowItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseSection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\DesignableItems\BaseTextItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="src\Designer\RootReportModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="src\Dialogs\EditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,48 @@
+<AddIn name        = "AI Agent"
+       author      = "AI Team"
+       copyright   = "prj:///doc/copyright.txt"
+       description = "AI-powered code assistance and productivity tools"
+       addInManagerHidden = "preinstalled">
+	
+	<Manifest>
+		<Identity name = "ICSharpCode.AiAgent"/>
+	</Manifest>
+	
+	<Runtime>
+		<Import assembly = "AiAgent.dll"/>
+	</Runtime>
+	
+	<Path name = "/SharpDevelop/Workbench/MainMenu/Tools">
+		<MenuItem id = "ShowAiAgent"
+		          insertafter  = "Options"
+		          label = "${res:ICSharpCode.AiAgent.ShowAiAgent}"
+		          icon  = "Icons.16x16.Computer"
+		          class = "ICSharpCode.AiAgent.ShowAiAgentCommand"/>
+	</Path>
+	
+	<Path name = "/SharpDevelop/Pads/ProjectBrowser/ContextMenu/ProjectActions">
+		<MenuItem id    = "AiCodeGenerate"
+		          label = "${res:ICSharpCode.AiAgent.GenerateCode}"
+		          class = "ICSharpCode.AiAgent.GenerateCodeCommand"/>
+		<MenuItem id    = "AiCodeExplain"
+		          label = "${res:ICSharpCode.AiAgent.ExplainCode}"
+		          class = "ICSharpCode.AiAgent.ExplainCodeCommand"/>
+		<MenuItem id    = "AiCodeOptimize"
+		          label = "${res:ICSharpCode.AiAgent.OptimizeCode}"
+		          class = "ICSharpCode.AiAgent.OptimizeCodeCommand"/>
+	</Path>
+
+	<Path name = "/SharpDevelop/Pads">
+		<Pad id          = "AiAgent"
+		     label       = "${res:ICSharpCode.AiAgent.AiAgent}"
+		     icon        = "Icons.16x16.Computer"
+		     class       = "ICSharpCode.AiAgent.AiAgentPad"
+		     defaultPosition = "Right"/>
+	</Path>
+	
+	<Path name="/SharpDevelop/Workbench/Autostart">
+		<Class id = "AiService"
+		       class = "ICSharpCode.AiAgent.AiService"/>
+	</Path>
+	
+</AddIn>
