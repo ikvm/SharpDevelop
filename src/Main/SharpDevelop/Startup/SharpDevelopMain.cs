@@ -154,15 +154,15 @@ namespace ICSharpCode.SharpDevelop.Startup
 			// when reading from other processes' standard output, we explicitly set the encoding to get
 			// consistent behaviour in debug and release builds of SharpDevelop.
 			
-			#if DEBUG
-			// Console apps use the system's OEM codepage, windows apps the ANSI codepage.
-			// We'll always use the Windows (ANSI) codepage.
-			try {
-				Console.OutputEncoding = System.Text.Encoding.Default;
-			} catch (IOException) {
-				// can happen if SharpDevelop doesn't have a console
-			}
-			#endif
+			//#if DEBUG
+			//// Console apps use the system's OEM codepage, windows apps the ANSI codepage.
+			//// We'll always use the Windows (ANSI) codepage.
+			//try {
+			//	Console.OutputEncoding = System.Text.Encoding.Default;
+			//} catch (IOException) {
+			//	// can happen if SharpDevelop doesn't have a console
+			//}
+			//#endif
 			
 			LoggingService.Info("Starting SharpDevelop...");
 			try {
