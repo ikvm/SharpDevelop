@@ -113,7 +113,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="FormsDesigner.addin" CopyToOutputDirectory="Never" />
+    <None Include="FormsDesigner.addin" CopyToOutputDirectory="Always" />
     <None Include="packages.config" />
   </ItemGroup>
 

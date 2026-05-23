@@ -315,9 +315,9 @@ namespace ICSharpCode.SharpDevelop.Gui
 				{ "Framework", null },
 				{ "Microsoft-Windows-CLRCoreComp", null },
 				{ "Microsoft.VisualStudio.Primary.Interop.Assemblies.8.0", null },
-				{ "Microsoft-WinFX-Runtime", "3.0" },
-				{ "Microsoft-Windows-CLRCoreComp.3.0", "3.0" },
-				{ "Microsoft-Windows-CLRCoreComp-v3.5", "3.5" },
+				//{ "Microsoft-WinFX-Runtime", "3.0" },
+				//{ "Microsoft-Windows-CLRCoreComp.3.0", "3.0" },
+				//{ "Microsoft-Windows-CLRCoreComp-v3.5", "3.5" },
 				{ "Microsoft-Windows-CLRCoreComp.4.0", "4.0" },
 			};
 			

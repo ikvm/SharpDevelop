@@ -194,7 +194,7 @@ namespace ICSharpCode.SharpDevelop.Project
 			this.userProjectFile = ProjectRootElement.Create(MSBuildProjectCollection);
 			
 			projectFile.FullPath = information.FileName;
-			projectFile.ToolsVersion = "4.0";
+			projectFile.ToolsVersion = "Current";
 			projectFile.DefaultTargets = "Build";
 			userProjectFile.FullPath = information.FileName + ".user";
 			
@@ -1264,7 +1264,7 @@ namespace ICSharpCode.SharpDevelop.Project
 			}
 		}
 		
-		const string autoUpgradeNewToolsVersion = "4.0";
+		const string autoUpgradeNewToolsVersion = "Current";
 		
 		bool UpgradeToolsVersion(ProjectLoadInformation loadInformation)
 		{

@@ -40,7 +40,7 @@ namespace ICSharpCode.PackageManagement.Design
 			this.Name = name;
 			
 			ConstraintProvider = NullConstraintProvider.Instance;
-			TargetFramework = new FrameworkName(".NETFramework", new Version("4.0"));
+			TargetFramework = new FrameworkName(".NETFramework", new Version("4.8.1"));
 			
 			InstallPackageAction = (package, installAction) => {
 				PackagePassedToInstallPackage = package;

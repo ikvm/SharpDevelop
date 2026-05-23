@@ -61,7 +61,7 @@
 
   <ItemGroup>
     <None Include="SharpDevelop.SourceAnalysis.targets" CopyToOutputDirectory="Always" />
-    <None Include="SourceAnalysis.addin" CopyToOutputDirectory="Always" />
+    <None Include="SourceAnalysis.addin" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

@@ -187,19 +187,21 @@ namespace ICSharpCode.SharpDevelop.Workbench
 			LoggingService.Debug("Preload-Thread started.");
 			
 			// warm up MSBuild
-			string projectCode = @"
-<Project DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"" ToolsVersion=""4.0"">
+			string projectCode = 
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project Sdk=""Microsoft.NET.Sdk"">
+  
   <PropertyGroup>
+	<TargetFramework>net481</TargetFramework>
     <Configuration>Debug</Configuration>
     <Platform>AnyCPU</Platform>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include=""System"" />
   </ItemGroup>
-  <Import Project=""$(MSBuildToolsPath)\Microsoft.CSharp.targets"" />
 </Project>";
 			var project = new Microsoft.Build.Evaluation.Project(
-				new System.Xml.XmlTextReader(new System.IO.StringReader(projectCode)), null, "4.0",
+				new System.Xml.XmlTextReader(new System.IO.StringReader(projectCode)), null, "Current",
 				new Microsoft.Build.Evaluation.ProjectCollection());
 			
 			// warm up the XSHD loader

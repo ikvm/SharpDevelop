@@ -163,6 +163,7 @@
   <ItemGroup>
 	<PackageReference Include="Irony" Version="1.5.3" />
 	<PackageReference Include="Irony.Interpreter" Version="1.5.3" />
+	<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
     <!--<Reference Include="Irony, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ca48ace7223ead47">
       <HintPath>..\..\..\..\..\packages\Irony.1.2.0\lib\netstandard2.0\Irony.dll</HintPath>
       <Private>True</Private>

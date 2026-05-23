@@ -178,7 +178,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\data\resources\StringResources.resx" />
+    <EmbeddedResource Include="..\..\..\data\resources\StringResources.resx" Link="Resources\StringResources.resx" />
+    <EmbeddedResource Include="..\..\..\data\resources\StringResources.zh.resx" Link="Resources\StringResources.zh.resx" />
     <EmbeddedResource Include="Resources\BitmapResources.resources" />
     <EmbeddedResource Include="Resources\SplashScreen.jpg" LogicalName="Resources.SplashScreen.jpg" />
   </ItemGroup>
@@ -188,7 +189,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\data\resources\StringResources.resx" Link="StringResources.resx" />
+    <None Include="..\..\..\data\resources\StringResources.resx" Link="Resources\StringResources.resx" />
     <None Include="..\GlobalAssemblyInfo.cs.template" Link="Configuration\GlobalAssemblyInfo.cs.template" />
     <None Include="..\GlobalAssemblyInfo.vb.template" Link="Configuration\GlobalAssemblyInfo.vb.template" />
     <None Include="app.config" />
@@ -199,11 +200,14 @@
 
   <ItemGroup>
 	<PackageReference Include="AvalonEdit" Version="6.3.1.120" />
-	<PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+	<PackageReference Include="ICSharpCode.NRefactory" Version ="5.5.1" />
+	<PackageReference Include="Microsoft.Build" Version ="18.6.3" />
+	<PackageReference Include="Microsoft.Build.Framework" Version ="18.6.3" />
     <Reference Include="ICSharpCode.NRefactory.CSharp.Refactoring">
       <HintPath>..\..\Libraries\ICSharpCode.NRefactory\ICSharpCode.NRefactory.CSharp.Refactoring.dll</HintPath>
     </Reference>
 	<PackageReference Include="log4net" Version="3.3.1" />
+	<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
     <!--<Reference Include="ICSharpCode.AvalonEdit, Version=6.3.0.90, Culture=neutral, PublicKeyToken=9cc39be672370310">
       <HintPath>..\..\..\packages\AvalonEdit.6.3.0.90\lib\net462\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
@@ -221,8 +225,6 @@
       <HintPath>..\..\..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>-->
-	<PackageReference Include="Microsoft.Build" Version="16.11.6" />
-	<PackageReference Include="Microsoft.Build.Framework" Version="16.11.6" />
     <!--<Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />-->
 	<PackageReference Include="Mono.Cecil" Version="0.9.6.4" />

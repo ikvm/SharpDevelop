@@ -6,9 +6,6 @@ bin/
 /AddIns/
 /doc/ChangeLog.html
 /data/resources/StringResources.*.resources
-/src/AddIns/Analysis/Profiler/Controller/Data/UnmanagedCallTreeNode64.cs
-/src/AddIns/Analysis/Profiler/Controller/Profiler64.cs
-/src/AddIns/Analysis/Profiler/Controller/structs64.cs
 /src/AddIns/Analysis/Profiler/Hook/Callback.x64.obj
 /src/AddIns/Analysis/Profiler/Hook/x64
 /src/AddIns/Analysis/Profiler/Hook/Win32

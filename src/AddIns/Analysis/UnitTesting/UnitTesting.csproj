@@ -102,7 +102,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="PostBuildEvent.proj" />
-    <None Include="UnitTesting.addin" CopyToOutputDirectory="Never" />
+    <None Include="UnitTesting.addin" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>
