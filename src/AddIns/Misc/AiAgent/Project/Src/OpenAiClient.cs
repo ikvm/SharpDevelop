@@ -50,10 +50,12 @@ namespace ICSharpCode.AiAgent
             switch (provider)
             {
                 case AiProvider.OpenAI:
-                    _apiEndpoint = "https://api.openai.com/v1/chat/completions";
-                    break;
+                    //_apiEndpoint = "https://api.openai.com/v1/chat/completions";
+                    _apiEndpoint = "https://api.longcat.chat/v1/chat/completions";
+					break;
                 case AiProvider.Anthropic:
-                    _apiEndpoint = "https://api.anthropic.com/v1/messages";
+                    //_apiEndpoint = "https://api.anthropic.com/v1/messages";
+                    _apiEndpoint = "https://api.longcat.chat/anthropic//v1/messages";
                     break;
             }
         }
@@ -73,8 +75,9 @@ namespace ICSharpCode.AiAgent
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
                     break;
                 case AiProvider.Anthropic:
-                    _httpClient.DefaultRequestHeaders.Add("X-API-Key", _apiKey);
-                    _httpClient.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+                    //_httpClient.DefaultRequestHeaders.Add("X-API-Key", _apiKey);
+                    //_httpClient.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
                     break;
             }
         }
@@ -91,10 +94,12 @@ namespace ICSharpCode.AiAgent
             switch (_provider)
             {
                 case AiProvider.OpenAI:
-                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, model ?? "gpt-3.5-turbo");
+                    //jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, model ?? "gpt-3.5-turbo");
+                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, model ?? "LongCat-Flash-Lite");
                     break;
                 case AiProvider.Anthropic:
-                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, model ?? "claude-3-code-3-5-sonnet-20240620");
+                    //jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, model ?? "claude-3-code-3-5-sonnet-20240620");
+                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, model ?? "LongCat-Flash-Lite");
                     break;
                 default:
                     throw new NotSupportedException("AI provider not supported");

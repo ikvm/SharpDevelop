@@ -13,31 +13,20 @@
 	</Runtime>
 	
 	<Path name = "/SharpDevelop/Workbench/MainMenu/Tools">
-		<MenuItem id = "ShowAiAgent"
+		<MenuItem id    = "ShowAiAgent"
 		          insertafter  = "Options"
-		          label = "${res:ICSharpCode.AiAgent.ShowAiAgent}"
-		          icon  = "Icons.16x16.Computer"
-		          class = "ICSharpCode.AiAgent.ShowAiAgentCommand"/>
+		          label        = "AI Agent"
+		          icon         = "Icons.16x16.BrowserWindow"
+		          class        = "ICSharpCode.AiAgent.ShowAiAgentCommand"/>
 	</Path>
 	
-	<Path name = "/SharpDevelop/Pads/ProjectBrowser/ContextMenu/ProjectActions">
-		<MenuItem id    = "AiCodeGenerate"
-		          label = "${res:ICSharpCode.AiAgent.GenerateCode}"
-		          class = "ICSharpCode.AiAgent.GenerateCodeCommand"/>
-		<MenuItem id    = "AiCodeExplain"
-		          label = "${res:ICSharpCode.AiAgent.ExplainCode}"
-		          class = "ICSharpCode.AiAgent.ExplainCodeCommand"/>
-		<MenuItem id    = "AiCodeOptimize"
-		          label = "${res:ICSharpCode.AiAgent.OptimizeCode}"
-		          class = "ICSharpCode.AiAgent.OptimizeCodeCommand"/>
-	</Path>
-
-	<Path name = "/SharpDevelop/Pads">
-		<Pad id          = "AiAgent"
-		     label       = "${res:ICSharpCode.AiAgent.AiAgent}"
-		     icon        = "Icons.16x16.Computer"
-		     class       = "ICSharpCode.AiAgent.AiAgentPad"
-		     defaultPosition = "Right"/>
+	<Path name = "/SharpDevelop/Workbench/Pads">
+		<Pad id                = "AiAgentPad"
+		     category          = "AI"
+		     title             = "AI Agent"
+		     icon              = "Icons.16x16.BrowserWindow"
+		     class             = "ICSharpCode.AiAgent.AiAgentPad"
+		     defaultPosition   = "Right, Hidden"/>
 	</Path>
 	
 	<Path name="/SharpDevelop/Workbench/Autostart">

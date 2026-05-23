@@ -4,6 +4,8 @@ using ICSharpCode.SharpDevelop.Gui;
 using ICSharpCode.SharpDevelop.Editor;
 using ICSharpCode.SharpDevelop.Workbench;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ICSharpCode.AiAgent
@@ -12,9 +14,35 @@ namespace ICSharpCode.AiAgent
     {
         public override void Run()
         {
+            // 首先尝试通过GetPad获取
             var pad = SD.Workbench.GetPad(typeof(AiAgentPad));
             if (pad != null)
+            {
                 pad.BringPadToFront();
+                return;
+            }
+            
+            // 如果GetPad返回null，遍历PadContentCollection查找
+            foreach (var p in SD.Workbench.PadContentCollection)
+            {
+                if (p.Class == typeof(AiAgentPad).FullName)
+                {
+                    p.BringPadToFront();
+                    return;
+                }
+            }
+            
+            // 最后尝试通过AddInTree查找
+            var pads = ICSharpCode.Core.AddInTree.BuildItems<PadDescriptor>("/SharpDevelop/Workbench/Pads", null, false);
+            foreach (var p in pads)
+            {
+                if (p.Class == typeof(AiAgentPad).FullName)
+                {
+                    // 使用ActivatePad而不是ShowPad
+                    SD.Workbench.ActivatePad(p);
+                    return;
+                }
+            }
         }
     }
 
