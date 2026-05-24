@@ -1092,10 +1092,12 @@ namespace ICSharpCode.SharpDevelop.Project
 				bool isSdkProject = !string.IsNullOrEmpty(projectFile.Sdk);
 				foreach (var item in c.Project.AllEvaluatedItems) {
 					if (!isSdkProject && item.IsImported) continue;
+
+					Trace.WriteLine($"item: EvaluatedInclude={item.EvaluatedInclude}.ItemType={item.ItemType}");
 					
 					if (isSdkProject) {
 						// Skip SDK-provided framework references that are implicit from the target framework
-						if (item.ItemType == "FrameworkReference")
+						if (item.ItemType == "FrameworkReference" || item.ItemType == "AdditionalProbingPath")
 							continue;
 						
 						var category = ProjectItemClassifier.ClassifyItem(item);
