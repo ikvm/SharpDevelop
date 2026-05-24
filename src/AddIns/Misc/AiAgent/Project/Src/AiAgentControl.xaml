@@ -3,76 +3,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ICSharpCode.AiAgent"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="AI Agent" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" x:Name="StatusText" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" x:Name="StatusText" FontSize="10" Foreground="Gray" VerticalAlignment="Center" Margin="8 0 0 0"/>
+            <Button Grid.Column="2" x:Name="SettingsButton" Content="Settings" Width="70" Height="22" FontSize="11"/>
         </Grid>
         
         <Grid Grid.Row="1" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Provider:" Margin="0 0 5 0"/>
-            <ComboBox Grid.Column="1" x:Name="ProviderComboBox" Width="200">
-                <ComboBoxItem Tag="OpenAI" IsSelected="True">OpenAI (GPT)</ComboBoxItem>
-                <ComboBoxItem Tag="Anthropic">Anthropic (Claude)</ComboBoxItem>
-            </ComboBox>
-        </Grid>
-        
-        <Grid Grid.Row="2" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="API Key:" Margin="0 0 5 0"/>
-            <PasswordBox Grid.Column="1" x:Name="ApiKeyTextBox" Width="200"/>
-            <Button Grid.Column="2" x:Name="ConfigureButton" Content="Configure" Width="80"/>
-        </Grid>
-        
-        <Grid Grid.Row="3" Margin="5">
-            <Label Content="Select Action:"/>
-        </Grid>
-        
-        <Grid Grid.Row="4" Margin="5">
             <StackPanel Orientation="Vertical">
-                <Button x:Name="BtnGenerate" Content="Code Generation" Margin="0 2"/>
-                <Button x:Name="BtnExplain" Content="Explain Code" Margin="0 2"/>
-                <Button x:Name="BtnOptimize" Content="Optimize Code" Margin="0 2"/>
-                <Button x:Name="BtnRefactor" Content="Refactor Code" Margin="0 2"/>
-                <Button x:Name="BtnDebug" Content="Debug Code" Margin="0 2"/>
+                <Button x:Name="BtnGenerate" Content="Code Generation" Margin="0 2" Height="28"/>
+                <Button x:Name="BtnExplain" Content="Explain Code" Margin="0 2" Height="28"/>
+                <Button x:Name="BtnOptimize" Content="Optimize Code" Margin="0 2" Height="28"/>
+                <Button x:Name="BtnRefactor" Content="Refactor Code" Margin="0 2" Height="28"/>
+                <Button x:Name="BtnDebug" Content="Debug Code" Margin="0 2" Height="28"/>
             </StackPanel>
         </Grid>
         
-        <Grid Grid.Row="5" Margin="5">
-            <Label Content="Prompt:"/>
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Prompt:"/>
+            <TextBox Grid.Row="1" x:Name="PromptTextBox" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
         </Grid>
         
-        <Grid Grid.Row="6" Margin="5">
-            <TextBox x:Name="PromptTextBox" AcceptsReturn="True" Height="100" VerticalScrollBarVisibility="Auto"/>
+        <Grid Grid.Row="3" Margin="5">
+            <local:ThinkingStreamControl x:Name="StreamOutput"/>
         </Grid>
         
-        <Grid Grid.Row="7" Margin="5">
-            <Button x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="100" HorizontalAlignment="Right"/>
+        <Grid Grid.Row="4" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="100" Height="28"/>
         </Grid>
     </Grid>
 </UserControl>

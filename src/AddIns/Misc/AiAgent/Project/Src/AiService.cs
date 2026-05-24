@@ -11,6 +11,7 @@ namespace ICSharpCode.AiAgent
         private static AiService _instance;
         private readonly OpenAiClient _openAiClient;
         private readonly SynchronizationContext _synchronizationContext;
+        private CancellationTokenSource _streamCts;
         private bool _isConfigured;
         private bool _isProcessing;
         private string _statusMessage;
@@ -74,7 +75,7 @@ namespace ICSharpCode.AiAgent
                 string apiKey = PropertyService.Get("AiAgent.ApiKey", string.Empty);
                 string apiEndpoint = PropertyService.Get("AiAgent.ApiEndpoint", string.Empty);
                 string providerStr = PropertyService.Get("AiAgent.Provider", "OpenAI");
-                
+
                 if (Enum.TryParse(providerStr, out AiProvider provider))
                 {
                     Provider = provider;
@@ -109,20 +110,73 @@ namespace ICSharpCode.AiAgent
                 Provider = provider;
                 _openAiClient.Configure(apiKey, apiEndpoint, provider);
                 IsConfigured = true;
-                
+
                 PropertyService.Set("AiAgent.ApiKey", apiKey);
                 PropertyService.Set("AiAgent.Provider", provider.ToString());
                 if (!string.IsNullOrEmpty(apiEndpoint))
                 {
                     PropertyService.Set("AiAgent.ApiEndpoint", apiEndpoint);
                 }
-                
+
                 StatusMessage = $"AI Agent configured successfully ({provider})";
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Configuration failed: {ex.Message}";
                 LoggingService.Error("AI Agent configuration failed", ex);
+            }
+        }
+
+        public async Task StreamActionAsync(string prompt, string systemMessage, string actionName, ThinkingStreamControl outputControl)
+        {
+            if (!IsConfigured)
+                throw new InvalidOperationException("AI Agent is not configured");
+
+            CancelCurrentStream();
+            _streamCts = new CancellationTokenSource();
+
+            IsProcessing = true;
+            StatusMessage = $"{actionName}...";
+            outputControl.BeginStream(actionName);
+
+            try
+            {
+                await _openAiClient.StreamChatMessageAsync(
+                    prompt,
+                    chunk => outputControl.AppendChunk(chunk),
+                    _streamCts.Token,
+                    systemMessage);
+
+                if (!_streamCts.IsCancellationRequested)
+                {
+                    outputControl.SetCompleted();
+                    StatusMessage = $"{actionName} completed";
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                outputControl.Cancel();
+                StatusMessage = $"{actionName} cancelled";
+            }
+            catch (Exception ex)
+            {
+                outputControl.SetError(ex.Message);
+                StatusMessage = $"Error: {ex.Message}";
+                LoggingService.Error($"AI Agent {actionName} failed", ex);
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
+        }
+
+        public void CancelCurrentStream()
+        {
+            if (_streamCts != null)
+            {
+                _streamCts.Cancel();
+                _streamCts.Dispose();
+                _streamCts = null;
             }
         }
 

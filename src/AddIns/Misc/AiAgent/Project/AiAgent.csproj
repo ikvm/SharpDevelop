@@ -20,6 +20,7 @@
 
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -43,6 +44,9 @@
     <Compile Include="Configuration\AssemblyInfo.cs" />
     <Compile Include="Src\AiAgentPad.cs" />
     <Compile Include="Src\AiAgentControl.xaml.cs" DependentUpon="AiAgentControl.xaml" />
+    <Compile Include="Src\ConfigurationDialog.xaml.cs" DependentUpon="ConfigurationDialog.xaml" />
+    <Compile Include="Src\TypewriterResultWindow.xaml.cs" DependentUpon="TypewriterResultWindow.xaml" />
+    <Compile Include="Src\ThinkingStreamControl.xaml.cs" DependentUpon="ThinkingStreamControl.xaml" />
     <Compile Include="Src\AiAgentCommands.cs" />
     <Compile Include="Src\AiService.cs" />
     <Compile Include="Src\OpenAiClient.cs" />
@@ -50,6 +54,9 @@
 
   <ItemGroup>
     <Page Include="Src\AiAgentControl.xaml" />
+    <Page Include="Src\ConfigurationDialog.xaml" />
+    <Page Include="Src\TypewriterResultWindow.xaml" />
+    <Page Include="Src\ThinkingStreamControl.xaml" />
   </ItemGroup>
 
   <ItemGroup>

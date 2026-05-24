@@ -21,70 +21,37 @@ namespace ICSharpCode.AiAgent
             _control.BtnRefactor.Click += BtnRefactor_Click;
             _control.BtnDebug.Click += BtnDebug_Click;
             _control.BtnExecute.Click += BtnExecute_Click;
-            _control.ConfigureButton.Click += ConfigureButton_Click;
-            
+            _control.SettingsButton.Click += SettingsButton_Click;
+
             UpdateStatus();
-            
+
             AiService.Instance.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(AiService.StatusMessage))
                 {
                     UpdateStatus();
                 }
-                else if (e.PropertyName == nameof(AiService.Provider))
+                else if (e.PropertyName == nameof(AiService.IsConfigured))
                 {
-                    UpdateProviderSelection();
+                    UpdateStatus();
+                    _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
                 }
             };
-            
-            UpdateProviderSelection();
         }
 
         private void UpdateStatus()
         {
             _control.StatusText.Text = AiService.Instance.StatusMessage;
-            _control.StatusText.Foreground = AiService.Instance.IsConfigured 
-                ? System.Windows.Media.Brushes.Green 
+            _control.StatusText.Foreground = AiService.Instance.IsConfigured
+                ? System.Windows.Media.Brushes.Green
                 : System.Windows.Media.Brushes.Orange;
         }
 
-        private void UpdateProviderSelection()
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (System.Windows.Controls.ComboBoxItem item in _control.ProviderComboBox.Items)
-            {
-                string tag = item.Tag?.ToString();
-                if (tag != null && Enum.TryParse(tag, out AiProvider provider))
-                {
-                    item.IsSelected = provider == AiService.Instance.Provider;
-                }
-            }
-        }
-
-        private AiProvider GetSelectedProvider()
-        {
-            var selectedItem = _control.ProviderComboBox.SelectedItem as System.Windows.Controls.ComboBoxItem;
-            if (selectedItem != null && selectedItem.Tag != null)
-            {
-                if (Enum.TryParse(selectedItem.Tag.ToString(), out AiProvider provider))
-                {
-                    return provider;
-                }
-            }
-            return AiProvider.OpenAI;
-        }
-
-        private void ConfigureButton_Click(object sender, RoutedEventArgs e)
-        {
-            string apiKey = _control.ApiKeyTextBox.Password;
-            
-            if (string.IsNullOrWhiteSpace(apiKey))
-            {
-                MessageBox.Show("Please enter an API key");
-                return;
-            }
-            
-            AiProvider provider = GetSelectedProvider();
-            AiService.Instance.Configure(apiKey, null, provider);
+            var dialog = new ConfigurationDialog();
+            dialog.Owner = Window.GetWindow(_control);
+            dialog.ShowDialog();
             UpdateStatus();
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
@@ -99,28 +66,40 @@ namespace ICSharpCode.AiAgent
         private void BtnExplain_Click(object sender, RoutedEventArgs e)
         {
             _selectedAction = "explain";
-            _control.PromptTextBox.Text = "Explain this code...";
+            string selectedCode = CommandHelper.GetSelectedCode();
+            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                ? "Explain this code..."
+                : selectedCode;
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
         private void BtnOptimize_Click(object sender, RoutedEventArgs e)
         {
             _selectedAction = "optimize";
-            _control.PromptTextBox.Text = "Optimize this code...";
+            string selectedCode = CommandHelper.GetSelectedCode();
+            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                ? "Optimize this code..."
+                : selectedCode;
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
         private void BtnRefactor_Click(object sender, RoutedEventArgs e)
         {
             _selectedAction = "refactor";
-            _control.PromptTextBox.Text = "Refactor this code to...";
+            string selectedCode = CommandHelper.GetSelectedCode();
+            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                ? "Refactor this code to..."
+                : selectedCode;
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
         private void BtnDebug_Click(object sender, RoutedEventArgs e)
         {
             _selectedAction = "debug";
-            _control.PromptTextBox.Text = "Debug this code with error...";
+            string selectedCode = CommandHelper.GetSelectedCode();
+            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                ? "Debug this code with error..."
+                : selectedCode;
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
@@ -141,30 +120,41 @@ namespace ICSharpCode.AiAgent
 
             _control.BtnExecute.IsEnabled = false;
 
+            string systemMessage = null;
+            string actionName = null;
+
+            switch (_selectedAction)
+            {
+                case "generate":
+                    actionName = "Generate Code";
+                    systemMessage = "You are an expert software developer. Generate clean, efficient, and well-documented code. Respond only with the requested code.";
+                    break;
+                case "explain":
+                    actionName = "Explain Code";
+                    systemMessage = "You are an expert software developer. Explain the provided code in detail, including its purpose, key algorithms, and potential improvements.";
+                    prompt = $"Explain this code:\n\n{prompt}";
+                    break;
+                case "optimize":
+                    actionName = "Optimize Code";
+                    systemMessage = "You are an expert software developer. Optimize the provided code for performance, readability, and best practices. Explain the changes made.";
+                    prompt = $"Optimize this code and explain the changes:\n\n{prompt}";
+                    break;
+                case "refactor":
+                    actionName = "Refactor Code";
+                    systemMessage = "You are an expert software developer. Refactor the provided code according to the specified goal. Explain the refactoring approach.";
+                    prompt = $"Refactor this code:\n\n{prompt}";
+                    break;
+                case "debug":
+                    actionName = "Debug Code";
+                    systemMessage = "You are an expert debugger. Analyze the provided code and error description to identify and fix bugs.";
+                    prompt = $"Debug this code:\n\n{prompt}";
+                    break;
+            }
+
             try
             {
-                string result = string.Empty;
-                
-                switch (_selectedAction)
-                {
-                    case "generate":
-                        result = await AiService.Instance.GenerateCodeAsync(prompt);
-                        break;
-                    case "explain":
-                        result = await AiService.Instance.ExplainCodeAsync(prompt);
-                        break;
-                    case "optimize":
-                        result = await AiService.Instance.OptimizeCodeAsync(prompt);
-                        break;
-                    case "refactor":
-                        result = await AiService.Instance.RefactorCodeAsync(prompt, "improve code quality");
-                        break;
-                    case "debug":
-                        result = await AiService.Instance.DebugCodeAsync(prompt, "Unknown error");
-                        break;
-                }
-
-                ShowResult(result);
+                _control.StreamOutput.Clear();
+                await AiService.Instance.StreamActionAsync(prompt, systemMessage, actionName, _control.StreamOutput);
             }
             catch (Exception ex)
             {
@@ -174,29 +164,6 @@ namespace ICSharpCode.AiAgent
             {
                 _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
             }
-        }
-
-        private void ShowResult(string content)
-        {
-            var resultWindow = new Window();
-            resultWindow.Title = "AI Agent Result";
-            resultWindow.SizeToContent = SizeToContent.WidthAndHeight;
-            resultWindow.MinWidth = 600;
-            resultWindow.MinHeight = 400;
-            
-            var textBox = new System.Windows.Controls.TextBox();
-            textBox.Text = content;
-            textBox.IsReadOnly = true;
-            textBox.AcceptsReturn = true;
-            textBox.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-            textBox.HorizontalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
-            textBox.FontFamily = new System.Windows.Media.FontFamily("Consolas");
-            textBox.FontSize = 12;
-            textBox.MinWidth = 580;
-            textBox.MinHeight = 380;
-            
-            resultWindow.Content = textBox;
-            resultWindow.ShowDialog();
         }
     }
 }

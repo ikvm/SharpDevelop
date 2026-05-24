@@ -1,0 +1,2 @@
+将TypewriterResultWindow组件重构为可复用的独立控件ThinkingStreamControl，并集成到AiAgentPad面板中。同时，修改OpenAIClient的实现，将其响应方式更改为流式返回模式。在此基础上，结合ThinkingStreamControl组件，实现以think流式模式输出处理结果的功能。确保控件集成后界面布局合理、交互流畅，流式返回机制稳定可靠，且think模式的输出效果符合预期的用户体验要求。
+

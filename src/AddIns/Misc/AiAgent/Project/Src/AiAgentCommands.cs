@@ -6,7 +6,6 @@ using ICSharpCode.SharpDevelop.Workbench;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace ICSharpCode.AiAgent
 {
@@ -237,20 +236,8 @@ namespace ICSharpCode.AiAgent
 
         public static void ShowResult(string title, string content)
         {
-            Form resultForm = new Form();
-            resultForm.Text = title;
-            resultForm.Size = new System.Drawing.Size(800, 600);
-            
-            TextBox textBox = new TextBox();
-            textBox.Dock = DockStyle.Fill;
-            textBox.Multiline = true;
-            textBox.ReadOnly = true;
-            textBox.ScrollBars = ScrollBars.Both;
-            textBox.Font = new System.Drawing.Font("Consolas", 10);
-            textBox.Text = content;
-            
-            resultForm.Controls.Add(textBox);
-            resultForm.ShowDialog();
+            var window = new TypewriterResultWindow(title, content);
+            window.ShowDialog();
         }
     }
 }
