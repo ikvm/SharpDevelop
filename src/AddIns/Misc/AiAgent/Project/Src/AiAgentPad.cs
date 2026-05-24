@@ -9,16 +9,21 @@ namespace ICSharpCode.AiAgent
     public class AiAgentPad : AbstractPadContent
     {
         private readonly AiAgentControl _control;
+        private IAiSkill _currentSkill;
 
         public override object Control => _control;
 
         public AiAgentPad()
         {
             _control = new AiAgentControl();
+            _control.SkillCombo.SelectionChanged += SkillCombo_SelectionChanged;
+            _control.ModelCombo.SelectionChanged += ModelCombo_SelectionChanged;
             _control.ActionCombo.SelectionChanged += ActionCombo_SelectionChanged;
             _control.BtnExecute.Click += BtnExecute_Click;
             _control.SettingsButton.Click += SettingsButton_Click;
 
+            PopulateModelList();
+            PopulateSkillList();
             UpdateStatus();
 
             AiService.Instance.PropertyChanged += (sender, e) =>
@@ -50,44 +55,91 @@ namespace ICSharpCode.AiAgent
             dialog.ShowDialog();
             UpdateStatus();
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
+            PopulateModelList();
+        }
+
+        private void PopulateModelList()
+        {
+            _control.ModelCombo.Items.Clear();
+            if (OpenAiClient.AvailableModels.TryGetValue(AiService.Instance.Provider, out string[] models))
+            {
+                foreach (string model in models)
+                {
+                    var item = new ComboBoxItem { Content = model, Tag = model };
+                    item.IsSelected = (model == AiService.Instance.SelectedModel);
+                    _control.ModelCombo.Items.Add(item);
+                }
+            }
+        }
+
+        private void PopulateSkillList()
+        {
+            _control.SkillCombo.Items.Clear();
+            foreach (var skill in SkillManager.Instance.Skills)
+            {
+                var item = new ComboBoxItem { Content = skill.Name, Tag = skill.Id };
+                _control.SkillCombo.Items.Add(item);
+            }
+            if (_control.SkillCombo.Items.Count > 0)
+                _control.SkillCombo.SelectedIndex = 0;
+        }
+
+        private void ModelCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = _control.ModelCombo.SelectedItem as ComboBoxItem;
+            if (item?.Tag != null)
+            {
+                AiService.Instance.SelectedModel = item.Tag.ToString();
+            }
+        }
+
+        private void SkillCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = _control.SkillCombo.SelectedItem as ComboBoxItem;
+            if (item?.Tag == null) return;
+
+            _currentSkill = SkillManager.Instance.GetSkill(item.Tag.ToString());
+            if (_currentSkill == null) return;
+
+            UpdatePromptForSkill();
+            _control.BtnExecute.IsEnabled = true;
+        }
+
+        private void UpdatePromptForSkill()
+        {
+            if (_currentSkill == null) return;
+            string selectedCode = CommandHelper.GetSelectedCode();
+
+            if (_currentSkill is ExplainCodeSkill || _currentSkill is OptimizeCodeSkill ||
+                _currentSkill is RefactorCodeSkill || _currentSkill is DebugCodeSkill)
+            {
+                _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                    ? "请先在编辑器中选中代码..."
+                    : selectedCode;
+            }
+            else
+            {
+                _control.PromptTextBox.Text = _control.PromptTextBox.Text.Length < 5
+                    ? "输入您的需求..."
+                    : _control.PromptTextBox.Text;
+            }
         }
 
         private void ActionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedItem = _control.ActionCombo.SelectedItem as ComboBoxItem;
-            if (selectedItem?.Tag == null) return;
+            var item = _control.ActionCombo.SelectedItem as ComboBoxItem;
+            if (item == null) return;
 
-            string action = selectedItem.Tag.ToString();
-            string selectedCode = CommandHelper.GetSelectedCode();
+            string action = item.Tag.ToString();
 
-            switch (action)
+            if (action == "execute" && _currentSkill != null)
             {
-                case "generate":
-                    _control.PromptTextBox.Text = "创建一个 C# 类用于...";
-                    break;
-                case "explain":
-                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                        ? "请选择代码后进行解释..."
-                        : selectedCode;
-                    break;
-                case "optimize":
-                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                        ? "请选择代码后进行优化..."
-                        : selectedCode;
-                    break;
-                case "refactor":
-                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                        ? "请选择代码后进行重构..."
-                        : selectedCode;
-                    break;
-                case "debug":
-                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                        ? "请选择代码后进行调试..."
-                        : selectedCode;
-                    break;
+                UpdatePromptForSkill();
             }
-
-            _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
+            else if (action == "chat")
+            {
+                _control.PromptTextBox.Text = "自由对话模式：输入任意问题...";
+            }
         }
 
         private async void BtnExecute_Click(object sender, RoutedEventArgs e)
@@ -105,46 +157,56 @@ namespace ICSharpCode.AiAgent
                 return;
             }
 
-            var selectedItem = _control.ActionCombo.SelectedItem as ComboBoxItem;
-            string action = selectedItem?.Tag?.ToString() ?? "generate";
+            var actionItem = _control.ActionCombo.SelectedItem as ComboBoxItem;
+            string action = actionItem?.Tag?.ToString() ?? "execute";
 
             _control.BtnExecute.IsEnabled = false;
 
-            string systemMessage = null;
-            string actionName = null;
-
-            switch (action)
-            {
-                case "generate":
-                    actionName = "生成代码";
-                    systemMessage = "你是一位资深的软件开发者。请生成简洁高效且文档完善的代码，直接输出请求的代码即可。";
-                    break;
-                case "explain":
-                    actionName = "解释代码";
-                    systemMessage = "你是一位资深的软件开发者。请详细解释所提供的代码，包括其功能、核心算法以及潜在的优化空间。";
-                    prompt = $"请解释以下代码：\n\n{prompt}";
-                    break;
-                case "optimize":
-                    actionName = "优化代码";
-                    systemMessage = "你是一位资深的软件开发者。请对所提供的代码进行性能、可读性和最佳实践方面的优化，并说明所做的改进。";
-                    prompt = $"请优化以下代码并说明改动：\n\n{prompt}";
-                    break;
-                case "refactor":
-                    actionName = "重构代码";
-                    systemMessage = "你是一位资深的软件开发者。请根据指定的目标对代码进行重构，并说明重构的思路。";
-                    prompt = $"请重构以下代码：\n\n{prompt}";
-                    break;
-                case "debug":
-                    actionName = "调试代码";
-                    systemMessage = "你是一位资深的调试专家。请分析所提供的代码和错误描述，找出并修复缺陷。";
-                    prompt = $"请调试以下代码：\n\n{prompt}";
-                    break;
-            }
-
             try
             {
+                string systemMessage;
+                string actionName;
+                string finalPrompt;
+
+                if (action == "execute" && _currentSkill != null)
+                {
+                    string selectedCode = CommandHelper.GetSelectedCode();
+                    systemMessage = _currentSkill.SystemMessage;
+                    actionName = _currentSkill.Name;
+                    finalPrompt = _currentSkill.BuildPrompt(prompt, selectedCode);
+                }
+                else
+                {
+                    systemMessage = "你是一位有用的AI助手。请根据用户的输入提供有帮助的回复。";
+                    actionName = "自由对话";
+                    finalPrompt = prompt;
+                }
+
                 _control.StreamOutput.Clear();
-                await AiService.Instance.StreamActionAsync(prompt, systemMessage, actionName, _control.StreamOutput);
+
+                if (AiService.Instance.ToolExecutor.ExecutedCount > 0)
+                {
+                    var confirmRollback = MessageBox.Show(
+                        "上一次操作有未回滚的本地文件更改。是否先回滚上一次的更改？\n\n选择\"是\"：回滚后继续\n选择\"否\"：保留更改并继续",
+                        "本地更改提醒",
+                        MessageBoxButton.YesNoCancel,
+                        MessageBoxImage.Question);
+
+                    if (confirmRollback == MessageBoxResult.Yes)
+                    {
+                        await AiService.Instance.RollbackAsync();
+                        _control.StreamOutput.AppendToolStatus("✅ 已回滚上一次的更改");
+                    }
+                    else if (confirmRollback == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
+                AiService.Instance.ToolParser.Reset();
+                AiService.Instance.ToolExecutor.ClearRollbackStack();
+
+                await AiService.Instance.StreamActionAsync(finalPrompt, systemMessage, actionName, _control.StreamOutput);
             }
             catch (Exception ex)
             {

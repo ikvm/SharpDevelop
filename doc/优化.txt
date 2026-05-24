@@ -1,2 +1,8 @@
 将TypewriterResultWindow组件重构为可复用的独立控件ThinkingStreamControl，并集成到AiAgentPad面板中。同时，修改OpenAIClient的实现，将其响应方式更改为流式返回模式。在此基础上，结合ThinkingStreamControl组件，实现以think流式模式输出处理结果的功能。确保控件集成后界面布局合理、交互流畅，流式返回机制稳定可靠，且think模式的输出效果符合预期的用户体验要求。
 
+skill技能是需要支持辅助本地执行的工具，比如：Claude Code里面的代码辅助功能，可以直接修改代码，优化代码，生成代码等，而不是返回一段文字
+
+The "skill" functionality must support auxiliary local execution tools, similar to the code assistance features in Claude Code. These tools should enable direct code manipulation capabilities including but not limited to: modifying existing code files, optimizing code structure and performance, generating new code snippets or complete functions, and refactoring code elements. The implementation should prioritize practical code interaction rather than providing textual descriptions or explanations of code changes.
+
+
+"skill"功能必须支持辅助性的本地执行工具，类似于 Claude Code 中的代码辅助能力。这些工具应具备直接的代码操作能力，包括但不限于：修改现有代码文件、优化代码结构和性能、生成新的代码片段或完整函数，以及重构代码元素。在实现上，应优先考虑实际的代码交互能力，而非提供代码变更的文字描述或解释。

@@ -24,7 +24,48 @@ namespace ICSharpCode.AiAgent
                 }
             }
 
+            RefreshModelList();
+            SelectCurrentModel();
+
             ApiKeyBox.Password = "";
+        }
+
+        private void RefreshModelList()
+        {
+            ModelComboBox.Items.Clear();
+            ComboBoxItem selectedItem = ProviderComboBox.SelectedItem as ComboBoxItem;
+            if (selectedItem?.Tag == null || !Enum.TryParse(selectedItem.Tag.ToString(), out AiProvider provider))
+                provider = AiProvider.OpenAI;
+
+            if (OpenAiClient.AvailableModels.TryGetValue(provider, out string[] models))
+            {
+                foreach (string model in models)
+                {
+                    ModelComboBox.Items.Add(new ComboBoxItem { Content = model, Tag = model });
+                }
+            }
+        }
+
+        private void SelectCurrentModel()
+        {
+            string currentModel = AiService.Instance.SelectedModel;
+            foreach (ComboBoxItem item in ModelComboBox.Items)
+            {
+                if (item.Tag?.ToString() == currentModel)
+                {
+                    ModelComboBox.SelectedItem = item;
+                    return;
+                }
+            }
+            if (ModelComboBox.Items.Count > 0)
+                ModelComboBox.SelectedIndex = 0;
+        }
+
+        private void ProviderComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshModelList();
+            if (ModelComboBox.Items.Count > 0)
+                ModelComboBox.SelectedIndex = 0;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -37,15 +78,14 @@ namespace ICSharpCode.AiAgent
                 return;
             }
 
-            ComboBoxItem selectedItem = ProviderComboBox.SelectedItem as ComboBoxItem;
+            ComboBoxItem providerItem = ProviderComboBox.SelectedItem as ComboBoxItem;
             AiProvider provider = AiProvider.OpenAI;
-
-            if (selectedItem?.Tag != null && Enum.TryParse(selectedItem.Tag.ToString(), out AiProvider parsed))
-            {
+            if (providerItem?.Tag != null && Enum.TryParse(providerItem.Tag.ToString(), out AiProvider parsed))
                 provider = parsed;
-            }
 
-            AiService.Instance.Configure(apiKey, null, provider);
+            string model = (ModelComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString();
+
+            AiService.Instance.Configure(apiKey, null, provider, model);
             DialogResult = true;
             Close();
         }

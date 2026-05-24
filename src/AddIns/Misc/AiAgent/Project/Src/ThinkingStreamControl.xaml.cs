@@ -1,5 +1,6 @@
 using Markdig;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -23,6 +24,7 @@ namespace ICSharpCode.AiAgent
             InsertButton.IsEnabled = false;
             CopyButton.IsEnabled = false;
             CopyHtmlButton.IsEnabled = false;
+            RollbackButton.Visibility = Visibility.Collapsed;
 
             _markdownPipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
@@ -44,6 +46,8 @@ namespace ICSharpCode.AiAgent
             InsertButton.IsEnabled = false;
             CopyButton.IsEnabled = false;
             CopyHtmlButton.IsEnabled = false;
+            RollbackButton.Visibility = Visibility.Collapsed;
+            ClearToolStatus();
             ShowRawView();
 
             _thinkingTimer = new DispatcherTimer();
@@ -101,6 +105,9 @@ namespace ICSharpCode.AiAgent
             InsertButton.IsEnabled = true;
             CopyButton.IsEnabled = true;
             CopyHtmlButton.IsEnabled = true;
+
+            if (AiService.Instance.ToolExecutor.ExecutedCount > 0)
+                RollbackButton.Visibility = Visibility.Visible;
 
             if (_showPreview)
                 RefreshPreview();
@@ -193,7 +200,9 @@ namespace ICSharpCode.AiAgent
             InsertButton.IsEnabled = false;
             CopyButton.IsEnabled = false;
             CopyHtmlButton.IsEnabled = false;
+            RollbackButton.Visibility = Visibility.Collapsed;
             StreamStatusText.Foreground = System.Windows.Media.Brushes.Gray;
+            ClearToolStatus();
             ShowRawView();
         }
 
@@ -202,32 +211,124 @@ namespace ICSharpCode.AiAgent
             return OutputTextBox.Text;
         }
 
+        public void AppendToolStatus(string statusMessage)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action<string>(AppendToolStatus), statusMessage);
+                return;
+            }
+
+            ToolStatusBorder.Visibility = Visibility.Visible;
+
+            if (string.IsNullOrEmpty(ToolStatusText.Text))
+                ToolStatusText.Text = statusMessage;
+            else
+                ToolStatusText.Text += "\n" + statusMessage;
+
+            ToolStatusScroll.ScrollToBottom();
+        }
+
+        public void ClearToolStatus()
+        {
+            ToolStatusText.Text = string.Empty;
+            ToolStatusBorder.Visibility = Visibility.Collapsed;
+        }
+
+        public void ShowToolResultSummary(int successCount, int failCount)
+        {
+            if (!Dispatcher.CheckAccess())
+                return;
+
+            if (failCount > 0)
+            {
+                ToolStatusHeader.Text = $"🔧 本地操作: {successCount} 成功, {failCount} 失败";
+                ToolStatusBorder.BorderBrush = System.Windows.Media.Brushes.Orange;
+                ToolStatusBorder.Background = System.Windows.Media.Brushes.LightGoldenrodYellow;
+            }
+            else
+            {
+                ToolStatusHeader.Text = $"🔧 本地操作: {successCount} 个操作已执行";
+                ToolStatusBorder.BorderBrush = System.Windows.Media.Brushes.Green;
+                ToolStatusBorder.Background = System.Windows.Media.Brushes.LightGreen;
+            }
+        }
+
+        private void RollbackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(() => RollbackButton_Click(sender, e)));
+                return;
+            }
+
+            var result = MessageBox.Show(
+                "确定要回滚所有本地文件操作吗？这将撤销本次对话中 AI 对文件的所有更改。",
+                "确认回滚",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                AppendToolStatus("⏮ 开始回滚所有操作...");
+                var rollbackTask = AiService.Instance.RollbackAsync();
+                rollbackTask.ContinueWith(t =>
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        if (t.IsCompleted && t.Result)
+                        {
+                            AppendToolStatus("✅ 所有操作已成功回滚");
+                            RollbackButton.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            AppendToolStatus("❌ 部分回滚操作失败");
+                        }
+                    }));
+                }, TaskContinuationOptions.NotOnFaulted);
+            }
+        }
+
         private void ShowRawView()
         {
             RawScrollViewer.Visibility = Visibility.Visible;
-            PreviewBrowser.Visibility = Visibility.Collapsed;
+            PreviewWebView.Visibility = Visibility.Collapsed;
             PreviewToggle.Content = "Preview";
         }
 
         private void ShowPreviewView()
         {
             RawScrollViewer.Visibility = Visibility.Collapsed;
-            PreviewBrowser.Visibility = Visibility.Visible;
+            PreviewWebView.Visibility = Visibility.Visible;
             PreviewToggle.Content = "Raw";
         }
 
-        private void RefreshPreview()
+        private async void RefreshPreview()
         {
             string markdown = OutputTextBox.Text;
             if (string.IsNullOrEmpty(markdown))
             {
-                PreviewBrowser.NavigateToString("<html><body style='font-family:sans-serif;color:#888;padding:20px;'><p>No content</p></body></html>");
+                await NavigateWebView("<html><body style='font-family:sans-serif;color:#888;padding:20px;'><p>No content</p></body></html>");
                 return;
             }
 
             string html = Markdown.ToHtml(markdown, _markdownPipeline);
             string styledHtml = BuildStyledHtml(html);
-            PreviewBrowser.NavigateToString(styledHtml);
+            await NavigateWebView(styledHtml);
+        }
+
+        private async Task NavigateWebView(string html)
+        {
+            try
+            {
+                if (PreviewWebView.CoreWebView2 == null)
+                    await PreviewWebView.EnsureCoreWebView2Async();
+                PreviewWebView.CoreWebView2.NavigateToString(html);
+            }
+            catch
+            {
+            }
         }
 
         private static string BuildStyledHtml(string bodyHtml)
@@ -319,6 +420,7 @@ namespace ICSharpCode.AiAgent
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Cancel();
+            AiService.Instance.CancelCurrentStream();
         }
 
         private void CopyButton_Click(object sender, RoutedEventArgs e)

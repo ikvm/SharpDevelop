@@ -22,6 +22,19 @@ namespace ICSharpCode.AiAgent
         private string _apiKey;
         private string _apiEndpoint;
         private AiProvider _provider;
+        private string _selectedModel;
+
+        public static readonly Dictionary<AiProvider, string[]> AvailableModels = new()
+        {
+            { AiProvider.OpenAI, new[] { "LongCat-Flash-Thinking-2601", "gpt-4o", "gpt-4o-mini" } },
+            { AiProvider.Anthropic, new[] { "LongCat-Flash-Thinking-2601", "claude-3-5-sonnet-20240620", "claude-3-haiku-20240307" } }
+        };
+
+        public string SelectedModel
+        {
+            get => _selectedModel ?? AvailableModels[_provider][0];
+            set => _selectedModel = value;
+        }
 
         public OpenAiClient()
         {
@@ -30,10 +43,11 @@ namespace ICSharpCode.AiAgent
             SetDefaultEndpoint(AiProvider.OpenAI);
         }
 
-        public void Configure(string apiKey, string apiEndpoint = null, AiProvider provider = AiProvider.OpenAI)
+        public void Configure(string apiKey, string apiEndpoint = null, AiProvider provider = AiProvider.OpenAI, string model = null)
         {
             _apiKey = apiKey;
             _provider = provider;
+            _selectedModel = model;
 
             if (!string.IsNullOrEmpty(apiEndpoint))
             {
@@ -193,18 +207,18 @@ namespace ICSharpCode.AiAgent
 			return false;
 		}
 
-		const string MODEL_NAME = "LongCat-Flash-Thinking-2601"; // LongCat-Flash-Lite
 		private StringContent BuildRequestContent(string prompt, string systemMessage, string model, bool stream)
         {
             string jsonContent;
+            string actualModel = _selectedModel ?? AvailableModels[_provider][0];
 
             switch (_provider)
             {
                 case AiProvider.OpenAI:
-                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, MODEL_NAME, stream);
+                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, actualModel, stream);
                     break;
                 case AiProvider.Anthropic:
-                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, MODEL_NAME, stream);
+                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, actualModel, stream);
                     break;
                 default:
                     throw new NotSupportedException("AI provider not supported");

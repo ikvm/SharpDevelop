@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
@@ -39,23 +41,46 @@
                              Background="#FAFAFA"
                              MinHeight="60"/>
                 </ScrollViewer>
-                <WebBrowser x:Name="PreviewBrowser"
-                            Visibility="Collapsed"
-                            MinHeight="60"/>
+                <wv2:WebView2 x:Name="PreviewWebView"
+                              Visibility="Collapsed"
+                              MinHeight="60"/>
             </Grid>
         </Border>
         
-        <Grid Grid.Row="2" Margin="4 2 4 2">
+        <Border Grid.Row="2" x:Name="ToolStatusBorder" BorderBrush="#4CAF50" BorderThickness="1" CornerRadius="2" Margin="2" Visibility="Collapsed" Background="#F1F8E9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" x:Name="ToolStatusHeader" Text="🔧 本地操作状态" FontSize="10" FontWeight="Bold" Foreground="#2E7D32" Padding="4 2 4 2"/>
+                <ScrollViewer Grid.Row="1" x:Name="ToolStatusScroll" VerticalScrollBarVisibility="Auto" MaxHeight="80">
+                    <TextBox x:Name="ToolStatusText"
+                             IsReadOnly="True"
+                             FontFamily="Consolas"
+                             FontSize="10"
+                             TextWrapping="Wrap"
+                             Padding="4"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             Foreground="#1B5E20"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+        
+        <Grid Grid.Row="3" Margin="4 2 4 2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" x:Name="StreamStatusText" Text="" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
-            <Button Grid.Column="1" x:Name="CopyButton" Content="Copy" Width="50" Height="20" FontSize="10" Margin="0 0 4 0" Click="CopyButton_Click"/>
-            <Button Grid.Column="2" x:Name="CopyHtmlButton" Content="Copy HTML" Width="60" Height="20" FontSize="10" Margin="0 0 4 0" Click="CopyHtmlButton_Click"/>
-            <Button Grid.Column="3" x:Name="InsertButton" Content="Insert" Width="50" Height="20" FontSize="10" Click="InsertButton_Click"/>
+            <Button Grid.Column="1" x:Name="RollbackButton" Content="Rollback" Width="60" Height="20" FontSize="10" Margin="0 0 4 0" Visibility="Collapsed" Click="RollbackButton_Click"/>
+            <Button Grid.Column="2" x:Name="CopyButton" Content="Copy" Width="50" Height="20" FontSize="10" Margin="0 0 4 0" Click="CopyButton_Click"/>
+            <Button Grid.Column="3" x:Name="CopyHtmlButton" Content="Copy HTML" Width="60" Height="20" FontSize="10" Margin="0 0 4 0" Click="CopyHtmlButton_Click"/>
+            <Button Grid.Column="4" x:Name="InsertButton" Content="Insert" Width="50" Height="20" FontSize="10" Click="InsertButton_Click"/>
         </Grid>
     </Grid>
 </UserControl>

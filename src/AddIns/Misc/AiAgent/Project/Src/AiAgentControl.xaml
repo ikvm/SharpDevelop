@@ -29,22 +29,26 @@
             <local:ThinkingStreamControl x:Name="StreamOutput"/>
         </Grid>
         
-        <Grid Grid.Row="2" Margin="5">
+        <Grid Grid.Row="2" Margin="5" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Action:" VerticalAlignment="Center" Margin="0 0 4 0"/>
-            <ComboBox Grid.Column="1" x:Name="ActionCombo" Height="28" VerticalAlignment="Center">
-                <ComboBoxItem Tag="generate" IsSelected="True">Code Generation</ComboBoxItem>
-                <ComboBoxItem Tag="explain">Explain Code</ComboBoxItem>
-                <ComboBoxItem Tag="optimize">Optimize Code</ComboBoxItem>
-                <ComboBoxItem Tag="refactor">Refactor Code</ComboBoxItem>
-                <ComboBoxItem Tag="debug">Debug Code</ComboBoxItem>
+            <Label Grid.Column="0" Content="Model:" VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <ComboBox Grid.Column="1" x:Name="ModelCombo" Height="26" VerticalAlignment="Center" Margin="0 0 6 0"/>
+            <Label Grid.Column="2" Content="Skill:" VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <ComboBox Grid.Column="3" x:Name="SkillCombo" Height="26" VerticalAlignment="Center" Margin="0 0 6 0"/>
+            <Label Grid.Column="4" Content="Action:" VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <ComboBox Grid.Column="5" x:Name="ActionCombo" Height="26" VerticalAlignment="Center">
+                <ComboBoxItem Tag="execute" IsSelected="True">Execute Prompt</ComboBoxItem>
+                <ComboBoxItem Tag="chat">Free Chat</ComboBoxItem>
             </ComboBox>
-            <Button Grid.Column="3" x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="80" Height="28" Margin="8 0 0 0"/>
+            <Button Grid.Column="6" x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="80" Height="26" Margin="6 0 0 0"/>
         </Grid>
         
         <Grid Grid.Row="3" Margin="5">
