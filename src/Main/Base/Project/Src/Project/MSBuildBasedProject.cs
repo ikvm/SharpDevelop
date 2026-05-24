@@ -1092,18 +1092,13 @@ namespace ICSharpCode.SharpDevelop.Project
 				bool isSdkProject = !string.IsNullOrEmpty(projectFile.Sdk);
 				foreach (var item in c.Project.AllEvaluatedItems) {
 					if (!isSdkProject && item.IsImported) continue;
-
-					Trace.WriteLine($"item: EvaluatedInclude={item.EvaluatedInclude}.ItemType={item.ItemType}");
 					
 					if (isSdkProject) {
-						// Skip SDK-provided framework references that are implicit from the target framework
-						if (item.ItemType == "FrameworkReference" || item.ItemType == "AdditionalProbingPath")
-							continue;
-						
 						var category = ProjectItemClassifier.ClassifyItem(item);
 						
 						switch (category)
 						{
+							case ProjectItemClassifier.ItemCategory.SdkInternal:
 							case ProjectItemClassifier.ItemCategory.BuildFile:
 							case ProjectItemClassifier.ItemCategory.Unknown:
 								continue;
@@ -1114,11 +1109,8 @@ namespace ICSharpCode.SharpDevelop.Project
 				}
 				
 				ClearFindFileCache();
-				// TODO: raise the CollectionChanged event with the appropriate arguments
 			}
 			
-			// refresh project browser to make sure references and other project items are still valid
-			// after TargetFramework or other properties changed. Fixes SD-1876
 			if (!isLoading)
 				ProjectBrowserPad.RefreshViewAsync();
 		}
@@ -1564,15 +1556,191 @@ namespace ICSharpCode.SharpDevelop.Project
 	public class ProjectItemClassifier
 	{
 		/// <summary>
+		/// 项目项的分类枚举
+		/// </summary>
+		public enum ItemCategory
+		{
+			Unknown,           // 无法分类的项
+			CodeFile,          // 代码文件（Compile, Page, ApplicationDefinition 等）
+			Resource,          // 资源文件（EmbeddedResource, Content, None 等）
+			Dependency,        // 依赖项（Reference, COMReference）
+			ProjectReference,  // 项目引用（ProjectReference）
+			PackageReference,  // NuGet 包引用（PackageReference）
+			BuildFile,         // MSBuild 构建文件（Import, UsingTask 等）
+			Configuration,     // 配置文件（app.config, web.config 等）
+			SdkInternal,       // SDK 内部项（不显示在项目树中）
+			Other              // 其他可显示的项
+		}
+
+		/// <summary>
+		/// 分类 MSBuild 项目项，返回对应的 ItemCategory
+		/// </summary>
+		public static ItemCategory ClassifyItem(Microsoft.Build.Evaluation.ProjectItem item)
+		{
+			var itemType = item.ItemType;
+			var include = item.EvaluatedInclude;
+
+			// 1. SDK 内部基础设施项（这些项不应出现在项目树中）
+			if (IsSdkInternal(itemType))
+				return ItemCategory.SdkInternal;
+
+			// 2. 代码文件
+			if (IsCodeFile(itemType, include))
+				return ItemCategory.CodeFile;
+
+			// 3. 项目引用
+			if (itemType == "ProjectReference")
+				return ItemCategory.ProjectReference;
+
+			// 4. NuGet 包引用
+			if (itemType == "PackageReference")
+				return ItemCategory.PackageReference;
+
+			// 5. 程序集引用和 COM 引用
+			if (itemType == "Reference" || itemType == "COMReference")
+				return ItemCategory.Dependency;
+
+			// 6. 资源文件
+			if (IsResourceItem(itemType))
+				return ItemCategory.Resource;
+
+			// 7. MSBuild 构建文件
+			if (IsBuildFile(itemType))
+				return ItemCategory.BuildFile;
+
+			// 8. 配置文件
+			if (IsConfigurationFile(itemType, include))
+				return ItemCategory.Configuration;
+
+			// 9. 其他可显示项（Using, Folder, WebReferences 等）
+			return ItemCategory.Other;
+		}
+
+		/// <summary>
+		/// 判断是否为 SDK 内部基础设施项，这些项由 .NET SDK 自动生成，
+		/// 不应显示在 SharpDevelop 的项目树中。
+		/// 完整列表从 itemType.txt 调试日志中提取。
+		/// </summary>
+		private static bool IsSdkInternal(string itemType)
+		{
+			switch (itemType)
+			{
+				// NuGet 包管理内部项
+				case "PackageDownload":
+				case "AdditionalProbingPath":
+				case "SourceRoot":
+				case "ImplicitPackageReferenceVersion":
+
+				// SDK 框架引用（隐式，由 TargetFramework 决定）
+				case "FrameworkReference":
+
+				// SDK 已知框架/运行时包
+				case "KnownFrameworkReference":
+				case "KnownAppHostPack":
+				case "KnownCrossgen2Pack":
+				case "KnownILCompilerPack":
+				case "KnownRuntimePack":
+				case "KnownILLinkPack":
+				case "KnownWebAssemblySdkPack":
+				case "KnownAspNetCorePack":
+
+				// Windows SDK 支持的目标平台版本
+				case "WindowsSdkSupportedTargetPlatformVersion":
+
+				// 支持的运行时标识平台
+				case "SdkSupportedTargetPlatformIdentifier":
+				case "_KnownRuntimeIdentiferPlatforms":
+
+				// 支持的目标框架版本（.NETCoreApp, .NETStandard, .NETFramework）
+				case "SupportedNETCoreAppTargetFramework":
+				case "SupportedNETStandardTargetFramework":
+				case "SupportedNETFrameworkTargetFramework":
+				case "SupportedTargetFramework":
+
+				// 支持的目标平台
+				case "SupportedPlatform":
+
+				// SourceLink 源码链接
+				case "SourceLinkGitHubHost":
+				case "SourceLinkGitLabHost":
+				case "SourceLinkAzureReposGitHost":
+				case "SourceLinkBitbucketGitHost":
+
+				// ASP.NET Core 静态资产
+				case "StaticWebAssetContentTypeMapping":
+				case "StaticWebAssetFingerprintPattern":
+
+				// SDK 隐式文件/工具
+				case "_WebToolingArtifacts":
+				case "_ContentIncludedByDefault":
+
+				// 已结束生命周期（EOL）的框架版本
+				case "_EolNetCoreTargetFrameworkVersions":
+
+				// 目录查找相关
+				case "_AllDirectoriesAbove":
+				case "_GlobalJsonStartingDir":
+				case "_PotentialContainingGlobalJsonDir":
+				case "PotentialEditorConfigFiles":
+				case "GlobalAnalyzerConfigFiles":
+				case "EditorConfigFiles":
+
+				// 设计时生成/构建加速
+				case "BuildAccelerationIncompatiblePackage":
+				case "AdditionalDesignTimeBuildInput":
+
+				// 项目能力标记（ProjectCapability - 用于 Visual Studio 特性检测）
+				case "ProjectCapability":
+				case "PropertyPageSchema":
+
+				// 构建中间产物
+				case "_OutputPathItem":
+				case "_UnmanagedRegistrationCache":
+				case "_ResolveComReferenceCache":
+				case "AppConfigFileDestination":
+				case "IntermediateAssembly":
+				case "CopyUpToDateMarker":
+				case "IntermediateRefAssembly":
+				case "CreateDirectory":
+				case "_DebugSymbolsIntermediatePath":
+				case "_DebugSymbolsOutputPath":
+				case "_DeploymentManifestEntryPoint":
+				case "ApplicationManifest":
+				case "_ApplicationManifestFinal":
+				case "DeployManifest":
+				case "BuiltProjectOutputGroupKeyOutput":
+				case "DebugSymbolsProjectOutputGroupOutput":
+				case "ClsidMap":
+
+				// XAML 构建任务
+				case "XamlBuildTaskTypeGenerationExtensionName":
+
+				// 构建日志/配置
+				case "EmbedInBinlog":
+				case "PreprocessorValue":
+				case "GenerateRuntimeConfigurationFilesInputs":
+				case "RuntimeHostConfigurationOption":
+
+				// AvailableItemName 是框架内部使用的类型注册
+				case "AvailableItemName":
+					return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// 判断是否为代码文件
 		/// </summary>
 		private static bool IsCodeFile(string itemType, string filePath)
 		{
 			// 常见的代码文件 ItemType
 			if (itemType == "Compile" ||
-					itemType == "Page" ||
-					itemType == "ApplicationDefinition" || itemType == "AdditionalProbingPath" ||
-					itemType == "TypeScriptCompile")
+				itemType == "Page" ||
+				itemType == "ApplicationDefinition" ||
+				itemType == "TypeScriptCompile" ||
+				itemType == "ClCompile" ||
+				itemType == "ClInclude" ||
+				itemType == "Header")
 			{
 				return true;
 			}
@@ -1581,8 +1749,11 @@ namespace ICSharpCode.SharpDevelop.Project
 			if (!string.IsNullOrEmpty(filePath))
 			{
 				var extension = Path.GetExtension(filePath).ToLowerInvariant();
-				var codeExtensions = new[] { ".cs", ".vb", ".fs", ".cpp", ".c", ".h", ".ts", ".js", ".jsx", ".tsx" };
-
+				var codeExtensions = new[] {
+					".cs", ".vb", ".fs", ".cpp", ".c", ".h", ".hpp",
+					".ts", ".js", ".jsx", ".tsx", ".css", ".scss",
+					".razor", ".cshtml", ".vbhtml"
+				};
 				return codeExtensions.Contains(extension);
 			}
 
@@ -1590,131 +1761,59 @@ namespace ICSharpCode.SharpDevelop.Project
 		}
 
 		/// <summary>
-		/// 判断是否为依赖项
-		/// </summary>
-		private static bool IsDependencyItem(string itemType)
-		{
-			// 常见的依赖项 ItemType
-			return itemType == "Reference" ||
-						 itemType == "PackageReference" ||
-						 itemType == "ProjectReference" ||
-						 itemType == "COMReference" ||
-						 itemType == "PackageDownload" ||
-						 itemType == "FrameworkReference";
-		}
-
-		/// <summary>
 		/// 判断是否为资源文件
 		/// </summary>
 		private static bool IsResourceItem(string itemType)
 		{
-			return itemType == "EmbeddedResource" ||
-						 itemType == "Resource" ||
-						 itemType == "Content" ||
-						 itemType == "None" ||
-						 itemType == "AdditionalFiles" ||
-						 itemType == "Analyzer";
-		}
-
-		/// <summary>
-		/// 判断是否为项目引用
-		/// </summary>
-		private static bool IsProjectReference(string itemType, string evaluatedInclude)
-		{
-			if (itemType == "ProjectReference")
-				return true;
-
-			// 有时项目引用也可能通过其他方式指定
-			if (!string.IsNullOrEmpty(evaluatedInclude) &&
-					evaluatedInclude.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
+			switch (itemType)
 			{
-				return true;
+				case "EmbeddedResource":
+				case "Resource":
+				case "Content":
+				case "None":
+				case "AdditionalFiles":
+				case "Analyzer":
+				case "CodeAnalysisRuleSet":
+					return true;
 			}
-
 			return false;
 		}
 
 		/// <summary>
-		/// 判断是否为 NuGet 包引用
+		/// 判断是否为 MSBuild 构建文件
 		/// </summary>
-		private static bool IsPackageReference(string itemType)
-		{
-			return itemType == "PackageReference" || itemType == "PackageDownload";
-		}
-
-		public enum ItemCategory
-		{
-			Unknown,
-			CodeFile,
-			Resource,
-			Dependency,
-			ProjectReference,
-			PackageReference,
-			BuildFile,
-			Configuration,
-			Other
-		}
-
-		public static ItemCategory ClassifyItem(Microsoft.Build.Evaluation.ProjectItem item)
-		{
-			var itemType = item.ItemType;
-			var include = item.EvaluatedInclude;
-
-			// 1. 代码文件
-			if (IsCodeFile(itemType, include))
-				return ItemCategory.CodeFile;
-
-			// 2. 项目引用
-			if (IsProjectReference(itemType, include))
-				return ItemCategory.ProjectReference;
-
-			// 3. NuGet 包引用
-			if (IsPackageReference(itemType))
-				return ItemCategory.PackageReference;
-
-			// 4. 程序集引用
-			if (itemType == "Reference")
-				return ItemCategory.Dependency;
-
-			// 5. 资源文件
-			if (IsResourceItem(itemType))
-				return ItemCategory.Resource;
-
-			// 6. 构建相关文件
-			if (IsBuildFile(itemType))
-				return ItemCategory.BuildFile;
-
-			// 7. 配置文件
-			if (IsConfigurationFile(itemType, include))
-				return ItemCategory.Configuration;
-
-			return ItemCategory.Other;
-		}
-
 		private static bool IsBuildFile(string itemType)
 		{
-			return itemType == "Import" ||
-						 itemType == "UsingTask" ||
-						 itemType == "Target" ||
-						 itemType == "PropertyGroup" ||
-						 itemType == "ItemGroup";
+			switch (itemType)
+			{
+				case "Import":
+				case "UsingTask":
+				case "Target":
+				case "PropertyGroup":
+				case "ItemGroup":
+				case "InternalsVisibleTo":
+					return true;
+			}
+			return false;
 		}
 
+		/// <summary>
+		/// 判断是否为配置文件
+		/// </summary>
 		private static bool IsConfigurationFile(string itemType, string include)
 		{
 			if (itemType == "None" || itemType == "Content")
 			{
 				var fileName = Path.GetFileName(include).ToLowerInvariant();
 				return fileName == "appsettings.json" ||
-							 fileName == "web.config" ||
-							 fileName == "app.config" ||
-							 fileName.EndsWith(".config") ||
-							 fileName == "package.json" ||
-							 fileName == "bower.json" ||
-							 fileName == ".editorconfig" ||
-							 fileName == ".gitignore";
+					fileName == "web.config" ||
+					fileName == "app.config" ||
+					fileName.EndsWith(".config") ||
+					fileName == "package.json" ||
+					fileName == "bower.json" ||
+					fileName == ".editorconfig" ||
+					fileName == ".gitignore";
 			}
-
 			return false;
 		}
 	}
