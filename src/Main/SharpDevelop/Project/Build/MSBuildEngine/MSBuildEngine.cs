@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -67,6 +67,8 @@ namespace ICSharpCode.SharpDevelop.Project
 				// BuildingSolutionFile does not work in MSBuild 4.0 anymore, but BuildingInsideVisualStudio
 				// can be used to get the same effect.
 				yield return new KeyValuePair<string, string>("BuildingInsideVisualStudio", "true");
+				
+				yield return new KeyValuePair<string, string>("DisableDuplicateNuGetItemsCheck", "true");
 				
 				// Re-load these properties from AddInTree every time because "text" might contain
 				// SharpDevelop properties resolved by the StringParser (e.g. ${property:FxCopPath}).
