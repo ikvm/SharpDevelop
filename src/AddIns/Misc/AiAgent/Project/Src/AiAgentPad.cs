@@ -1,6 +1,7 @@
 using ICSharpCode.SharpDevelop.Workbench;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using ICSharpCode.SharpDevelop;
 
 namespace ICSharpCode.AiAgent
@@ -8,18 +9,13 @@ namespace ICSharpCode.AiAgent
     public class AiAgentPad : AbstractPadContent
     {
         private readonly AiAgentControl _control;
-        private string _selectedAction;
 
         public override object Control => _control;
 
         public AiAgentPad()
         {
             _control = new AiAgentControl();
-            _control.BtnGenerate.Click += BtnGenerate_Click;
-            _control.BtnExplain.Click += BtnExplain_Click;
-            _control.BtnOptimize.Click += BtnOptimize_Click;
-            _control.BtnRefactor.Click += BtnRefactor_Click;
-            _control.BtnDebug.Click += BtnDebug_Click;
+            _control.ActionCombo.SelectionChanged += ActionCombo_SelectionChanged;
             _control.BtnExecute.Click += BtnExecute_Click;
             _control.SettingsButton.Click += SettingsButton_Click;
 
@@ -56,50 +52,41 @@ namespace ICSharpCode.AiAgent
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
-        private void BtnGenerate_Click(object sender, RoutedEventArgs e)
+        private void ActionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedAction = "generate";
-            _control.PromptTextBox.Text = "Generate a C# class for...";
-            _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
-        }
+            var selectedItem = _control.ActionCombo.SelectedItem as ComboBoxItem;
+            if (selectedItem?.Tag == null) return;
 
-        private void BtnExplain_Click(object sender, RoutedEventArgs e)
-        {
-            _selectedAction = "explain";
+            string action = selectedItem.Tag.ToString();
             string selectedCode = CommandHelper.GetSelectedCode();
-            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                ? "Explain this code..."
-                : selectedCode;
-            _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
-        }
 
-        private void BtnOptimize_Click(object sender, RoutedEventArgs e)
-        {
-            _selectedAction = "optimize";
-            string selectedCode = CommandHelper.GetSelectedCode();
-            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                ? "Optimize this code..."
-                : selectedCode;
-            _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
-        }
+            switch (action)
+            {
+                case "generate":
+                    _control.PromptTextBox.Text = "创建一个 C# 类用于...";
+                    break;
+                case "explain":
+                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                        ? "请选择代码后进行解释..."
+                        : selectedCode;
+                    break;
+                case "optimize":
+                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                        ? "请选择代码后进行优化..."
+                        : selectedCode;
+                    break;
+                case "refactor":
+                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                        ? "请选择代码后进行重构..."
+                        : selectedCode;
+                    break;
+                case "debug":
+                    _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
+                        ? "请选择代码后进行调试..."
+                        : selectedCode;
+                    break;
+            }
 
-        private void BtnRefactor_Click(object sender, RoutedEventArgs e)
-        {
-            _selectedAction = "refactor";
-            string selectedCode = CommandHelper.GetSelectedCode();
-            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                ? "Refactor this code to..."
-                : selectedCode;
-            _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
-        }
-
-        private void BtnDebug_Click(object sender, RoutedEventArgs e)
-        {
-            _selectedAction = "debug";
-            string selectedCode = CommandHelper.GetSelectedCode();
-            _control.PromptTextBox.Text = string.IsNullOrEmpty(selectedCode)
-                ? "Debug this code with error..."
-                : selectedCode;
             _control.BtnExecute.IsEnabled = AiService.Instance.IsConfigured;
         }
 
@@ -107,23 +94,26 @@ namespace ICSharpCode.AiAgent
         {
             if (!AiService.Instance.IsConfigured)
             {
-                MessageBox.Show("Please configure the API key first");
+                MessageBox.Show("请先配置 API Key");
                 return;
             }
 
             string prompt = _control.PromptTextBox.Text;
             if (string.IsNullOrWhiteSpace(prompt))
             {
-                MessageBox.Show("Please enter a prompt");
+                MessageBox.Show("请输入提示内容");
                 return;
             }
+
+            var selectedItem = _control.ActionCombo.SelectedItem as ComboBoxItem;
+            string action = selectedItem?.Tag?.ToString() ?? "generate";
 
             _control.BtnExecute.IsEnabled = false;
 
             string systemMessage = null;
             string actionName = null;
 
-            switch (_selectedAction)
+            switch (action)
             {
                 case "generate":
                     actionName = "生成代码";
@@ -158,7 +148,7 @@ namespace ICSharpCode.AiAgent
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show($"错误：{ex.Message}");
             }
             finally
             {

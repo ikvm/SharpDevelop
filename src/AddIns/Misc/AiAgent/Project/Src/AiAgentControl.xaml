@@ -9,9 +9,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
@@ -27,34 +26,34 @@
         </Grid>
         
         <Grid Grid.Row="1" Margin="5">
-            <StackPanel Orientation="Vertical">
-                <Button x:Name="BtnGenerate" Content="Code Generation" Margin="0 2" Height="28"/>
-                <Button x:Name="BtnExplain" Content="Explain Code" Margin="0 2" Height="28"/>
-                <Button x:Name="BtnOptimize" Content="Optimize Code" Margin="0 2" Height="28"/>
-                <Button x:Name="BtnRefactor" Content="Refactor Code" Margin="0 2" Height="28"/>
-                <Button x:Name="BtnDebug" Content="Debug Code" Margin="0 2" Height="28"/>
-            </StackPanel>
+            <local:ThinkingStreamControl x:Name="StreamOutput"/>
         </Grid>
         
         <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Action:" VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <ComboBox Grid.Column="1" x:Name="ActionCombo" Height="28" VerticalAlignment="Center">
+                <ComboBoxItem Tag="generate" IsSelected="True">Code Generation</ComboBoxItem>
+                <ComboBoxItem Tag="explain">Explain Code</ComboBoxItem>
+                <ComboBoxItem Tag="optimize">Optimize Code</ComboBoxItem>
+                <ComboBoxItem Tag="refactor">Refactor Code</ComboBoxItem>
+                <ComboBoxItem Tag="debug">Debug Code</ComboBoxItem>
+            </ComboBox>
+            <Button Grid.Column="3" x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="80" Height="28" Margin="8 0 0 0"/>
+        </Grid>
+        
+        <Grid Grid.Row="3" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Content="Prompt:"/>
-            <TextBox Grid.Row="1" x:Name="PromptTextBox" AcceptsReturn="True" Height="80" VerticalScrollBarVisibility="Auto"/>
-        </Grid>
-        
-        <Grid Grid.Row="3" Margin="5">
-            <local:ThinkingStreamControl x:Name="StreamOutput"/>
-        </Grid>
-        
-        <Grid Grid.Row="4" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" x:Name="BtnExecute" Content="Execute" IsEnabled="False" Width="100" Height="28"/>
+            <TextBox Grid.Row="1" x:Name="PromptTextBox" AcceptsReturn="True" Height="70" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
         </Grid>
     </Grid>
 </UserControl>
