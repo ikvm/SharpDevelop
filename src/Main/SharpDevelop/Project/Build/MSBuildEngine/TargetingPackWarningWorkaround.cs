@@ -37,7 +37,7 @@ namespace ICSharpCode.SharpDevelop.Project
 		
 		public IMSBuildChainedLoggerFilter CreateFilter(IMSBuildLoggerContext context, IMSBuildChainedLoggerFilter nextFilter)
 		{
-			if (context.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2010) {
+			if (context.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2019) {
 				return new TargetingPackWarningWorkaroundChainEntry(nextFilter);
 			} else {
 				return nextFilter;

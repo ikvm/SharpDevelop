@@ -516,7 +516,7 @@ namespace ICSharpCode.SharpDevelop.Project
 		
 		[Browsable(false)]
 		public virtual SolutionFormatVersion MinimumSolutionVersion {
-			get { return SolutionFormatVersion.VS2005; }
+			get { return SolutionFormatVersion.VS2019; }
 		}
 		
 		/// <summary>

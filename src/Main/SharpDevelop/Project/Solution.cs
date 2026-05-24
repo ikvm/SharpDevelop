@@ -358,14 +358,14 @@ namespace ICSharpCode.SharpDevelop.Project
 		
 		SolutionFormatVersion ComputeSolutionVersion()
 		{
-			SolutionFormatVersion version = SolutionFormatVersion.VS2005;
+			SolutionFormatVersion version = SolutionFormatVersion.VS2019;
 			foreach (var project in this.Projects) {
 				if (project.MinimumSolutionVersion > version)
 					version = project.MinimumSolutionVersion;
 			}
 			
-			if ((minVSVersion != null || currVSVersion != null) && version < SolutionFormatVersion.VS2012)
-				version = SolutionFormatVersion.VS2012;
+			if ((minVSVersion != null || currVSVersion != null) && version < SolutionFormatVersion.VS2019)
+				version = SolutionFormatVersion.VS2019;
 			return version;
 		}
 		#endregion

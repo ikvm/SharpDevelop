@@ -124,12 +124,12 @@ namespace ICSharpCode.SharpDevelop.Project
 					// The build engine will handle this exception (occurs when unloading a project while a build is running)
 					if (projectFile == null)
 						throw new ObjectDisposedException("MSBuildBasedProject");
-					if (string.IsNullOrEmpty(projectFile.ToolsVersion) || projectFile.ToolsVersion == "2.0") {
-						return SolutionFormatVersion.VS2005;
-					} else if (projectFile.ToolsVersion == "3.0" || projectFile.ToolsVersion == "3.5") {
-						return SolutionFormatVersion.VS2008;
+					if (string.IsNullOrEmpty(projectFile.ToolsVersion) || projectFile.ToolsVersion == "4.0") {
+						return SolutionFormatVersion.VS2019;
+					//} else if (projectFile.ToolsVersion == "3.0" || projectFile.ToolsVersion == "3.5") {
+					//	return SolutionFormatVersion.VS2008;
 					} else {
-						return SolutionFormatVersion.VS2010;
+						return SolutionFormatVersion.VS2026;
 					}
 				}
 			}

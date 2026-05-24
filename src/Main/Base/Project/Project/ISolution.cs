@@ -25,10 +25,15 @@ namespace ICSharpCode.SharpDevelop.Project
 {
 	public enum SolutionFormatVersion
 	{
-		VS2005 = 9,
-		VS2008 = 10,
-		VS2010 = 11,
-		VS2012 = 12
+		//VS2005 = 9,
+		//VS2008 = 10,
+		//VS2010 = 11,
+		//VS2012 = 12,
+		//VS2015 = 13,
+		//VS2017 = 14,
+		VS2019 = 15,
+		VS2022 = 17,
+		VS2026 = 18
 	}
 	
 	/// <summary>

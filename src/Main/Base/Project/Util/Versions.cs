@@ -40,5 +40,17 @@ namespace ICSharpCode.SharpDevelop
 		public static readonly Version V4_7_2 = new Version(4, 7, 2);
 		public static readonly Version V4_8 = new Version(4, 8);
 		public static readonly Version V4_8_1 = new Version(4, 8, 1);
+
+
+		public static readonly Version V5_0 = new Version(5, 0);
+		public static readonly Version V6_0 = new Version(6, 0);
+		public static readonly Version V7_0 = new Version(7, 0);
+		public static readonly Version V8_0 = new Version(8, 0);
+		public static readonly Version V9_0 = new Version(9, 0);
+		public static readonly Version V10_0 = new Version(10, 0);
+		public static readonly Version V11_0 = new Version(11, 0);
+		public static readonly Version V12_0 = new Version(12, 0);
+		public static readonly Version V13_0 = new Version(13, 0);
+		public static readonly Version V14_0 = new Version(14, 0);
 	}
 }

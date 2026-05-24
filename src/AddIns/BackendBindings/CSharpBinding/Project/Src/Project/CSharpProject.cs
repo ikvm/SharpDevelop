@@ -107,7 +107,7 @@ namespace CSharpBinding
 		
 		public override Task<bool> BuildAsync(ProjectBuildOptions options, IBuildFeedbackSink feedbackSink, IProgressMonitor progressMonitor)
 		{
-			if (this.MinimumSolutionVersion == SolutionFormatVersion.VS2005) {
+			if (this.MinimumSolutionVersion == SolutionFormatVersion.VS2019) {
 				return SD.MSBuildEngine.BuildAsync(
 					this, options, feedbackSink, progressMonitor.CancellationToken,
 					new [] { Path.Combine(FileUtility.ApplicationRootPath, @"bin\SharpDevelop.CheckMSBuild35Features.targets") });
@@ -222,20 +222,19 @@ namespace CSharpBinding
 				return base.GetDefaultItemType(fileName);
 		}
 		
-		static readonly CompilerVersion msbuild20 = new CompilerVersion(new Version(2, 0), "C# 2.0");
-		static readonly CompilerVersion msbuild35 = new CompilerVersion(new Version(3, 5), "C# 3.0");
-		static readonly CompilerVersion msbuild40 = new CompilerVersion(new Version(4, 0), DotnetDetection.IsDotnet45Installed() ? "C# 5.0" : "C# 4.0");
+		static readonly CompilerVersion msbuild80 = new CompilerVersion(new Version(8, 0), "C# 8.0");
+		static readonly CompilerVersion msbuild100 = new CompilerVersion(new Version(10, 0), "C# 10.0");
+		static readonly CompilerVersion msbuild140 = new CompilerVersion(new Version(14, 0), "C# 14.0");// DotnetDetection.IsDotnet45Installed() ? "C# 14.0" : "C# 4.0");
 		
 		public override CompilerVersion CurrentCompilerVersion {
 			get {
 				switch (Project.MinimumSolutionVersion) {
-					case SolutionFormatVersion.VS2005:
-						return msbuild20;
-					case SolutionFormatVersion.VS2008:
-						return msbuild35;
-					case SolutionFormatVersion.VS2010:
-					case SolutionFormatVersion.VS2012:
-						return msbuild40;
+					case SolutionFormatVersion.VS2019:
+						return msbuild80;
+					case SolutionFormatVersion.VS2022:
+						return msbuild100;
+					case SolutionFormatVersion.VS2026:
+						return msbuild140;
 					default:
 						throw new NotSupportedException();
 				}
@@ -245,11 +244,11 @@ namespace CSharpBinding
 		public override IEnumerable<CompilerVersion> GetAvailableCompilerVersions()
 		{
 			List<CompilerVersion> versions = new List<CompilerVersion>();
-			if (DotnetDetection.IsDotnet35SP1Installed()) {
-				versions.Add(msbuild20);
-				versions.Add(msbuild35);
-			}
-			versions.Add(msbuild40);
+			//if (DotnetDetection.IsDotnet35SP1Installed()) {
+				versions.Add(msbuild80);
+				versions.Add(msbuild100);
+			//}
+			versions.Add(msbuild140);
 			return versions;
 		}
 		

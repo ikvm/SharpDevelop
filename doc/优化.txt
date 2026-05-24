@@ -6,3 +6,6 @@ The "skill" functionality must support auxiliary local execution tools, similar 
 
 
 "skill"功能必须支持辅助性的本地执行工具，类似于 Claude Code 中的代码辅助能力。这些工具应具备直接的代码操作能力，包括但不限于：修改现有代码文件、优化代码结构和性能、生成新的代码片段或完整函数，以及重构代码元素。在实现上，应优先考虑实际的代码交互能力，而非提供代码变更的文字描述或解释。
+
+
+content

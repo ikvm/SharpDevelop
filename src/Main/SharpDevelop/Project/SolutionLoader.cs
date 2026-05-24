@@ -224,23 +224,26 @@ namespace ICSharpCode.SharpDevelop.Project
 			
 			SolutionFormatVersion version;
 			switch (match.Result("${Version}")) {
-				case "7.00":
-				case "8.00":
-					throw Error("${res:SharpDevelop.Solution.CannotLoadOldSolution}");
-				case "9.00":
-					version = SolutionFormatVersion.VS2005;
+				//case "7.00":
+				//case "8.00":
+				//	throw Error("${res:SharpDevelop.Solution.CannotLoadOldSolution}");
+				//case "9.00":
+				//	version = SolutionFormatVersion.VS2005;
+				//	break;
+				case "16.00":
+					version = SolutionFormatVersion.VS2019;
 					break;
-				case "10.00":
-					version = SolutionFormatVersion.VS2008;
+				case "17.00":
+					version = SolutionFormatVersion.VS2022;
 					break;
-				case "11.00":
-					version = SolutionFormatVersion.VS2010;
-					break;
-				case "12.00":
-					version = SolutionFormatVersion.VS2012;
+				case "18.00":
+					version = SolutionFormatVersion.VS2026;
 					break;
 				default:
-					throw Error("${res:SharpDevelop.Solution.UnknownSolutionVersion}", match.Result("${Version}"));
+					version = SolutionFormatVersion.VS2019;
+					//throw Error("${res:SharpDevelop.Solution.CannotLoadOldSolution}");
+					break;
+					//throw Error("${res:SharpDevelop.Solution.UnknownSolutionVersion}", match.Result("${Version}"));
 			}
 			NextLine();
 			return version;

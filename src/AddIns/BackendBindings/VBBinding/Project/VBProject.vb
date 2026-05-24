@@ -82,10 +82,10 @@ Public Class VBProject
 	End Property
 	
 	Public Overrides Function BuildAsync(options As ProjectBuildOptions, feedbackSink As IBuildFeedbackSink, progressMonitor As IProgressMonitor) As Task(Of Boolean)
-		If Me.MinimumSolutionVersion = SolutionFormatVersion.VS2005 Then
-			Return SD.MSBuildEngine.BuildAsync(Me, options, feedbackSink, progressMonitor.CancellationToken, { Path.Combine(FileUtility.ApplicationRootPath, "bin\SharpDevelop.CheckMSBuild35Features.targets") })
-		End If
-		
+		'If Me.MinimumSolutionVersion = SolutionFormatVersion.VS2005 Then
+		'	Return SD.MSBuildEngine.BuildAsync(Me, options, feedbackSink, progressMonitor.CancellationToken, { Path.Combine(FileUtility.ApplicationRootPath, "bin\SharpDevelop.CheckMSBuild35Features.targets") })
+		'End If
+
 		Return MyBase.BuildAsync(options, feedbackSink, progressMonitor)
 	End Function
 

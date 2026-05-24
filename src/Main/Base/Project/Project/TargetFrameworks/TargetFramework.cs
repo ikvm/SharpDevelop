@@ -158,12 +158,12 @@ namespace ICSharpCode.SharpDevelop.Project
 		/// <remarks>The default implementation of this property is based on the <see cref="MinimumMSBuildVersion"/> property.</remarks>
 		public virtual SolutionFormatVersion MinimumSolutionVersion {
 			get {
-				if (MinimumMSBuildVersion <= Versions.V2_0)
-					return SolutionFormatVersion.VS2005;
-				else if (MinimumMSBuildVersion <= Versions.V3_5)
-					return SolutionFormatVersion.VS2008;
+				if (MinimumMSBuildVersion <= Versions.V8_0)
+					return SolutionFormatVersion.VS2019;
+				else if (MinimumMSBuildVersion <= Versions.V10_0)
+					return SolutionFormatVersion.VS2022;
 				else
-					return SolutionFormatVersion.VS2010;
+					return SolutionFormatVersion.VS2026;
 			}
 		}
 		

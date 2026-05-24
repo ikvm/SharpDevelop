@@ -78,10 +78,13 @@ namespace ICSharpCode.SharpDevelop.Project.Converter
 		public Version MSBuildVersion { get; private set; }
 		public string DisplayName { get; private set; }
 		
-		public static readonly CompilerVersion MSBuild20 = new CompilerVersion(Versions.V2_0, "MSBuild 2.0");
-		public static readonly CompilerVersion MSBuild35 = new CompilerVersion(Versions.V3_5, "MSBuild 3.5");
-		public static readonly CompilerVersion MSBuild40 = new CompilerVersion(Versions.V4_0, "MSBuild 4.0");
-		
+		//public static readonly CompilerVersion MSBuild20 = new CompilerVersion(Versions.V2_0, "MSBuild 2.0");
+		//public static readonly CompilerVersion MSBuild35 = new CompilerVersion(Versions.V3_5, "MSBuild 3.5");
+		//public static readonly CompilerVersion MSBuild40 = new CompilerVersion(Versions.V4_0, "MSBuild 4.0");
+		public static readonly CompilerVersion MSBuild80 = new CompilerVersion(Versions.V4_0, "MSBuild 8.0");
+		public static readonly CompilerVersion MSBuild100 = new CompilerVersion(Versions.V4_0, "MSBuild 10.0");
+		public static readonly CompilerVersion MSBuild140 = new CompilerVersion(Versions.V4_0, "MSBuild 14.0");
+
 		public CompilerVersion(Version msbuildVersion, string displayName)
 		{
 			if (msbuildVersion == null)

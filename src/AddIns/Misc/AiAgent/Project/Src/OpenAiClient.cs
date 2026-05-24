@@ -1,5 +1,7 @@
+using ICSharpCode.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ICSharpCode.SharpDevelop;
 
 namespace ICSharpCode.AiAgent
 {
@@ -27,7 +30,7 @@ namespace ICSharpCode.AiAgent
         public static readonly Dictionary<AiProvider, string[]> AvailableModels = new()
         {
             { AiProvider.OpenAI, new[] { "LongCat-Flash-Thinking-2601", "gpt-4o", "gpt-4o-mini" } },
-            { AiProvider.Anthropic, new[] { "LongCat-Flash-Thinking-2601", "claude-3-5-sonnet-20240620", "claude-3-haiku-20240307" } }
+            { AiProvider.Anthropic, new[] { "LongCat-Flash-Thinking-2601", "LongCat-Flash-Lite", "LongCat-Flash-Chat", "LongCat-Flash-Omni-2603" } }
         };
 
         public string SelectedModel
@@ -120,7 +123,8 @@ namespace ICSharpCode.AiAgent
                 Content = content
             };
 
-            using var response = await _httpClient.SendAsync(
+            SD.OutputPad.CurrentCategory.AppendLine("AI stream request: " + await content.ReadAsStringAsync());
+			using var response = await _httpClient.SendAsync(
                 request,
                 HttpCompletionOption.ResponseHeadersRead,
                 cancellationToken);
@@ -132,13 +136,14 @@ namespace ICSharpCode.AiAgent
 
 			while (!reader.EndOfStream)
 			{
-				string? line = await reader.ReadLineAsync();    // ����ÿһ��...}
-				Console.WriteLine(@"AI stream line:{0}", line);
+				string? line = await reader.ReadLineAsync();
+				Debug.WriteLine(@"AI stream response:{0}", line);
+				SD.OutputPad.CurrentCategory.AppendLine("AI stream response: " + line);
 
 				switch (_provider)
 				{
 					case AiProvider.OpenAI:
-						await StreamOpenAiResponseAsync(reader, onChunk, cancellationToken);
+						await StreamOpenAiResponseAsync(line, onChunk, cancellationToken);
 						break;
 					case AiProvider.Anthropic:
 						await StreamAnthropicResponseAsync(line, onChunk, cancellationToken);
@@ -147,64 +152,76 @@ namespace ICSharpCode.AiAgent
 			}
 		}
 
-        private async Task StreamOpenAiResponseAsync(StreamReader reader, Action<string> onChunk, CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                string line = await reader.ReadLineAsync();
-                if (line == null)
-                    break;
-
-                if (!line.StartsWith("data: "))
-                    continue;
-
-                string data = line.Substring(6);
-                if (data == "[DONE]")
-                    break;
-
-                try
-                {
-                    dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(data);
-                    if (json?.choices != null && json.choices.Count > 0)
-                    {
-                        string content = json.choices[0].delta?.content;
-                        if (!string.IsNullOrEmpty(content))
-                        {
-                            onChunk(content);
-                        }
-                    }
-                }
-                catch
-                {
-                }
-            }
-        }
-
-		private async Task<bool> StreamAnthropicResponseAsync(string line, Action<string> onChunk, CancellationToken cancellationToken)
+		private Task StreamOpenAiResponseAsync(string line, Action<string> onChunk, CancellationToken cancellationToken)
 		{
-			if (line == null) return false;
-			if (!line.StartsWith("data: ")) return false;
-
-			string data = line.Substring(6);
-
 			try
 			{
-				dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(data);
-				string type = json?.type?.ToString();
+				if (line == null)
+					return Task.CompletedTask;
 
-				if (type == "content_block_delta" && json?.delta?.text != null)
+				if (!line.StartsWith("data: "))
+					return Task.CompletedTask;
+
+				string data = line.Substring(6);
+				if (data == "[DONE]")
+					return Task.CompletedTask;
+
+				try
 				{
-					onChunk(json.delta.text.ToString());
+					dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(data);
+					if (json?.choices != null && json.choices.Count > 0)
+					{
+						string content = json.choices[0].delta?.content;
+						if (!string.IsNullOrEmpty(content))
+						{
+							onChunk(content);
+						}
+					}
 				}
-				else if (type == "message_stop")
+				catch
 				{
-					return true;
 				}
+
+				return Task.CompletedTask;
 			}
-			catch
+			catch (Exception exception)
 			{
+				return Task.FromException(exception);
 			}
-			return false;
+		}
+
+		private Task<bool> StreamAnthropicResponseAsync(string line, Action<string> onChunk, CancellationToken cancellationToken)
+		{
+			try
+			{
+				if (line == null) return Task.FromResult(false);
+				if (!line.StartsWith("data: ")) return Task.FromResult(false);
+
+				string data = line.Substring(6);
+
+				try
+				{
+					dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(data);
+					string type = json?.type?.ToString();
+
+					if (type == "content_block_delta" && json?.delta?.text != null)
+					{
+						onChunk(json.delta.text.ToString());
+					}
+					else if (type == "message_stop")
+					{
+						return Task.FromResult(true);
+					}
+				}
+				catch
+				{
+				}
+				return Task.FromResult(false);
+			}
+			catch (Exception exception)
+			{
+				return Task.FromException<bool>(exception);
+			}
 		}
 
 		private StringContent BuildRequestContent(string prompt, string systemMessage, string model, bool stream)

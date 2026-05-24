@@ -298,7 +298,7 @@ namespace ICSharpCode.SharpDevelop.Project
 		[Browsable(false)]
 		public virtual bool UpgradeDesired {
 			get {
-				return MinimumSolutionVersion < SolutionFormatVersion.VS2010;
+				return MinimumSolutionVersion < SolutionFormatVersion.VS2026;
 			}
 		}
 		

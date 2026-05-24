@@ -150,24 +150,25 @@ namespace ICSharpCode.SharpDevelop.Project
 			foreach (ILogger logger in loggers) {
 				logger.Initialize(eventSource);
 			}
-			
+
 			tcs = new TaskCompletionSource<bool>();
-			if (projectMinimumSolutionVersion <= SolutionFormatVersion.VS2008) {
-				if (DotnetDetection.IsDotnet35SP1Installed()) {
-					BuildWorkerManager.MSBuild35.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
-				} else {
-					loggerChain.HandleError(new BuildError(job.ProjectFileName, ".NET 3.5 SP1 is required to build this project."));
-					tcs.SetResult(false);
-				}
-			} else {
-				if (DotnetDetection.IsBuildTools2015Installed()) {
-					BuildWorkerManager.MSBuild140.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
-				} else if (DotnetDetection.IsBuildTools2013Installed()) {
-					BuildWorkerManager.MSBuild120.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
-				} else {
-					BuildWorkerManager.MSBuild40.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
-				}
-			}
+			//if (projectMinimumSolutionVersion <= SolutionFormatVersion.VS2019) {
+			//	if (DotnetDetection.IsDotnet452Installed()) {
+			//		BuildWorkerManager.MSBuild35.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
+			//	} else {
+			//		loggerChain.HandleError(new BuildError(job.ProjectFileName, ".NET 3.5 SP1 is required to build this project."));
+			//		tcs.SetResult(false);
+			//	}
+			//} else {
+			//	if (DotnetDetection.IsBuildTools2015Installed()) {
+			//		BuildWorkerManager.MSBuild140.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
+			//	} else if (DotnetDetection.IsBuildTools2013Installed()) {
+			//		BuildWorkerManager.MSBuild120.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
+			//	} else {
+			//		BuildWorkerManager.MSBuild40.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
+			//	}
+			//}
+			BuildWorkerManager.MSBuild40.RunBuildJob(job, loggerChain, OnDone, cancellationToken);
 			return tcs.Task;
 		}
 		
@@ -210,7 +211,7 @@ namespace ICSharpCode.SharpDevelop.Project
 				// 'MsTestToolsTargets' is preferred because it's at the end of the MSBuild 3.5 and 4.0 target file,
 				// but on MSBuild 2.0 we need to fall back to 'CodeAnalysisTargets'.
 				string hijackedProperty = "MsTestToolsTargets";
-				if (projectMinimumSolutionVersion == SolutionFormatVersion.VS2005)
+				if (projectMinimumSolutionVersion == SolutionFormatVersion.VS2019)
 					hijackedProperty = "CodeAnalysisTargets";
 				
 				// because we'll replace the hijackedProperty, manually write the corresponding include

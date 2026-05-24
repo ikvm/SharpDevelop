@@ -55,25 +55,25 @@ namespace ICSharpCode.SharpDevelop.Project
 			writer.WriteLine();
 			writer.WriteLine("Microsoft Visual Studio Solution File, Format Version " + (int)version + ".00");
 			switch (version) {
-				case SolutionFormatVersion.VS2005:
-					writer.WriteLine("# Visual Studio 2005");
+				case SolutionFormatVersion.VS2019:
+					writer.WriteLine("# Visual Studio 2019");
 					break;
-				case SolutionFormatVersion.VS2008:
-					writer.WriteLine("# Visual Studio 2008");
+				case SolutionFormatVersion.VS2022:
+					writer.WriteLine("# Visual Studio 2022");
 					break;
-				case SolutionFormatVersion.VS2010:
-					writer.WriteLine("# Visual Studio 2010");
+				case SolutionFormatVersion.VS2026:
+					writer.WriteLine("# Visual Studio 2026");
 					break;
-				case SolutionFormatVersion.VS2012:
-					writer.WriteLine("# Visual Studio 2012");
-					break;
+				//case SolutionFormatVersion.VS2012:
+				//	writer.WriteLine("# Visual Studio 2012");
+				//	break;
 			}
 			writer.WriteLine("# SharpDevelop " + RevisionClass.Major + "." + RevisionClass.Minor);
 		}
 		
 		public void WriteSolutionVersionProperties(SolutionFormatVersion version, Version currVSVersion, Version minVSVersion)
 		{
-			if (version >= SolutionFormatVersion.VS2012) {
+			if (version >= SolutionFormatVersion.VS2019) {
 				writer.WriteLine("VisualStudioVersion = {0}", currVSVersion);
 				writer.WriteLine("MinimumVisualStudioVersion = {0}", minVSVersion);
 			}

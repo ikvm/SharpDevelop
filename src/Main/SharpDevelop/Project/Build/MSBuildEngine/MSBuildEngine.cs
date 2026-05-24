@@ -95,7 +95,7 @@ namespace ICSharpCode.SharpDevelop.Project
 			
 			var additionalTargetFileList = additionalTargetFiles != null ? additionalTargetFiles.ToList() : new List<string>();
 			additionalTargetFileList.AddRange(AdditionalTargetFiles.Select(fileName => fileName.ToString()));
-			if (project.MinimumSolutionVersion >= SolutionFormatVersion.VS2010) {
+			if (project.MinimumSolutionVersion >= SolutionFormatVersion.VS2019) {
 				additionalTargetFileList.Add(Path.Combine(Path.GetDirectoryName(typeof(MSBuildEngine).Assembly.Location), "SharpDevelop.TargetingPack.targets"));
 			}
 			var engine = new MSBuildEngineWorker(this, project, options, feedbackSink, additionalTargetFileList);
@@ -143,7 +143,7 @@ namespace ICSharpCode.SharpDevelop.Project
 			}
 			
 			List<string> targets = new List<string>();
-			if (baseProject.MinimumSolutionVersion >= SolutionFormatVersion.VS2010) {
+			if (baseProject.MinimumSolutionVersion >= SolutionFormatVersion.VS2019) {
 				targets.Add("ResolveReferences");
 				targets.Add("DesignTimeResolveAssemblyReferences");
 			} else {

@@ -28,7 +28,7 @@ namespace ICSharpCode.SharpDevelop.Project
 	/// </summary>
 	public class MSBuildFileProject : AbstractProject
 	{
-		SolutionFormatVersion minimumSolutionVersion = SolutionFormatVersion.VS2005;
+		SolutionFormatVersion minimumSolutionVersion = SolutionFormatVersion.VS2019;
 		
 		public MSBuildFileProject(ProjectLoadInformation information) : base(information)
 		{
@@ -36,12 +36,14 @@ namespace ICSharpCode.SharpDevelop.Project
 				using (XmlReader r = XmlReader.Create(information.FileName, new XmlReaderSettings { IgnoreComments = true, XmlResolver = null })) {
 					if (r.Read() && r.MoveToContent() == XmlNodeType.Element) {
 						string toolsVersion = r.GetAttribute("ToolsVersion");
-						Version v;
-						if (Version.TryParse(toolsVersion, out v)) {
-							if (v >= new Version(4, 0)) {
-								minimumSolutionVersion = SolutionFormatVersion.VS2010; // use 4.0 Build Worker
-							}
-						}
+						if(string.IsNullOrEmpty(toolsVersion) || toolsVersion.Equals("Current", StringComparison.OrdinalIgnoreCase))
+							minimumSolutionVersion = SolutionFormatVersion.VS2026; // use 14.0 Build Worker
+						//Version v;
+						//if (Version.TryParse(toolsVersion, out v)) {
+						//	if (v >= new Version(4, 0)) {
+						//		minimumSolutionVersion = SolutionFormatVersion.VS2026; // use 4.0 Build Worker
+						//	}
+						//}
 					}
 				}
 			} catch (XmlException ex) {

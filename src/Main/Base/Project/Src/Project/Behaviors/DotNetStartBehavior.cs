@@ -151,13 +151,12 @@ namespace ICSharpCode.SharpDevelop.Project
 		public override CompilerVersion CurrentCompilerVersion {
 			get {
 				switch (Project.MinimumSolutionVersion) {
-					case SolutionFormatVersion.VS2005:
-						return CompilerVersion.MSBuild20;
-					case SolutionFormatVersion.VS2008:
-						return CompilerVersion.MSBuild35;
-					case SolutionFormatVersion.VS2010:
-					case SolutionFormatVersion.VS2012:
-						return CompilerVersion.MSBuild40;
+					case SolutionFormatVersion.VS2019:
+						return CompilerVersion.MSBuild80;
+					case SolutionFormatVersion.VS2022:
+						return CompilerVersion.MSBuild100;
+					case SolutionFormatVersion.VS2026:
+						return CompilerVersion.MSBuild140;
 					default:
 						throw new NotSupportedException();
 				}
@@ -167,11 +166,11 @@ namespace ICSharpCode.SharpDevelop.Project
 		public override IEnumerable<CompilerVersion> GetAvailableCompilerVersions()
 		{
 			List<CompilerVersion> versions = new List<CompilerVersion>();
-			if (DotnetDetection.IsDotnet35SP1Installed()) {
-				versions.Add(CompilerVersion.MSBuild20);
-				versions.Add(CompilerVersion.MSBuild35);
-			}
-			versions.Add(CompilerVersion.MSBuild40);
+			//if (DotnetDetection.IsDotnet35SP1Installed()) {
+				versions.Add(CompilerVersion.MSBuild80);
+				versions.Add(CompilerVersion.MSBuild100);
+			//}
+			versions.Add(CompilerVersion.MSBuild140);
 			return versions;
 		}
 		

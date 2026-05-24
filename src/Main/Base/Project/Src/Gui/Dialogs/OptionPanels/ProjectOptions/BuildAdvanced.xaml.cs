@@ -86,15 +86,15 @@ namespace ICSharpCode.SharpDevelop.Gui.OptionPanels
 			
 			this.TargetCPU = new List<KeyItemPair>();
 			supports32BitPreferred = false;
-			var outputType = projectOptions.GetProperty("OutputType", OutputType.Exe);
-			if (DotnetDetection.IsDotnet45Installed() &&
-			    ((outputType.Value == OutputType.Exe) || (outputType.Value == OutputType.WinExe))) {
-				var upgradableProject = projectOptions.Project as IUpgradableProject;
-				if (upgradableProject != null && upgradableProject.CurrentTargetFramework.Supports32BitPreferredOption)
-					supports32BitPreferred = (projectOptions.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2010);
-				// Show 32 vs. 64 options even for library projects;
-				// it's relevant for web applications.
-			}
+			//var outputType = projectOptions.GetProperty("OutputType", OutputType.Exe);
+			//if (DotnetDetection.IsDotnet45Installed() &&
+			//    ((outputType.Value == OutputType.Exe) || (outputType.Value == OutputType.WinExe))) {
+			//	var upgradableProject = projectOptions.Project as IUpgradableProject;
+			//	if (upgradableProject != null && upgradableProject.CurrentTargetFramework.Supports32BitPreferredOption)
+			//		supports32BitPreferred = (projectOptions.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2010);
+			//	// Show 32 vs. 64 options even for library projects;
+			//	// it's relevant for web applications.
+			//}
 			if (supports32BitPreferred) {
 				this.TargetCPU.Add(new KeyItemPair("AnyCPU32", StringParser.Parse("${res:Dialog.ProjectOptions.Build.TargetCPU.Any32}")));
 				this.TargetCPU.Add(new KeyItemPair("AnyCPU64", StringParser.Parse("${res:Dialog.ProjectOptions.Build.TargetCPU.Any64}")));

@@ -16,8 +16,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-using System;
 using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text.RegularExpressions;
+using Microsoft.Win32;
+
 
 namespace ICSharpCode.SharpDevelop
 {
@@ -159,4 +165,262 @@ namespace ICSharpCode.SharpDevelop
 			}
 		}
 	}
+
+	public class DotNetCoreDetector
+	{
+		public static List<DotNetVersionInfo> DetectDotNetCoreVersions()
+		{
+			var versions = new List<DotNetVersionInfo>();
+
+			try
+			{
+				// 检测 .NET SDK 版本
+				var sdkVersions = GetDotNetSdkVersions();
+				versions.AddRange(sdkVersions);
+
+				// 检测 .NET 运行时版本
+				var runtimeVersions = GetDotNetRuntimeVersions();
+				versions.AddRange(runtimeVersions);
+			}
+			catch (Exception ex)
+			{
+				// 记录错误日志
+				Debug.WriteLine($"检测.NET Core版本时出错: {ex.Message}");
+			}
+
+			return versions;
+		}
+
+		private static List<DotNetVersionInfo> GetDotNetSdkVersions()
+		{
+			var versions = new List<DotNetVersionInfo>();
+
+			try
+			{
+				var processInfo = new ProcessStartInfo
+				{
+					FileName = "dotnet",
+					Arguments = "--list-sdks",
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					CreateNoWindow = true
+				};
+
+				using (var process = Process.Start(processInfo))
+				{
+					var output = process.StandardOutput.ReadToEnd();
+					process.WaitForExit();
+
+					// 解析输出，例如：8.0.100 [C:\program files\dotnet\sdk]
+					var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+					foreach (var line in lines)
+					{
+						var match = Regex.Match(line, @"^(\d+\.\d+\.\d+)\s+$$(.+)$$$");
+						if (match.Success)
+						{
+							versions.Add(new DotNetVersionInfo
+							{
+								Version = match.Groups[1].Value,
+								Type = "SDK",
+								InstallationPath = match.Groups[2].Value
+							});
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+				// dotnet 命令可能不存在
+			}
+
+			return versions;
+		}
+
+		private static List<DotNetVersionInfo> GetDotNetRuntimeVersions()
+		{
+			var versions = new List<DotNetVersionInfo>();
+
+			try
+			{
+				var processInfo = new ProcessStartInfo
+				{
+					FileName = "dotnet",
+					Arguments = "--list-runtimes",
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					CreateNoWindow = true
+				};
+
+				using (var process = Process.Start(processInfo))
+				{
+					var output = process.StandardOutput.ReadToEnd();
+					process.WaitForExit();
+
+					// 解析输出，例如：Microsoft.NETCore.App 8.0.6 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
+					var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+					foreach (var line in lines)
+					{
+						var match = Regex.Match(line, @"^(\S+)\s+(\d+\.\d+\.\d+)\s+$$(.+)$$$");
+						if (match.Success)
+						{
+							versions.Add(new DotNetVersionInfo
+							{
+								RuntimeName = match.Groups[1].Value,
+								Version = match.Groups[2].Value,
+								Type = "Runtime",
+								InstallationPath = match.Groups[3].Value
+							});
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+				// dotnet 命令可能不存在
+			}
+
+			return versions;
+		}
+	}
+
+	public class DotNetVersionInfo
+	{
+		public string Version { get; set; }
+		public string Type { get; set; } // SDK 或 Runtime
+		public string RuntimeName { get; set; } // 运行时名称，如 Microsoft.NETCore.App
+		public string InstallationPath { get; set; }
+	}
+
+	public class DotNetFileSystemDetector
+	{
+		public static List<DotNetVersionInfo> DetectViaFileSystem()
+		{
+			var versions = new List<DotNetVersionInfo>();
+
+			// 常见的 .NET 安装路径
+			var possiblePaths = new[]
+			{
+						Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet"),
+						Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "dotnet"),
+						Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet"),
+						Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "dotnet")
+				};
+
+			foreach (var basePath in possiblePaths)
+			{
+				if (Directory.Exists(basePath))
+				{
+					// 检测 SDK 版本
+					var sdkPath = Path.Combine(basePath, "sdk");
+					if (Directory.Exists(sdkPath))
+					{
+						var sdkDirs = Directory.GetDirectories(sdkPath);
+						foreach (var sdkDir in sdkDirs)
+						{
+							var dirName = Path.GetFileName(sdkDir);
+							if (Regex.IsMatch(dirName, @"^\d+\.\d+\.\d+"))
+							{
+								versions.Add(new DotNetVersionInfo
+								{
+									Version = dirName,
+									Type = "SDK",
+									InstallationPath = sdkDir
+								});
+							}
+						}
+					}
+
+					// 检测运行时版本
+					var sharedPath = Path.Combine(basePath, "shared");
+					if (Directory.Exists(sharedPath))
+					{
+						var runtimeDirs = Directory.GetDirectories(sharedPath);
+						foreach (var runtimeDir in runtimeDirs)
+						{
+							var runtimeName = Path.GetFileName(runtimeDir);
+							var versionDirs = Directory.GetDirectories(runtimeDir);
+
+							foreach (var versionDir in versionDirs)
+							{
+								var version = Path.GetFileName(versionDir);
+								if (Regex.IsMatch(version, @"^\d+\.\d+\.\d+"))
+								{
+									versions.Add(new DotNetVersionInfo
+									{
+										RuntimeName = runtimeName,
+										Version = version,
+										Type = "Runtime",
+										InstallationPath = versionDir
+									});
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return versions;
+		}
+	}
+
+	public class DotNetFrameworkDetector
+	{
+		public static List<DotNetVersionInfo> DetectFrameworkVersions()
+		{
+			var versions = new List<DotNetVersionInfo>();
+
+			// 检测 .NET Framework 4.x
+			try
+			{
+				using (var ndpKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
+				{
+					if (ndpKey != null)
+					{
+						var release = ndpKey.GetValue("Release") as int?;
+						if (release.HasValue)
+						{
+							var version = GetFrameworkVersionFromRelease(release.Value);
+							if (version != null)
+							{
+								versions.Add(new DotNetVersionInfo
+								{
+									Version = version,
+									Type = "Framework",
+									RuntimeName = ".NET Framework"
+								});
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"检测.NET Framework时出错: {ex.Message}");
+			}
+
+			return versions;
+		}
+
+		private static string GetFrameworkVersionFromRelease(int release)
+		{
+			// 根据 Release DWORD 值确定 .NET Framework 版本
+			// 参考：https://docs.microsoft.com/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+			if (release >= 533320) return "4.8.1";
+			if (release >= 528040) return "4.8";
+			if (release >= 461808) return "4.7.2";
+			if (release >= 461308) return "4.7.1";
+			if (release >= 460798) return "4.7";
+			if (release >= 394802) return "4.6.2";
+			if (release >= 394254) return "4.6.1";
+			if (release >= 393295) return "4.6";
+			if (release >= 379893) return "4.5.2";
+			if (release >= 378675) return "4.5.1";
+			if (release >= 378389) return "4.5";
+
+			return null;
+		}
+	}
+
 }

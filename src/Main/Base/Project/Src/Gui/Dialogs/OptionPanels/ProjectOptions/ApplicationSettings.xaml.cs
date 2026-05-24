@@ -194,8 +194,8 @@ namespace ICSharpCode.SharpDevelop.Gui.OptionPanels
 		
 		void project_MinimumSolutionVersionChanged(object sender, EventArgs e)
 		{
-			// embedding manifests requires the project to target MSBuild 3.5 or higher
-			applicationManifestComboBox.IsEnabled = base.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2008;
+			// embedding manifests requires the project to target MSBuild 8.0 or higher
+			applicationManifestComboBox.IsEnabled = base.Project.MinimumSolutionVersion >= SolutionFormatVersion.VS2019;
 		}
 		
 		
