@@ -193,17 +193,18 @@ namespace ICSharpCode.AiAgent
 			return false;
 		}
 
-        private StringContent BuildRequestContent(string prompt, string systemMessage, string model, bool stream)
+		const string MODEL_NAME = "LongCat-Flash-Thinking-2601"; // LongCat-Flash-Lite
+		private StringContent BuildRequestContent(string prompt, string systemMessage, string model, bool stream)
         {
             string jsonContent;
 
             switch (_provider)
             {
                 case AiProvider.OpenAI:
-                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, model ?? "LongCat-Flash-Lite", stream);
+                    jsonContent = BuildOpenAiRequestBody(prompt, systemMessage, MODEL_NAME, stream);
                     break;
                 case AiProvider.Anthropic:
-                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, model ?? "LongCat-Flash-Lite", stream);
+                    jsonContent = BuildAnthropicRequestBody(prompt, systemMessage, MODEL_NAME, stream);
                     break;
                 default:
                     throw new NotSupportedException("AI provider not supported");
