@@ -126,28 +126,28 @@ namespace ICSharpCode.AiAgent
             switch (_selectedAction)
             {
                 case "generate":
-                    actionName = "Generate Code";
-                    systemMessage = "You are an expert software developer. Generate clean, efficient, and well-documented code. Respond only with the requested code.";
+                    actionName = "生成代码";
+                    systemMessage = "你是一位资深的软件开发者。请生成简洁高效且文档完善的代码，直接输出请求的代码即可。";
                     break;
                 case "explain":
-                    actionName = "Explain Code";
-                    systemMessage = "You are an expert software developer. Explain the provided code in detail, including its purpose, key algorithms, and potential improvements.";
-                    prompt = $"Explain this code:\n\n{prompt}";
+                    actionName = "解释代码";
+                    systemMessage = "你是一位资深的软件开发者。请详细解释所提供的代码，包括其功能、核心算法以及潜在的优化空间。";
+                    prompt = $"请解释以下代码：\n\n{prompt}";
                     break;
                 case "optimize":
-                    actionName = "Optimize Code";
-                    systemMessage = "You are an expert software developer. Optimize the provided code for performance, readability, and best practices. Explain the changes made.";
-                    prompt = $"Optimize this code and explain the changes:\n\n{prompt}";
+                    actionName = "优化代码";
+                    systemMessage = "你是一位资深的软件开发者。请对所提供的代码进行性能、可读性和最佳实践方面的优化，并说明所做的改进。";
+                    prompt = $"请优化以下代码并说明改动：\n\n{prompt}";
                     break;
                 case "refactor":
-                    actionName = "Refactor Code";
-                    systemMessage = "You are an expert software developer. Refactor the provided code according to the specified goal. Explain the refactoring approach.";
-                    prompt = $"Refactor this code:\n\n{prompt}";
+                    actionName = "重构代码";
+                    systemMessage = "你是一位资深的软件开发者。请根据指定的目标对代码进行重构，并说明重构的思路。";
+                    prompt = $"请重构以下代码：\n\n{prompt}";
                     break;
                 case "debug":
-                    actionName = "Debug Code";
-                    systemMessage = "You are an expert debugger. Analyze the provided code and error description to identify and fix bugs.";
-                    prompt = $"Debug this code:\n\n{prompt}";
+                    actionName = "调试代码";
+                    systemMessage = "你是一位资深的调试专家。请分析所提供的代码和错误描述，找出并修复缺陷。";
+                    prompt = $"请调试以下代码：\n\n{prompt}";
                     break;
             }
 
