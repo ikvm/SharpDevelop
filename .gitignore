@@ -27,3 +27,5 @@ bin/
 *.DotSettings.user
 *.suo
 .DS_Store
+*.user
+/.vs
