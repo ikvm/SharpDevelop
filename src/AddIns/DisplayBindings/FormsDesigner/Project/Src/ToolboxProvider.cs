@@ -192,7 +192,7 @@ namespace ICSharpCode.FormsDesigner
 			foreach (ProjectItem projectItem in project.Items) {
 				ReferenceProjectItem referenceItem = projectItem as ReferenceProjectItem;
 				if (referenceItem != null) {
-					if (referenceItem.ItemType == ItemType.Reference) {
+					if (referenceItem.ItemType == ItemType.Reference || referenceItem.ItemType == ItemType.PackageReference) {
 						LoggingService.Debug("Checking project reference: " + referenceItem.Include);
 						if (referenceItem.HintPath.Length > 0 && File.Exists(referenceItem.FileName)) {
 							LoggingService.Debug("Checking assembly reference");

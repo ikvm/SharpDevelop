@@ -52,7 +52,7 @@ namespace ICSharpCode.SharpDevelop.Parser
 							// Special handling for project references: Compare with project name instead of file name
 							return (((ProjectReferenceProjectItem) item).ProjectName == fullName.ShortName);
 						}
-						return (item.ItemType == ItemType.Reference) && (item.Include == fullName.ShortName);
+						return (item.ItemType == ItemType.Reference || item.ItemType == ItemType.PackageReference) && (item.Include == fullName.ShortName);
 					});
 			
 			if (projectItem != null) {
