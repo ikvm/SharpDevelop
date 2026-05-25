@@ -201,8 +201,8 @@
   <ItemGroup>
 	<PackageReference Include="AvalonEdit" Version="6.3.1.120" />
 	<PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
-	<PackageReference Include="Microsoft.Build" Version="18.6.3" />
-	<PackageReference Include="Microsoft.Build.Framework" Version="18.6.3" />
+	<PackageReference Include="Microsoft.Build" Version="18.0.2" />
+	<PackageReference Include="Microsoft.Build.Framework" Version="18.0.2" />
     <Reference Include="ICSharpCode.NRefactory.CSharp.Refactoring">
       <HintPath>..\..\Libraries\ICSharpCode.NRefactory\ICSharpCode.NRefactory.CSharp.Refactoring.dll</HintPath>
     </Reference>
@@ -228,6 +228,8 @@
     <!--<Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />-->
 	<PackageReference Include="Mono.Cecil" Version="0.9.6.4" />
+	<PackageReference Include="System.Reflection.Metadata" Version="9.0.0" />
+	<PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.0" />
     <!--<Reference Include="Mono.Cecil">
       <HintPath>..\..\..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>-->

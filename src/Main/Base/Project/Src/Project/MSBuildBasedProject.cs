@@ -1101,6 +1101,7 @@ namespace ICSharpCode.SharpDevelop.Project
 							case ProjectItemClassifier.ItemCategory.SdkInternal:
 							case ProjectItemClassifier.ItemCategory.BuildFile:
 							case ProjectItemClassifier.ItemCategory.Unknown:
+							case ProjectItemClassifier.ItemCategory.Other:
 								continue;
 						}
 					}
@@ -1651,6 +1652,8 @@ namespace ICSharpCode.SharpDevelop.Project
 				case "SdkSupportedTargetPlatformIdentifier":
 				case "_KnownRuntimeIdentiferPlatforms":
 
+				case "_ExcludedKnownRuntimeIdentiferPlatforms":
+
 				// 支持的目标框架版本（.NETCoreApp, .NETStandard, .NETFramework）
 				case "SupportedNETCoreAppTargetFramework":
 				case "SupportedNETStandardTargetFramework":
@@ -1723,6 +1726,9 @@ namespace ICSharpCode.SharpDevelop.Project
 
 				// AvailableItemName 是框架内部使用的类型注册
 				case "AvailableItemName":
+
+				case "JsonSchemaSegment":
+				case "Analyzer":
 					return true;
 			}
 			return false;
@@ -1772,7 +1778,7 @@ namespace ICSharpCode.SharpDevelop.Project
 				case "Content":
 				case "None":
 				case "AdditionalFiles":
-				case "Analyzer":
+				//case "Analyzer":
 				case "CodeAnalysisRuleSet":
 					return true;
 			}

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFramework>net481</TargetFramework>
+    <OutputType>Library</OutputType>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <ProjectGuid>{B2C3D4E5-F6A7-8901-BCDE-F12345678901}</ProjectGuid>
+    <AssemblyName>LanguageServerClient</AssemblyName>
+    <RootNamespace>ICSharpCode.LanguageServerClient</RootNamespace>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <BaseAddress>126877696</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+
+    <UseWPF>true</UseWPF>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG</DefineConstants>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\LanguageServerClient\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <OutputPath>..\..\..\..\..\AddIns\Misc\LanguageServerClient\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Configuration\AssemblyInfo.cs" />
+    <Compile Include="Src\Protocol\Models\Position.cs" />
+    <Compile Include="Src\Protocol\Models\Range.cs" />
+    <Compile Include="Src\Protocol\Models\Location.cs" />
+    <Compile Include="Src\Protocol\Models\TextDocumentIdentifier.cs" />
+    <Compile Include="Src\Protocol\Models\TextDocumentItem.cs" />
+    <Compile Include="Src\Protocol\Models\VersionedTextDocumentIdentifier.cs" />
+    <Compile Include="Src\Protocol\Models\TextDocumentContentChangeEvent.cs" />
+    <Compile Include="Src\Protocol\Models\InitializeParams.cs" />
+    <Compile Include="Src\Protocol\Models\InitializeResult.cs" />
+    <Compile Include="Src\Protocol\Models\CompletionParams.cs" />
+    <Compile Include="Src\Protocol\Models\CompletionList.cs" />
+    <Compile Include="Src\Protocol\Models\CompletionItem.cs" />
+    <Compile Include="Src\Protocol\Models\HoverParams.cs" />
+    <Compile Include="Src\Protocol\Models\Hover.cs" />
+    <Compile Include="Src\Protocol\Models\DefinitionParams.cs" />
+    <Compile Include="Src\Protocol\Models\ReferenceParams.cs" />
+    <Compile Include="Src\Protocol\Models\PublishDiagnosticsParams.cs" />
+    <Compile Include="Src\Protocol\Models\Diagnostic.cs" />
+    <Compile Include="Src\Protocol\Models\DiagnosticSeverity.cs" />
+    <Compile Include="Src\Protocol\ClientCapabilities.cs" />
+    <Compile Include="Src\Protocol\ServerCapabilities.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcClient.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcMessage.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcRequest.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcResponse.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcNotification.cs" />
+    <Compile Include="Src\JsonRpc\JsonRpcError.cs" />
+    <Compile Include="Src\LspClient.cs" />
+    <Compile Include="Src\LspConnection.cs" />
+    <Compile Include="Src\LspDocumentSyncService.cs" />
+    <Compile Include="Src\Adapters\LspService.cs" />
+    <Compile Include="Src\Adapters\LspParserAdapter.cs" />
+    <Compile Include="Src\Adapters\LspCompletionAdapter.cs" />
+    <Compile Include="Src\Adapters\LspDiagnosticsAdapter.cs" />
+    <Compile Include="Src\Adapters\LspNavigationAdapter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LanguageServerClient.addin" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Main\Base\Project\ICSharpCode.SharpDevelop.csproj">
+      <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
+      <Name>ICSharpCode.SharpDevelop</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Main\Core\Project\ICSharpCode.Core.csproj">
+      <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
+      <Name>ICSharpCode.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

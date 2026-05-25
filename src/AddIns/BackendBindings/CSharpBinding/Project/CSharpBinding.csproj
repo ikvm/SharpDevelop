@@ -63,6 +63,8 @@
     <Compile Include="Src\FormattingStrategy\CSharpFormatter.cs" />
     <Compile Include="Src\FormattingStrategy\CSharpFormattingPolicies.cs" />
     <Compile Include="Src\FormattingStrategy\FormattingOptionBinding.cs" />
+    <Compile Include="Src\FormattingStrategy\Roslyn\RoslynFormatter.cs" />
+    <Compile Include="Src\FormattingStrategy\Roslyn\RoslynFormattingStrategy.cs" />
     <Compile Include="Src\FormsDesigner\CSharpDesignerGenerator.cs" />
     <Compile Include="Src\FormsDesigner\CSharpDesignerLoader.cs" />
     <Compile Include="Src\FormsDesigner\CSharpDesignerLoaderProvider.cs" />
@@ -108,6 +110,9 @@
     <Compile Include="Src\Completion\CSharpCompletionBinding.cs" />
     <Compile Include="Src\Completion\CSharpCompletionDataFactory.cs" />
     <Compile Include="Src\Completion\EntityCompletionData.cs" />
+    <Compile Include="Src\Completion\Roslyn\RoslynCompletionBinding.cs" />
+    <Compile Include="Src\Completion\Roslyn\RoslynCompletionData.cs" />
+    <Compile Include="Src\Completion\Roslyn\RoslynCompletionItemKindToIconConverter.cs" />
     <Compile Include="Src\CSharpBracketSearcher.cs" />
     <Compile Include="Src\CSharpLanguageBinding.cs" />
     <Compile Include="Src\CSharpProjectBinding.cs" />
@@ -121,6 +126,28 @@
     <Compile Include="Src\Parser\CSharpFullParseInformation.cs" />
     <Compile Include="Src\Parser\CSharpSymbolSearch.cs" />
     <Compile Include="Src\Parser\Parser.cs" />
+    <Compile Include="Src\Parser\Roslyn\RoslynParserAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\RoslynFullParseInformation.cs" />
+    <Compile Include="Src\Parser\Roslyn\RoslynUnresolvedFileAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\RoslynUnresolvedTypeDefinitionAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\RoslynCompilationManager.cs" />
+    <Compile Include="Src\RoslynHighlighter\RoslynSemanticHighlighter.cs" />
+    <Compile Include="Src\RoslynHighlighter\RoslynSemanticClassificationVisitor.cs" DependentUpon="RoslynSemanticHighlighter.cs" />
+    <Compile Include="Src\RoslynHighlighter\RoslynClassificationToHighlightingMapper.cs" DependentUpon="RoslynSemanticHighlighter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\AdapterCache.cs" />
+    <Compile Include="Src\Diagnostics\Roslyn\RoslynDiagnosticsProvider.cs" />
+    <Compile Include="Src\Diagnostics\Roslyn\RoslynCodeFixService.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynCompilationAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynAssemblyAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynTypeAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynMemberAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynNamespaceAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynTypeDefinitionAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynProjectContentAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynParameterAdapter.cs" />
+    <Compile Include="Src\Parser\Roslyn\Adapters\RoslynTypeReference.cs" />
+    <Compile Include="Src\Navigation\Roslyn\RoslynNavigationService.cs" />
+    <Compile Include="Src\Navigation\Roslyn\RoslynGoToDefinitionCommand.cs" />
     <Compile Include="Src\Project\VBNetToCSharpConvertVisitorWithMyFormsSupport.cs" />
     <Compile Include="Src\Project\CSharpMyNamespaceBuilder.cs" />
     <Compile Include="Src\Project\CSharpProject.cs" />
@@ -153,9 +180,14 @@
 
   <ItemGroup>
 	  <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
-	  <PackageReference Include="ICSharpCode.NRefactory" Version ="5.5.1" />
-	  <PackageReference Include="Microsoft.Build" Version ="18.6.3" />
-	  <PackageReference Include="Microsoft.Build.Framework" Version ="18.6.3" />
+	  <PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
+	  <PackageReference Include="Microsoft.Build" Version="18.0.2" />
+	  <PackageReference Include="Microsoft.Build.Framework" Version="18.0.2" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.3.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="5.3.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="5.3.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.3.0" />
     <Reference Include="ICSharpCode.NRefactory.CSharp.Refactoring">
       <HintPath>..\..\..\..\Libraries\ICSharpCode.NRefactory\ICSharpCode.NRefactory.CSharp.Refactoring.dll</HintPath>
     </Reference>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -37,14 +37,49 @@ namespace ICSharpCode.SharpDevelop.Parser
 	sealed class ParserService : IParserService
 	{
 		IList<ParserDescriptor> parserDescriptors;
+		ParserBackend currentParserBackend;
 		
 		public ParserService()
 		{
 			parserDescriptors = AddInTree.BuildItems<ParserDescriptor>("/SharpDevelop/Parser", null, false);
+			// 从配置中读取解析器后端设置，默认为 NRefactory
+			currentParserBackend = SD.PropertyService.Get("SharpDevelop.ParserBackend", ParserBackend.NRefactory);
 			this.LoadSolutionProjectsThread = new LoadSolutionProjects();
 		}
 		
 		public ILoadSolutionProjectsThread LoadSolutionProjectsThread { get; private set; }
+		
+		#region CurrentParserBackend
+		public event EventHandler ParserBackendChanged = delegate {};
+		
+		public ParserBackend CurrentParserBackend {
+			get { return currentParserBackend; }
+			set {
+				SD.MainThread.VerifyAccess();
+				if (currentParserBackend != value) {
+					currentParserBackend = value;
+					SD.PropertyService.Set("SharpDevelop.ParserBackend", value);
+					// 后端切换时，使所有缓存失效
+					InvalidateAllCacheEntries();
+					ParserBackendChanged(null, EventArgs.Empty);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// 使所有文件条目的缓存失效，以便使用新的解析器后端重新解析。
+		/// </summary>
+		void InvalidateAllCacheEntries()
+		{
+			List<ParserServiceEntry> entries;
+			lock (fileEntryDict) {
+				entries = fileEntryDict.Values.ToList();
+			}
+			foreach (var entry in entries) {
+				entry.ExpireCache();
+			}
+		}
+		#endregion
 		
 		#region ParseInformationUpdated
 		public event EventHandler<ParseInformationEventArgs> ParseInformationUpdated = delegate {};
@@ -380,6 +415,7 @@ namespace ICSharpCode.SharpDevelop.Parser
 		
 		/// <summary>
 		/// Creates a new IParser instance that can parse the specified file.
+		/// 根据当前解析器后端配置选择合适的解析器。
 		/// This method is thread-safe.
 		/// </summary>
 		internal IParser CreateParser(FileName fileName)
@@ -388,6 +424,35 @@ namespace ICSharpCode.SharpDevelop.Parser
 				throw new ArgumentNullException("fileName");
 			if (parserDescriptors == null)
 				return null;
+			
+			// 根据当前后端配置筛选解析器
+			string preferredId = null;
+			switch (currentParserBackend) {
+				case ParserBackend.Roslyn:
+					preferredId = "C#/Roslyn";
+					break;
+				case ParserBackend.Lsp:
+					preferredId = "C#/LSP";
+					break;
+				default:
+					preferredId = null; // NRefactory: 使用默认逻辑
+					break;
+			}
+			
+			// 优先尝试匹配首选后端
+			if (preferredId != null) {
+				foreach (ParserDescriptor descriptor in parserDescriptors) {
+					if (descriptor.Language == preferredId && descriptor.CanParse(fileName)) {
+						IParser p = descriptor.CreateParser();
+						if (p != null) {
+							p.TaskListTokens = TaskListTokens;
+							return p;
+						}
+					}
+				}
+			}
+			
+			// 回退到默认逻辑（选择第一个能解析该文件的描述符）
 			foreach (ParserDescriptor descriptor in parserDescriptors) {
 				if (descriptor.CanParse(fileName)) {
 					IParser p = descriptor.CreateParser();

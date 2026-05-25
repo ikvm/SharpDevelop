@@ -69,8 +69,8 @@
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />-->
     <PackageReference Include="ICSharpCode.NRefactory" Version ="5.5.1" />
-    <PackageReference Include="Microsoft.Build" Version ="18.6.3" />
-    <PackageReference Include="Microsoft.Build.Framework" Version ="18.6.3" />
+    <PackageReference Include="Microsoft.Build" Version ="18.0.2" />
+    <PackageReference Include="Microsoft.Build.Framework" Version ="18.0.2" />
   </ItemGroup>
 
   <ItemGroup>

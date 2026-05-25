@@ -58,10 +58,15 @@
 		        supportedfilenamepattern = "\.(cs)$"
 		        projectfileextension = ".csproj"
 		        class = "CSharpBinding.Parser.TParser"/>
+		<Parser id    = "C#/Roslyn"
+		        supportedfilenamepattern = "\.(cs)$"
+		        projectfileextension = ".csproj"
+		        class = "CSharpBinding.Parser.Roslyn.RoslynParserAdapter"/>
 	</Path>
 	
 	<Path name = "/SharpDevelop/ViewContent/TextEditor/CodeCompletion">
 		<CodeCompletionBinding id = "CSharp" extensions = ".cs" class = "CSharpBinding.Completion.CSharpCompletionBinding"/>
+		<CodeCompletionBinding id = "CSharpRoslyn" extensions = ".cs" class = "CSharpBinding.Completion.Roslyn.RoslynCompletionBinding"/>
 	</Path>
 	
 	<Path name = "/SharpDevelop/BackendBindings/Templates">
@@ -94,6 +99,7 @@
 	
 	<Path name="/SharpDevelop/ViewContent/AvalonEdit/Highlighters">
 		<Highlighter id="CSharpSemantic" extensions=".cs" class="CSharpBinding.CSharpSemanticHighlighter" />
+		<Highlighter id="CSharpRoslynSemantic" extensions=".cs" class="CSharpBinding.RoslynHighlighter.RoslynSemanticHighlighter" />
 	</Path>
 	
 	<Path path = "/SharpDevelop/BackendBindings/ProjectOptions/C#">
@@ -499,6 +505,19 @@
 		                fileNamePattern = "\.cs$"/>
 	</Path>
 	
+	<!-- Roslyn 导航命令：在编辑器上下文菜单中注册 -->
+	<Path name = "/SharpDevelop/ViewContent/TextEditor/ContextMenu/RoslynNavigation">
+		<MenuItem id = "RoslynGotoDefinition"
+		          label = "跳转到定义 (Roslyn)"
+		          class = "CSharpBinding.Navigation.Roslyn.RoslynGoToDefinitionCommand"/>
+		<MenuItem id = "RoslynFindReferences"
+		          label = "查找引用 (Roslyn)"
+		          class = "CSharpBinding.Navigation.Roslyn.RoslynFindReferencesCommand"/>
+		<MenuItem id = "RoslynGotoImplementation"
+		          label = "跳转到实现 (Roslyn)"
+		          class = "CSharpBinding.Navigation.Roslyn.RoslynGoToImplementationCommand"/>
+	</Path>
+
 	<!-- Autostart command for initialization -->
 	<Path name = "/SharpDevelop/Autostart">
 		<Class id    = "CSharpFormattingOptionsPoliciesInitCommand"

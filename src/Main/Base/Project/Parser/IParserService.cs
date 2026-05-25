@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -37,6 +37,16 @@ namespace ICSharpCode.SharpDevelop.Parser
 	[SDService("SD.ParserService")]
 	public interface IParserService
 	{
+		/// <summary>
+		/// 获取或设置当前使用的解析器后端
+		/// </summary>
+		ParserBackend CurrentParserBackend { get; set; }
+
+		/// <summary>
+		/// Occurs when the <see cref="CurrentParserBackend"/> property changes.
+		/// 此事件在主线程上触发。
+		/// </summary>
+		event EventHandler ParserBackendChanged;
 		/// <summary>
 		/// Gets/Sets the task list tokens.
 		/// The getter of this property is thread-safe;

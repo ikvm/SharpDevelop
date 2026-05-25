@@ -1,0 +1,31 @@
+<AddIn name        = "Language Server Protocol Client"
+       author      = "SharpDevelop Team"
+       copyright   = "prj:///doc/copyright.txt"
+       description = "LSP client for connecting to language servers"
+       addInManagerHidden = "preinstalled">
+
+	<Manifest>
+		<Identity name = "ICSharpCode.LanguageServerClient"/>
+		<Dependency addin = "ICSharpCode.SharpDevelop" />
+	</Manifest>
+
+	<Runtime>
+		<Import assembly = "LanguageServerClient.dll"/>
+	</Runtime>
+
+	<!-- 注册 LSP 解析器适配器 -->
+	<Path name = "/SharpDevelop/Parser">
+		<Parser id    = "C#/LSP"
+		        supportedfilenamepattern = "\.(cs)$"
+		        projectfileextension = ".csproj"
+		        class = "ICSharpCode.LanguageServerClient.Adapters.LspParserAdapter"/>
+	</Path>
+
+	<!-- 注册 LSP 代码补全适配器 -->
+	<Path name = "/SharpDevelop/ViewContent/TextEditor/CodeCompletion">
+		<CodeCompletionBinding id = "CSharpLSP"
+		                       class = "ICSharpCode.LanguageServerClient.Adapters.LspCompletionAdapter"
+		                       extensions = ".cs"/>
+	</Path>
+
+</AddIn>
