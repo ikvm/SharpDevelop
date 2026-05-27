@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -145,7 +145,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					var ownerDefinition = methodDefinition.AccessorOwner;
 					if (ownerDefinition == null)
 						return null;
-					result = ownerDefinition.Specialize(this.Substitution);
+					result = (IMember)ownerDefinition.Specialize(this.Substitution);
 					return LazyInit.GetOrSet(ref accessorOwner, result);
 				}
 			}
@@ -202,10 +202,36 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			return methodDefinition.Specialize(TypeParameterSubstitution.Compose(newSubstitution, substitutionWithoutSpecializedTypeParameters));
 		}
 		
-		IMethod IMethod.Specialize(TypeParameterSubstitution newSubstitution)
-		{
-			return methodDefinition.Specialize(TypeParameterSubstitution.Compose(newSubstitution, substitutionWithoutSpecializedTypeParameters));
+		IMethod IMethod.Getter {
+			get {
+				if (IsAccessor && AccessorOwner is IProperty p)
+					return p.Getter;
+				return null;
+			}
 		}
+		
+		IMethod IMethod.Setter {
+			get {
+				if (IsAccessor && AccessorOwner is IProperty p)
+					return p.Setter;
+				return null;
+			}
+		}
+		
+		IUnresolvedMethod IMethod.UnresolvedMember {
+			get { return baseMember.UnresolvedMember as IUnresolvedMethod; }
+		}
+		
+		#region 显式实现 Abstractions IMethod 接口成员
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IMethod.ReturnTypeAttributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(ReturnTypeAttributes);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeParameter> ICSharpCode.TypeSystem.IMethod.TypeParameters => new CastList<ITypeParameter, ICSharpCode.TypeSystem.ITypeParameter>(TypeParameters);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IMethod.TypeArguments => new CastList<IType, ICSharpCode.TypeSystem.IType>(TypeArguments);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedMethod> ICSharpCode.TypeSystem.IMethod.Parts => new CastList<IUnresolvedMethod, ICSharpCode.TypeSystem.IUnresolvedMethod>(Parts);
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMethod.AccessorOwner => AccessorOwner;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.ReducedFrom => ReducedFrom;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => (IMethod)Specialize((TypeParameterSubstitution)substitution);
+		bool ICSharpCode.TypeSystem.IMethod.IsParameterized => IsParameterized;
+		#endregion
 		
 		public override string ToString()
 		{

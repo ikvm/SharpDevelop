@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -18,120 +18,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using ICSharpCode.NRefactory.TypeSystem;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Type parameter of a generic class/method.
-	/// </summary>
-	public interface IUnresolvedTypeParameter : INamedElement
-	{
-		/// <summary>
-		/// Get the type of this type parameter's owner.
-		/// </summary>
-		/// <returns>SymbolKind.TypeDefinition or SymbolKind.Method</returns>
-		SymbolKind OwnerType { get; }
-		
-		/// <summary>
-		/// Gets the index of the type parameter in the type parameter list of the owning method/class.
-		/// </summary>
-		int Index { get; }
-		
-		/// <summary>
-		/// Gets the list of attributes declared on this type parameter.
-		/// </summary>
-		IList<IUnresolvedAttribute> Attributes { get; }
-		
-		/// <summary>
-		/// Gets the variance of this type parameter.
-		/// </summary>
-		VarianceModifier Variance { get; }
-		
-		/// <summary>
-		/// Gets the region where the type parameter is defined.
-		/// </summary>
-		DomRegion Region { get; }
-		
-		ITypeParameter CreateResolvedTypeParameter(ITypeResolveContext context);
-	}
-	
-	/// <summary>
-	/// Type parameter of a generic class/method.
-	/// </summary>
-	public interface ITypeParameter : IType, ISymbol
-	{
-		/// <summary>
-		/// Get the type of this type parameter's owner.
-		/// </summary>
-		/// <returns>SymbolKind.TypeDefinition or SymbolKind.Method</returns>
-		SymbolKind OwnerType { get; }
-		
-		/// <summary>
-		/// Gets the owning method/class.
-		/// This property may return null (for example for the dummy type parameters used by <see cref="ParameterListComparer.NormalizeMethodTypeParameters"/>).
-		/// </summary>
-		/// <remarks>
-		/// For "class Outer&lt;T&gt; { class Inner {} }",
-		/// inner.TypeParameters[0].Owner will be the outer class, because the same
-		/// ITypeParameter instance is used both on Outer`1 and Outer`1+Inner.
-		/// </remarks>
-		IEntity Owner { get; }
-		
-		/// <summary>
-		/// Gets the index of the type parameter in the type parameter list of the owning method/class.
-		/// </summary>
-		int Index { get; }
-		
-		/// <summary>
-		/// Gets the name of the type parameter.
-		/// </summary>
-		new string Name { get; }
-		
-		/// <summary>
-		/// Gets the list of attributes declared on this type parameter.
-		/// </summary>
-		IList<IAttribute> Attributes { get; }
-		
-		/// <summary>
-		/// Gets the variance of this type parameter.
-		/// </summary>
-		VarianceModifier Variance { get; }
-		
-		/// <summary>
-		/// Gets the region where the type parameter is defined.
-		/// </summary>
-		DomRegion Region { get; }
-		
-		/// <summary>
-		/// Gets the effective base class of this type parameter.
-		/// </summary>
-		IType EffectiveBaseClass { get; }
-		
-		/// <summary>
-		/// Gets the effective interface set of this type parameter.
-		/// </summary>
-		ICollection<IType> EffectiveInterfaceSet { get; }
-		
-		/// <summary>
-		/// Gets if the type parameter has the 'new()' constraint.
-		/// </summary>
-		bool HasDefaultConstructorConstraint { get; }
-		
-		/// <summary>
-		/// Gets if the type parameter has the 'class' constraint.
-		/// </summary>
-		bool HasReferenceTypeConstraint { get; }
-		
-		/// <summary>
-		/// Gets if the type parameter has the 'struct' constraint.
-		/// </summary>
-		bool HasValueTypeConstraint { get; }
-	}
-	
-	/// <summary>
-	/// Represents the variance of a type parameter.
+	/// 保留 NRefactory 自己的 VarianceModifier 枚举，与 Abstractions 中的值完全相同。
+	/// 这是为了避免在 NRefactory 代码中添加 using 别名的需要。
 	/// </summary>
 	public enum VarianceModifier : byte
 	{
@@ -147,5 +39,119 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		/// The type parameter is contravariant (used in input position).
 		/// </summary>
 		Contravariant
-	};
+	}
+	
+	/// <summary>
+	/// 继承自 Abstractions 中的 IUnresolvedTypeParameter，使 NRefactory 类型同时满足两个接口。
+	/// </summary>
+	public interface IUnresolvedTypeParameter : ICSharpCode.TypeSystem.IUnresolvedTypeParameter, INamedElement
+	{
+		/// <summary>
+		/// 使用 NRefactory 的 SymbolKind 枚举类型。
+		/// </summary>
+		new SymbolKind OwnerType { get; }
+		
+		/// <summary>
+		/// Gets the list of attributes on this type parameter.
+		/// </summary>
+		new IList<IUnresolvedAttribute> Attributes { get; }
+		
+		/// <summary>
+		/// Gets the variance of this type parameter.
+		/// </summary>
+		new VarianceModifier Variance { get; }
+		
+		/// <summary>
+		/// Creates the resolved type parameter.
+		/// </summary>
+		new ITypeParameter CreateResolvedTypeParameter(ITypeResolveContext context);
+	}
+	
+	/// <summary>
+	/// 继承自 Abstractions 中的 ITypeParameter，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
+	/// </summary>
+	public interface ITypeParameter : ICSharpCode.TypeSystem.ITypeParameter, IType, ISymbol
+	{
+		/// <summary>
+		/// 使用 NRefactory 的 SymbolKind 枚举类型。
+		/// </summary>
+		new SymbolKind SymbolKind { get; }
+		
+		/// <summary>
+		/// Gets the type of this type parameter's owner.
+		/// Uses NRefactory's SymbolKind enum.
+		/// </summary>
+		new SymbolKind OwnerType { get; }
+		
+		/// <summary>
+		/// Gets the owner of this type parameter.
+		/// </summary>
+		new IEntity Owner { get; }
+		
+		/// <summary>
+		/// Gets/Sets the name of the type parameter.
+		/// </summary>
+		new string Name { get; }
+		
+		/// <summary>
+		/// Gets the type parameter's variance (covariance/contravariance).
+		/// </summary>
+		new VarianceModifier Variance { get; }
+		
+		/// <summary>
+		/// Gets the position of this type parameter in the type parameter list of the owner.
+		/// </summary>
+		// Index 继承自基接口，类型为 int，无需隐藏
+
+		/// <summary>
+		/// Gets the list of attributes on this type parameter.
+		/// </summary>
+		new IList<IAttribute> Attributes { get; }
+		
+		/// <summary>
+		/// Gets the direct base types.
+		/// </summary>
+		new IEnumerable<IType> DirectBaseTypes { get; }
+		
+		/// <summary>
+		/// Gets the type constraints.
+		/// </summary>
+		new IList<IType> Constraints { get; }
+		
+		/// <summary>
+		/// Gets whether this type parameter has the 'new()' constraint.
+		/// </summary>
+		// HasDefaultConstructorConstraint 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the region of this type parameter.
+		/// </summary>
+		// Region 继承自基接口（DomRegion 值类型在不同命名空间但结构相同）
+		
+		/// <summary>
+		/// Gets the type parameter's effective base class.
+		/// </summary>
+		new IType EffectiveBaseClass { get; }
+		
+		/// <summary>
+		/// Gets all effective interface types.
+		/// </summary>
+		new IEnumerable<IType> EffectiveInterfaceTypes { get; }
+		
+		/// <summary>
+		/// Gets the effective interface set.
+		/// </summary>
+		new ICollection<IType> EffectiveInterfaceSet { get; }
+		
+		/// <summary>
+		/// Gets whether this type parameter can be used with the specified type.
+		/// </summary>
+		new bool CanBeUsedAs(IType type);
+		
+		/// <summary>
+		/// Gets the type parameter's effective base type.
+		/// </summary>
+		new IType EffectiveBaseType { get; }
+	}
 }

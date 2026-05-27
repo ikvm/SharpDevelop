@@ -67,5 +67,9 @@ namespace ICSharpCode.NRefactory.Documentation
 			// give back a guessed namespace/type name
 			return  new UnknownType(typeName.Substring(0, idx), typeName.Substring(idx + 1), typeParameterCount);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 	}
 }

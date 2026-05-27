@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -43,7 +43,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem.ConstantValues
 				// The constant needs to be resolved in a different compilation.
 				IProjectContent pc = context.CurrentAssembly as IProjectContent;
 				if (pc != null) {
-					ICompilation nestedCompilation = context.Compilation.SolutionSnapshot.GetCompilation(pc);
+					ICompilation nestedCompilation = (ICompilation)context.Compilation.SolutionSnapshot.GetCompilation(pc);
 					if (nestedCompilation != null) {
 						var nestedContext = MapToNestedCompilation(csContext, nestedCompilation);
 						ResolveResult rr = Resolve(new CSharpResolver(nestedContext));
@@ -54,6 +54,8 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem.ConstantValues
 			// Resolve in current context.
 			return Resolve(new CSharpResolver(csContext));
 		}
+
+		ICSharpCode.TypeSystem.ResolveResult ICSharpCode.TypeSystem.IConstantValue.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 		
 		CSharpTypeResolveContext MapToNestedCompilation(CSharpTypeResolveContext context, ICompilation nestedCompilation)
 		{
@@ -120,6 +122,8 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem.ConstantValues
 		{
 			return new ErrorResolveResult(type.Resolve(context));
 		}
+
+		ICSharpCode.TypeSystem.ResolveResult ICSharpCode.TypeSystem.IConstantValue.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 	}
 	
 	/// <summary>
@@ -159,6 +163,8 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem.ConstantValues
 			}
 			return new ErrorResolveResult(rr.Type);
 		}
+
+		ICSharpCode.TypeSystem.ResolveResult ICSharpCode.TypeSystem.IConstantValue.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 		
 		int ISupportsInterning.GetHashCodeForInterning()
 		{

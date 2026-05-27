@@ -90,6 +90,9 @@
       <Name>ICSharpCode.SharpDevelop.Widgets</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\ICSharpCode.TypeSystem.Abstractions\ICSharpCode.TypeSystem.Abstractions.csproj">
+      <Name>ICSharpCode.TypeSystem.Abstractions</Name>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

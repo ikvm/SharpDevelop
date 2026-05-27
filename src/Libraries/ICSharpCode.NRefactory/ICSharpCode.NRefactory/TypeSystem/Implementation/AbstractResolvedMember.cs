@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -71,7 +71,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			if (unresolved.IsExplicitInterfaceImplementation) {
 				List<IMember> result = new List<IMember>();
 				foreach (var memberReference in unresolved.ExplicitInterfaceImplementations) {
-					IMember member = memberReference.Resolve(context);
+					IMember member = (IMember)memberReference.Resolve(context);
 					if (member != null)
 						result.Add(member);
 				}
@@ -164,5 +164,69 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return (IMethod)unresolvedAccessor.CreateResolved(context);
 		}
+		
+		public Accessibility AccessibilityDomain {
+			get {
+				var declType = DeclaringTypeDefinition;
+				if (declType != null) {
+					// The accessibility domain of a member is the more restrictive of
+					// the member's own accessibility and its declaring type's accessibility domain
+					Accessibility declAccessibility = declType.Accessibility;
+					if (declAccessibility < Accessibility)
+						return declAccessibility;
+				}
+				return Accessibility;
+			}
+		}
+		
+		public bool IsAccessibleFrom(IAssembly assembly)
+		{
+			if (assembly == null)
+				throw new ArgumentNullException("assembly");
+			var domain = AccessibilityDomain;
+			if (domain == Accessibility.Public)
+				return true;
+			if (domain == Accessibility.None)
+				return false;
+			if (domain == Accessibility.Private)
+				return false;
+			var thisAssembly = ParentAssembly;
+			if (thisAssembly == null)
+				return false;
+			bool sameAssembly = thisAssembly.Equals(assembly);
+			if (domain == Accessibility.Internal || domain == Accessibility.ProtectedAndInternal)
+				return sameAssembly;
+			if (domain == Accessibility.ProtectedOrInternal)
+				return sameAssembly;
+			return false;
+		}
+		
+		IMember IMemberReference.Resolve(ITypeResolveContext context)
+		{
+			return this;
+		}
+		
+		IType ITypeReference.Resolve(ITypeResolveContext context)
+		{
+			return ReturnType;
+		}
+		
+		#region 显式实现 Abstractions IMember 接口成员
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IMember.UnresolvedMember => UnresolvedMember;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IMember.ReturnType => ReturnType;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.MemberDefinition => this;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IMember.ImplementedInterfaceMembers => new CastList<IMember, ICSharpCode.TypeSystem.IMember>(ImplementedInterfaceMembers);
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToReference() => ToReference() as ICSharpCode.TypeSystem.IMemberReference ?? ToMemberReference();
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToMemberReference() => ToMemberReference();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IMember.Substitution => Substitution;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => Specialize(substitution);
+		// IMemberReference 显式实现
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringType?.ToTypeReference();
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this;
+		// ISymbolReference 显式实现
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this as ICSharpCode.TypeSystem.ISymbol;
+		// ITypeReference 显式实现
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => ReturnType as ICSharpCode.TypeSystem.IType ?? ReturnType;
+		#endregion
 	}
 }

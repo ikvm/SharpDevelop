@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -16,25 +16,24 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents a method or property.
+	/// 继承自 Abstractions 中的 IParameterizedMember，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface IUnresolvedParameterizedMember : IUnresolvedMember
+	public interface IParameterizedMember : ICSharpCode.TypeSystem.IParameterizedMember, IMember
 	{
-		IList<IUnresolvedParameter> Parameters { get; }
-	}
-	
-	/// <summary>
-	/// Represents a method or property.
-	/// </summary>
-	public interface IParameterizedMember : IMember
-	{
-		IList<IParameter> Parameters { get; }
+		/// <summary>
+		/// Gets the parameters of this member.
+		/// </summary>
+		new IList<IParameter> Parameters { get; }
+		
+		/// <summary>
+		/// Gets the return type of this member.
+		/// </summary>
+		new IType ReturnType { get; }
 	}
 }

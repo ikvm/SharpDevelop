@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -27,7 +27,7 @@ using ICSharpCode.NRefactory.Utils;
 
 namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 {
-	public class CSharpAssembly : IAssembly
+	public class CSharpAssembly : IAssembly, ICSharpCode.TypeSystem.IAssembly
 	{
 		readonly ICompilation compilation;
 		readonly ITypeResolveContext context;
@@ -47,7 +47,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 		}
 		
 		public IUnresolvedAssembly UnresolvedAssembly {
-			get { return projectContent; }
+			get { return (IUnresolvedAssembly)projectContent; }
 		}
 		
 		public string AssemblyName {
@@ -228,8 +228,26 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 		{
 			return "[CSharpAssembly " + this.AssemblyName + "]";
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.IUnresolvedAssembly ICSharpCode.TypeSystem.IAssembly.UnresolvedAssembly => UnresolvedAssembly;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IAssembly.AssemblyAttributes => AssemblyAttributes.Cast<ICSharpCode.TypeSystem.IAttribute>().ToList();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IAssembly.ModuleAttributes => ModuleAttributes.Cast<ICSharpCode.TypeSystem.IAttribute>().ToList();
+		ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.IAssembly.RootNamespace => RootNamespace;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.IAssembly.TopLevelTypeDefinitions => TopLevelTypeDefinitions.Cast<ICSharpCode.TypeSystem.ITypeDefinition>();
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IAssembly.GetTypeDefinition(ICSharpCode.TypeSystem.TopLevelTypeName topLevelTypeName) => GetTypeDefinition((TopLevelTypeName)topLevelTypeName);
+		bool ICSharpCode.TypeSystem.IAssembly.InternalsVisibleTo(ICSharpCode.TypeSystem.IAssembly assembly) => InternalsVisibleTo(assembly as IAssembly);
+		#endregion
+
+		public ITypeResolveContext TypeResolveContext => context;
+
+		public ITypeDefinition GetTypeDefinition(string ns, string name, int typeParameterCount = 0)
+		{
+			return GetTypeDefinition(new TopLevelTypeName(ns, name, typeParameterCount));
+		}
 		
-		sealed class NS : INamespace
+		sealed class NS : INamespace, ICSharpCode.TypeSystem.INamespace
 		{
 			readonly CSharpAssembly assembly;
 			readonly NS parentNamespace;
@@ -260,11 +278,11 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 					this.types = new Dictionary<TopLevelTypeName, ITypeDefinition>(parentNamespace.types.Comparer);
 			}
 			
-			string INamespace.ExternAlias {
+			string ICSharpCode.TypeSystem.INamespace.ExternAlias {
 				get { return null; }
 			}
-			
-			string INamespace.FullName {
+
+			string ICSharpCode.TypeSystem.INamespace.FullName {
 				get { return fullName; }
 			}
 			
@@ -305,7 +323,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				get { return new [] { assembly }; }
 			}
 			
-			INamespace INamespace.GetChildNamespace(string name)
+			ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.GetChildNamespace(string name)
 			{
 				var nameComparer = assembly.compilation.NameComparer;
 				foreach (NS childNamespace in childNamespaces) {
@@ -333,6 +351,17 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			{
 				return new NamespaceReference(new DefaultAssemblyReference(assembly.AssemblyName), fullName);
 			}
+
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => assembly.Compilation;
+			ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind.Namespace;
+			ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+			ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.ParentNamespace => parentNamespace;
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.INamespace> ICSharpCode.TypeSystem.INamespace.ChildNamespaces => childNamespaces.Cast<ICSharpCode.TypeSystem.INamespace>();
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.INamespace.Types => ((INamespace)this).Types.Cast<ICSharpCode.TypeSystem.ITypeDefinition>();
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.INamespace.ContributingAssemblies => ((INamespace)this).ContributingAssemblies.Cast<ICSharpCode.TypeSystem.IAssembly>();
+			ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.INamespace.GetTypeDefinition(string name, int typeParameterCount) => ((INamespace)this).GetTypeDefinition(name, typeParameterCount);
+			#endregion
 		}
 	}
 }

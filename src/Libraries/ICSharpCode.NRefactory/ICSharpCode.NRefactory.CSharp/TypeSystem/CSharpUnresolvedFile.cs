@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -31,7 +31,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 	/// Represents a file that was parsed and converted for the type system.
 	/// </summary>
 	[Serializable, FastSerializerVersion(TypeSystemConvertVisitor.version)]
-	public class CSharpUnresolvedFile : AbstractFreezable, IUnresolvedFile, IUnresolvedDocumentationProvider
+	public class CSharpUnresolvedFile : AbstractFreezable, IUnresolvedFile, ICSharpCode.TypeSystem.IUnresolvedFile, IUnresolvedDocumentationProvider
 	{
 		// The 'FastSerializerVersion' attribute on CSharpUnresolvedFile must be incremented when fixing 
 		// bugs in the TypeSystemConvertVisitor
@@ -204,10 +204,25 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				var context = unresolvedTypeDef.CreateResolveContext(new SimpleTypeResolveContext(resolvedTypeDef));
 				if (resolvedEntity is IMember)
 					context = context.WithCurrentMember((IMember)resolvedEntity);
-				return new CSharpDocumentationComment(new StringTextSource(xmlDoc), context);
+				return new CSharpDocumentationComment(new StringTextSource(xmlDoc), (ITypeResolveContext)context);
 			} else {
 				return new DocumentationComment(new StringTextSource(xmlDoc), new SimpleTypeResolveContext(resolvedEntity));
 			}
 		}
+
+		public IEnumerable<IUnresolvedTypeDefinition> GetAllTypeDefinitions()
+		{
+			return TreeTraversal.PreOrder(topLevelTypeDefinitions, t => t.NestedTypes);
+		}
+
+		#region 显式实现 Abstractions 接口成员
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition> ICSharpCode.TypeSystem.IUnresolvedFile.TopLevelTypeDefinitions => TopLevelTypeDefinitions.Cast<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition>().ToList();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedFile.AssemblyAttributes => AssemblyAttributes.Cast<ICSharpCode.TypeSystem.IUnresolvedAttribute>().ToList();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedFile.ModuleAttributes => ModuleAttributes.Cast<ICSharpCode.TypeSystem.IUnresolvedAttribute>().ToList();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.Error> ICSharpCode.TypeSystem.IUnresolvedFile.Errors => Errors.Cast<ICSharpCode.TypeSystem.Error>().ToList();
+		ICSharpCode.TypeSystem.IUnresolvedTypeDefinition ICSharpCode.TypeSystem.IUnresolvedFile.GetTopLevelTypeDefinition(ICSharpCode.TypeSystem.TextLocation location) => GetTopLevelTypeDefinition((TextLocation)location);
+		ICSharpCode.TypeSystem.IUnresolvedTypeDefinition ICSharpCode.TypeSystem.IUnresolvedFile.GetInnermostTypeDefinition(ICSharpCode.TypeSystem.TextLocation location) => GetInnermostTypeDefinition((TextLocation)location);
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IUnresolvedFile.GetMember(ICSharpCode.TypeSystem.TextLocation location) => GetMember((TextLocation)location);
+		#endregion
 	}
 }

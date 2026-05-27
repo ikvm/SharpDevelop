@@ -85,15 +85,15 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		string INamedElement.FullName {
+		string ICSharpCode.TypeSystem.INamedElement.FullName {
 			get { return name; }
 		}
 		
-		string INamedElement.Namespace {
+		string ICSharpCode.TypeSystem.INamedElement.Namespace {
 			get { return string.Empty; }
 		}
 		
-		string INamedElement.ReflectionName {
+		string ICSharpCode.TypeSystem.INamedElement.ReflectionName {
 			get {
 				if (ownerType == SymbolKind.Method)
 					return "``" + index.ToString(CultureInfo.InvariantCulture);
@@ -190,5 +190,13 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				this.HasValueTypeConstraint, this.HasReferenceTypeConstraint, this.HasDefaultConstructorConstraint, this.Constraints.Resolve(context)
 			);
 		}
+		
+		#region 显式实现 Abstractions IUnresolvedTypeParameter 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.IUnresolvedTypeParameter.OwnerType => (ICSharpCode.TypeSystem.SymbolKind)(byte)OwnerType;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedTypeParameter.Attributes => new CastList<IUnresolvedAttribute, ICSharpCode.TypeSystem.IUnresolvedAttribute>(Attributes);
+		ICSharpCode.TypeSystem.VarianceModifier ICSharpCode.TypeSystem.IUnresolvedTypeParameter.Variance => (ICSharpCode.TypeSystem.VarianceModifier)(byte)Variance;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedTypeParameter.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.ITypeParameter ICSharpCode.TypeSystem.IUnresolvedTypeParameter.CreateResolvedTypeParameter(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolvedTypeParameter((ITypeResolveContext)context);
+		#endregion
 	}
 }

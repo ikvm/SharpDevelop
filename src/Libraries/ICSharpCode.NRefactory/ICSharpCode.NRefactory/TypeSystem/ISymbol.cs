@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -72,29 +72,21 @@ namespace ICSharpCode.NRefactory.TypeSystem
 	}
 	
 	/// <summary>
-	/// Interface for type system symbols.
+	/// 继承自 Abstractions 中的 ISymbol，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏 SymbolKind 属性，因为 NRefactory 使用自己的 SymbolKind 枚举。
 	/// </summary>
-	public interface ISymbol
+	public interface ISymbol : ICSharpCode.TypeSystem.ISymbol
 	{
 		/// <summary>
-		/// This property returns an enum specifying which kind of symbol this is
-		/// (which derived interfaces of ISymbol are implemented)
+		/// 使用 NRefactory 的 SymbolKind 枚举类型。
 		/// </summary>
-		SymbolKind SymbolKind { get; }
-		
-		/// <summary>
-		/// Gets the short name of the symbol.
-		/// </summary>
-		string Name { get; }
-		
-		/// <summary>
-		/// Creates a symbol reference that can be used to rediscover this symbol in another compilation.
-		/// </summary>
-		ISymbolReference ToReference();
+		new SymbolKind SymbolKind { get; }
 	}
 	
-	public interface ISymbolReference
+	/// <summary>
+	/// 继承自 Abstractions 中的 ISymbolReference
+	/// </summary>
+	public interface ISymbolReference : ICSharpCode.TypeSystem.ISymbolReference
 	{
-		ISymbol Resolve(ITypeResolveContext context);
 	}
 }

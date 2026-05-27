@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using ICSharpCode.NRefactory.Semantics;
 
 namespace ICSharpCode.NRefactory.TypeSystem.Implementation
@@ -111,7 +112,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				attributes[i] = new DefaultAttribute(
 					attributeType,
 					positionalArguments: new ResolveResult[] { securityActionRR },
-					namedArguments: namedArgs);
+					namedArguments: namedArgs.Select(p => new KeyValuePair<string, ResolveResult>(p.Key.FullName, p.Value)).ToList());
 			}
 		}
 	}
@@ -129,24 +130,27 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			this.index = index;
 		}
 		
-		DomRegion IUnresolvedAttribute.Region {
-			get { return DomRegion.Empty; }
-		}
-		
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedAttribute.Region => ICSharpCode.TypeSystem.DomRegion.Empty;
+
 		IAttribute IUnresolvedAttribute.CreateResolvedAttribute(ITypeResolveContext context)
 		{
 			return secDecl.Resolve(context.CurrentAssembly)[index];
 		}
-		
+
 		int ISupportsInterning.GetHashCodeForInterning()
 		{
 			return index ^ secDecl.GetHashCode();
 		}
-		
+
 		bool ISupportsInterning.EqualsForInterning(ISupportsInterning other)
 		{
 			UnresolvedSecurityAttribute attr = other as UnresolvedSecurityAttribute;
 			return attr != null && index == attr.index && secDecl == attr.secDecl;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ITypeReference IUnresolvedAttribute.AttributeType => null;
+		ICSharpCode.TypeSystem.IAttribute ICSharpCode.TypeSystem.IUnresolvedAttribute.CreateResolvedAttribute(ICSharpCode.TypeSystem.ITypeResolveContext context) => ((IUnresolvedAttribute)this).CreateResolvedAttribute((ITypeResolveContext)context);
+		#endregion
 	}
 }

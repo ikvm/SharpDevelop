@@ -55,5 +55,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		public bool IsIndexer {
 			get { return propertyDefinition.IsIndexer; }
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IProperty.Getter => Getter;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IProperty.Setter => Setter;
+		#endregion
 	}
 }

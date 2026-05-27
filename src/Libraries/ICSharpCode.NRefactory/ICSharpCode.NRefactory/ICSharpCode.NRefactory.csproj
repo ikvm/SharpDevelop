@@ -21,6 +21,7 @@
     <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
+    <LangVersion>latest</LangVersion>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
@@ -83,6 +84,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ICSharpCode.TypeSystem.Abstractions\ICSharpCode.TypeSystem.Abstractions.csproj">
+      <Project>{B1C2D3E4-F5A6-7890-BCDE-F12345678901}</Project>
+      <Name>ICSharpCode.TypeSystem.Abstractions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\AbiComparer.cs" />
@@ -181,6 +188,7 @@
     <Compile Include="TypeSystem\Implementation\AbstractUnresolvedMember.cs" />
     <Compile Include="TypeSystem\Implementation\AccessorOwnerMemberReference.cs" />
     <Compile Include="TypeSystem\Implementation\BaseTypeCollector.cs" />
+    <Compile Include="TypeSystem\Implementation\CastList.cs" />
     <Compile Include="TypeSystem\Implementation\DefaultAssemblyReference.cs" />
     <Compile Include="TypeSystem\Implementation\DefaultAttribute.cs" />
     <Compile Include="TypeSystem\Implementation\DefaultMemberReference.cs" />
@@ -228,6 +236,7 @@
     <Compile Include="TypeSystem\IntersectionType.cs" />
     <Compile Include="TypeSystem\IParameter.cs" />
     <Compile Include="TypeSystem\IParameterizedMember.cs" />
+    <Compile Include="TypeSystem\IUnresolvedMember.cs" />
     <Compile Include="TypeSystem\IUnresolvedFile.cs" />
     <Compile Include="TypeSystem\IProjectContent.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -92,5 +92,14 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 		{
 			return new CSharpTypeResolveContext(assembly, usingScope, currentTypeDefinition, currentMember, methodTypeParameterNames);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.ITypeResolveContext.CurrentAssembly => CurrentAssembly;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.ITypeResolveContext.CurrentTypeDefinition => CurrentTypeDefinition;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.ITypeResolveContext.CurrentMember => CurrentMember;
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentTypeDefinition(ICSharpCode.TypeSystem.ITypeDefinition typeDefinition) => WithCurrentTypeDefinition((ITypeDefinition)typeDefinition);
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentMember(ICSharpCode.TypeSystem.IMember member) => WithCurrentMember((IMember)member);
+		#endregion
 	}
 }

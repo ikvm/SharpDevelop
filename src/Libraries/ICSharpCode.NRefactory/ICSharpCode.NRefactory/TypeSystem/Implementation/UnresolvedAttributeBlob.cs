@@ -52,27 +52,30 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			this.blob = blob;
 		}
 		
-		DomRegion IUnresolvedAttribute.Region {
-			get { return DomRegion.Empty; }
-		}
-		
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedAttribute.Region => ICSharpCode.TypeSystem.DomRegion.Empty;
+
 		public IAttribute CreateResolvedAttribute(ITypeResolveContext context)
 		{
 			if (context.CurrentAssembly == null)
 				throw new InvalidOperationException("Cannot resolve CecilUnresolvedAttribute without a parent assembly");
 			return new CecilResolvedAttribute(context, this);
 		}
-		
+
 		int ISupportsInterning.GetHashCodeForInterning()
 		{
 			return attributeType.GetHashCode() ^ ctorParameterTypes.GetHashCode() ^ BlobReader.GetBlobHashCode(blob);
 		}
-		
+
 		bool ISupportsInterning.EqualsForInterning(ISupportsInterning other)
 		{
 			UnresolvedAttributeBlob o = other as UnresolvedAttributeBlob;
 			return o != null && attributeType == o.attributeType && ctorParameterTypes == o.ctorParameterTypes
 				&& BlobReader.BlobEquals(blob, o.blob);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ITypeReference IUnresolvedAttribute.AttributeType => attributeType;
+		ICSharpCode.TypeSystem.IAttribute ICSharpCode.TypeSystem.IUnresolvedAttribute.CreateResolvedAttribute(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolvedAttribute((ITypeResolveContext)context);
+		#endregion
 	}
 }

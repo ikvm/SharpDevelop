@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -59,59 +59,16 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		ProtectedAndInternal,
 	}
 	
-	public interface IHasAccessibility
+	/// <summary>
+	/// 继承自 Abstractions 中的 IHasAccessibility，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏基接口的 Accessibility 属性，因为 NRefactory 使用自己的 Accessibility 枚举。
+	/// </summary>
+	public interface IHasAccessibility : ICSharpCode.TypeSystem.IHasAccessibility
 	{
 		/// <summary>
 		/// Gets the accessibility of this entity.
+		/// 使用 NRefactory 的 Accessibility 枚举类型。
 		/// </summary>
-		Accessibility Accessibility { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is private.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is private; otherwise, <c>false</c>.
-		/// </value>
-		bool IsPrivate { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is public.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is public; otherwise, <c>false</c>.
-		/// </value>
-		bool IsPublic { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is protected.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is protected; otherwise, <c>false</c>.
-		/// </value>
-		bool IsProtected { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is internal.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is internal; otherwise, <c>false</c>.
-		/// </value>
-		bool IsInternal { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is protected or internal.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is protected or internal; otherwise, <c>false</c>.
-		/// </value>
-		bool IsProtectedOrInternal { get; }
-		
-		/// <summary>
-		/// Gets a value indicating whether this instance is protected and internal.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is protected and internal; otherwise, <c>false</c>.
-		/// </value>
-		bool IsProtectedAndInternal { get; }
+		new Accessibility Accessibility { get; }
 	}
 }

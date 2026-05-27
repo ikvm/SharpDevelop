@@ -72,7 +72,7 @@ namespace ICSharpCode.NRefactory.CSharp
 						var m = extMethod;
 						if (CSharpResolver.IsEligibleExtensionMethod(targetResult.TargetType, extMethod, true, out inferredTypes)) {
 							if (inferredTypes != null)
-								m = extMethod.Specialize(new TypeParameterSubstitution(null, inferredTypes));
+								m = (IMethod)extMethod.Specialize(new TypeParameterSubstitution(null, inferredTypes));
 						}
 
 						int correctedIndex = index + 1;

@@ -82,5 +82,11 @@ namespace ICSharpCode.NRefactory.TypeSystem
 				}
 			}
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		System.Collections.Generic.IEnumerable<IProjectContent> ISolutionSnapshot.ProjectContents => projectDictionary.Values;
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.ISolutionSnapshot.GetProjectContent(string fileName) => GetProjectContent(fileName);
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ISolutionSnapshot.GetCompilation(ICSharpCode.TypeSystem.IProjectContent content) => GetCompilation(content as IProjectContent);
+		#endregion
 	}
 }

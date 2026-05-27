@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -18,153 +18,176 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents an unresolved class, enum, interface, struct, delegate or VB module.
-	/// For partial classes, an unresolved type definition represents only a single part.
+	/// 继承自 Abstractions 中的 IUnresolvedTypeDefinition，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface IUnresolvedTypeDefinition : ITypeReference, IUnresolvedEntity
+	public interface IUnresolvedTypeDefinition : ICSharpCode.TypeSystem.IUnresolvedTypeDefinition, ITypeReference, IUnresolvedEntity
 	{
-		TypeKind Kind { get; }
+		/// <summary>使用 NRefactory 的 TypeKind 枚举类型</summary>
+		new TypeKind Kind { get; }
 		
-		FullTypeName FullTypeName { get; }
-		IList<ITypeReference> BaseTypes { get; }
-		IList<IUnresolvedTypeParameter> TypeParameters { get; }
+		/// <summary>使用 NRefactory 的 FullTypeName 值类型</summary>
+		new FullTypeName FullTypeName { get; }
 		
-		IList<IUnresolvedTypeDefinition> NestedTypes { get; }
-		IList<IUnresolvedMember> Members { get; }
-		
-		IEnumerable<IUnresolvedMethod> Methods { get; }
-		IEnumerable<IUnresolvedProperty> Properties { get; }
-		IEnumerable<IUnresolvedField> Fields { get; }
-		IEnumerable<IUnresolvedEvent> Events { get; }
+		/// <summary>使用 NRefactory 的 IList 类型</summary>
+		new IList<IUnresolvedTypeParameter> TypeParameters { get; }
 		
 		/// <summary>
-		/// Gets whether the type definition contains extension methods.
-		/// Returns null when the type definition needs to be resolved in order to determine whether
-		/// methods are extension methods.
+		/// Gets the base types.
 		/// </summary>
-		bool? HasExtensionMethods { get; }
+		new IList<ITypeReference> BaseTypes { get; }
 		
 		/// <summary>
-		/// Gets whether the partial modifier is set on this part of the type definition.
+		/// Gets the nested types.
 		/// </summary>
-		bool IsPartial { get; }
+		new IList<IUnresolvedTypeDefinition> NestedTypes { get; }
 		
 		/// <summary>
-		/// Gets whether this unresolved type definition causes the addition of a default constructor
-		/// if no other constructor is present.
+		/// Gets the members.
 		/// </summary>
-		bool AddDefaultConstructorIfRequired { get; }
+		new IList<IUnresolvedMember> Members { get; }
 		
 		/// <summary>
-		/// Looks up the resolved type definition from the <paramref name="context"/> corresponding to this unresolved
-		/// type definition.
+		/// Gets the methods.
 		/// </summary>
-		/// <param name="context">
-		/// Context for looking up the type. The context must specify the current assembly.
-		/// A <see cref="SimpleTypeResolveContext"/> that specifies the current assembly is sufficient.
-		/// </param>
-		/// <returns>
-		/// Returns the resolved type definition.
-		/// In case of an error, returns an <see cref="Implementation.UnknownType"/> instance.
-		/// Never returns null.
-		/// </returns>
+		new IList<IUnresolvedMethod> Methods { get; }
+		
+		/// <summary>
+		/// Gets the properties.
+		/// </summary>
+		new IList<IUnresolvedProperty> Properties { get; }
+		
+		/// <summary>
+		/// Gets the fields.
+		/// </summary>
+		new IList<IUnresolvedField> Fields { get; }
+		
+		/// <summary>
+		/// Gets the events.
+		/// </summary>
+		new IList<IUnresolvedEvent> Events { get; }
+		
+		/// <summary>
+		/// Resolves this type reference and returns the resolved type.
+		/// </summary>
 		new IType Resolve(ITypeResolveContext context);
 		
 		/// <summary>
-		/// This method is used to add language-specific elements like the C# UsingScope
-		/// to the type resolve context.
+		/// Creates the resolved type definition.
 		/// </summary>
-		/// <param name="parentContext">The parent context (e.g. the parent assembly),
-		/// including the parent type definition for inner classes.</param>
-		/// <returns>
-		/// The parent context, modified to include language-specific elements (e.g. using scope)
-		/// associated with this type definition.
-		/// </returns>
-		/// <remarks>
-		/// Use <c>unresolvedTypeDef.CreateResolveContext(parentContext).WithTypeDefinition(typeDef)</c> to
-		/// create the context for use within the type definition.
-		/// </remarks>
-		ITypeResolveContext CreateResolveContext(ITypeResolveContext parentContext);
+		new ITypeDefinition CreateResolvedTypeDefinition(ITypeResolveContext context);
+		
+		// IsPartial, AddPartialPart 继承自基接口
 	}
 	
 	/// <summary>
-	/// Represents a class, enum, interface, struct, delegate or VB module.
-	/// For partial classes, this represents the whole class.
+	/// 继承自 Abstractions 中的 ITypeDefinition，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface ITypeDefinition : IType, IEntity
+	public interface ITypeDefinition : ICSharpCode.TypeSystem.ITypeDefinition, IType, IEntity
 	{
-		/// <summary>
-		/// Returns all parts that contribute to this type definition.
-		/// Non-partial classes have a single part that represents the whole class.
-		/// </summary>
-		IList<IUnresolvedTypeDefinition> Parts { get; }
+		/// <summary>使用 NRefactory 的 FullTypeName 值类型</summary>
+		new FullTypeName FullTypeName { get; }
 		
-		IList<ITypeParameter> TypeParameters { get; }
+		/// <summary>使用 NRefactory 的 IList 类型</summary>
+		new IList<ITypeParameter> TypeParameters { get; }
 		
-		IList<ITypeDefinition> NestedTypes { get; }
-		IList<IMember> Members { get; }
+		/// <summary>使用 NRefactory 的 IList 类型</summary>
+		new IList<ITypeDefinition> NestedTypes { get; }
 		
-		IEnumerable<IField> Fields { get; }
-		IEnumerable<IMethod> Methods { get; }
-		IEnumerable<IProperty> Properties { get; }
-		IEnumerable<IEvent> Events { get; }
+		/// <summary>使用 NRefactory 的 IList 类型</summary>
+		new IList<IMember> Members { get; }
 		
 		/// <summary>
-		/// Gets the known type code for this type definition.
+		/// Gets the methods.
 		/// </summary>
-		KnownTypeCode KnownTypeCode { get; }
+		new IEnumerable<IMethod> Methods { get; }
 		
 		/// <summary>
-		/// For enums: returns the underlying primitive type.
-		/// For all other types: returns <see cref="SpecialType.UnknownType"/>.
+		/// Gets the properties.
 		/// </summary>
-		IType EnumUnderlyingType { get; }
+		new IEnumerable<IProperty> Properties { get; }
 		
 		/// <summary>
-		/// Gets the full name of this type.
+		/// Gets the fields.
 		/// </summary>
-		FullTypeName FullTypeName { get; }
+		new IEnumerable<IField> Fields { get; }
 		
 		/// <summary>
-		/// Gets/Sets the declaring type (incl. type arguments, if any).
-		/// This property will return null for top-level types.
+		/// Gets the events.
 		/// </summary>
-		new IType DeclaringType { get; } // solves ambiguity between IType.DeclaringType and IEntity.DeclaringType
+		new IEnumerable<IEvent> Events { get; }
 		
 		/// <summary>
-		/// Gets whether this type contains extension methods.
+		/// Gets the direct base types.
 		/// </summary>
-		/// <remarks>This property is used to speed up the search for extension methods.</remarks>
-		bool HasExtensionMethods { get; }
+		new IEnumerable<IType> DirectBaseTypes { get; }
 		
 		/// <summary>
-		/// Gets whether this type definition is made up of one or more partial classes.
+		/// Gets the declaring type definition (if this is a nested type).
 		/// </summary>
-		bool IsPartial { get; }
+		new ITypeDefinition DeclaringTypeDefinition { get; }
+		
+		/// <summary>使用 NRefactory 的 IType 类型</summary>
+		new IType DeclaringType { get; }
+		
+		/// <summary>使用 NRefactory 的 IAssembly 类型</summary>
+		new IAssembly ParentAssembly { get; }
+		
+		/// <summary>使用 NRefactory 的 KnownTypeCode 枚举</summary>
+		new KnownTypeCode KnownTypeCode { get; }
 		
 		/// <summary>
-		/// Determines how this type is implementing the specified interface member.
+		/// Gets whether this type definition is partial.
 		/// </summary>
-		/// <returns>
-		/// The method on this type that implements the interface member;
-		/// or null if the type does not implement the interface.
-		/// </returns>
-		IMember GetInterfaceImplementation(IMember interfaceMember);
+		// IsPartial 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the unresolved type definition parts.
+		/// </summary>
+		new IList<IUnresolvedTypeDefinition> Parts { get; }
 		
 		/// <summary>
-		/// Determines how this type is implementing the specified interface members.
+		/// Gets the type kind.
 		/// </summary>
-		/// <returns>
-		/// For each interface member, this method returns the class member 
-		/// that implements the interface member.
-		/// For interface members that are missing an implementation, the
-		/// result collection will contain a null element.
-		/// </returns>
-		IList<IMember> GetInterfaceImplementation(IList<IMember> interfaceMembers);
+		new TypeKind Kind { get; }
+		
+		/// <summary>
+		/// Gets whether the type is a reference type or value type.
+		/// </summary>
+		// IsReferenceType 继承自基接口，类型为 bool?，无需隐藏
+
+		/// <summary>
+		/// Gets whether this type is a delegate type.
+		/// </summary>
+		// IsDelegate 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this type has unmanaged constraint.
+		/// </summary>
+		// IsUnmanagedConstraint 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this type has readonly struct constraint.
+		/// </summary>
+		// IsReadOnlyStruct 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this type has byref-like constraint.
+		/// </summary>
+		// IsByRefLike 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this type is a record.
+		/// </summary>
+		// IsRecord 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the accessibility.
+		/// </summary>
+		new Accessibility Accessibility { get; }
 	}
 }

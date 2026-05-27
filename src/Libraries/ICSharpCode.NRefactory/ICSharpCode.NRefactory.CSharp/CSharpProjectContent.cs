@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -28,7 +28,7 @@ using ICSharpCode.NRefactory.Utils;
 namespace ICSharpCode.NRefactory.CSharp
 {
 	[Serializable]
-	public class CSharpProjectContent : IProjectContent
+	public class CSharpProjectContent : IProjectContent, ICSharpCode.TypeSystem.IProjectContent
 	{
 		string assemblyName;
 		string fullAssemblyName;
@@ -61,7 +61,7 @@ namespace ICSharpCode.NRefactory.CSharp
 			get { return unresolvedFiles.Values; }
 		}
 		
-		public IEnumerable<IAssemblyReference> AssemblyReferences {
+		public IList<IAssemblyReference> AssemblyReferences {
 			get { return assemblyReferences; }
 		}
 		
@@ -85,7 +85,7 @@ namespace ICSharpCode.NRefactory.CSharp
 			get { return compilerSettings; }
 		}
 		
-		object IProjectContent.CompilerSettings {
+		object ICSharpCode.TypeSystem.IProjectContent.CompilerSettings {
 			get { return compilerSettings; }
 		}
 		
@@ -119,14 +119,14 @@ namespace ICSharpCode.NRefactory.CSharp
 		public virtual ICompilation CreateCompilation()
 		{
 			var solutionSnapshot = new DefaultSolutionSnapshot();
-			ICompilation compilation = new SimpleCompilation(solutionSnapshot, this, assemblyReferences);
+			ICompilation compilation = new SimpleCompilation(solutionSnapshot, (IUnresolvedAssembly)this, (IEnumerable<IAssemblyReference>)assemblyReferences);
 			solutionSnapshot.AddCompilation(this, compilation);
 			return compilation;
 		}
 		
 		public virtual ICompilation CreateCompilation(ISolutionSnapshot solutionSnapshot)
 		{
-			return new SimpleCompilation(solutionSnapshot, this, assemblyReferences);
+			return new SimpleCompilation(solutionSnapshot, (IUnresolvedAssembly)this, (IEnumerable<IAssemblyReference>)assemblyReferences);
 		}
 		
 		protected virtual CSharpProjectContent Clone()
@@ -272,18 +272,44 @@ namespace ICSharpCode.NRefactory.CSharp
 			return pc;
 		}
 		
-		IAssembly IAssemblyReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IAssemblyReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
 			if (context == null)
 				throw new ArgumentNullException("context");
 			var cache = context.Compilation.CacheManager;
-			IAssembly asm = (IAssembly)cache.GetShared(this);
+			ICSharpCode.TypeSystem.IAssembly asm = (ICSharpCode.TypeSystem.IAssembly)cache.GetShared(this);
 			if (asm != null) {
 				return asm;
 			} else {
-				asm = new CSharpAssembly(context.Compilation, this);
-				return (IAssembly)cache.GetOrAddShared(this, asm);
+				asm = new CSharpAssembly((ICompilation)context.Compilation, this);
+				return (ICSharpCode.TypeSystem.IAssembly)cache.GetOrAddShared(this, asm);
 			}
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedFile> ICSharpCode.TypeSystem.IProjectContent.Files => Files;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssemblyReference> ICSharpCode.TypeSystem.IProjectContent.AssemblyReferences => AssemblyReferences;
+		ICSharpCode.TypeSystem.IUnresolvedFile ICSharpCode.TypeSystem.IProjectContent.GetFile(string fileName) => GetFile(fileName);
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.IProjectContent.CreateCompilation() => CreateCompilation();
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.IProjectContent.CreateCompilation(ICSharpCode.TypeSystem.ISolutionSnapshot solutionSnapshot) => CreateCompilation((ISolutionSnapshot)solutionSnapshot);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.SetAssemblyName(string newAssemblyName) => SetAssemblyName(newAssemblyName);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.SetProjectFileName(string newProjectFileName) => SetProjectFileName(newProjectFileName);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.SetLocation(string newLocation) => SetLocation(newLocation);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.AddAssemblyReferences(System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssemblyReference> references) => AddAssemblyReferences(references.Cast<IAssemblyReference>());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.AddAssemblyReferences(params ICSharpCode.TypeSystem.IAssemblyReference[] references) => AddAssemblyReferences(references.Cast<IAssemblyReference>().ToArray());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.RemoveAssemblyReferences(System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssemblyReference> references) => RemoveAssemblyReferences(references.Cast<IAssemblyReference>());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.RemoveAssemblyReferences(params ICSharpCode.TypeSystem.IAssemblyReference[] references) => RemoveAssemblyReferences(references.Cast<IAssemblyReference>().ToArray());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.AddOrUpdateFiles(System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedFile> newFiles) => AddOrUpdateFiles(newFiles.Cast<IUnresolvedFile>());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.AddOrUpdateFiles(params ICSharpCode.TypeSystem.IUnresolvedFile[] newFiles) => AddOrUpdateFiles(newFiles.Cast<IUnresolvedFile>().ToArray());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.RemoveFiles(IEnumerable<string> fileNames) => RemoveFiles(fileNames);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.RemoveFiles(params string[] fileNames) => RemoveFiles(fileNames);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.UpdateProjectContent(ICSharpCode.TypeSystem.IUnresolvedFile oldFile, ICSharpCode.TypeSystem.IUnresolvedFile newFile) => UpdateProjectContent((IUnresolvedFile)oldFile, (IUnresolvedFile)newFile);
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.UpdateProjectContent(System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedFile> oldFiles, System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedFile> newFiles) => UpdateProjectContent(oldFiles.Cast<IUnresolvedFile>(), newFiles.Cast<IUnresolvedFile>());
+		ICSharpCode.TypeSystem.IProjectContent ICSharpCode.TypeSystem.IProjectContent.SetCompilerSettings(object compilerSettings) => SetCompilerSettings(compilerSettings);
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedAssembly.AssemblyAttributes => AssemblyAttributes;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedAssembly.ModuleAttributes => ModuleAttributes;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition> ICSharpCode.TypeSystem.IUnresolvedAssembly.TopLevelTypeDefinitions => TopLevelTypeDefinitions;
+		IList<IUnresolvedAssembly> IProjectContent.Assemblies => throw new NotSupportedException();
+		#endregion
 	}
 }

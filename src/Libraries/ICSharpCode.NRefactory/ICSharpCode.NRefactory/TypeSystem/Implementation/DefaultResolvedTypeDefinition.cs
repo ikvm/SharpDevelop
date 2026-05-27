@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -64,8 +64,8 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				if (result != null) {
 					return result;
 				}
-				ITypeResolveContext contextForTypeParameters = parts[0].CreateResolveContext(parentContext);
-				contextForTypeParameters = contextForTypeParameters.WithCurrentTypeDefinition(this);
+				ITypeResolveContext contextForTypeParameters = (ITypeResolveContext)parts[0].CreateResolveContext(parentContext);
+				contextForTypeParameters = (ITypeResolveContext)contextForTypeParameters.WithCurrentTypeDefinition(this);
 				if (parentContext.CurrentTypeDefinition == null || parentContext.CurrentTypeDefinition.TypeParameterCount == 0) {
 					result = parts[0].TypeParameters.CreateResolvedTypeParameters(contextForTypeParameters);
 				} else {
@@ -96,7 +96,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				result = new List<IAttribute>();
 				var context = parentContext.WithCurrentTypeDefinition(this);
 				foreach (IUnresolvedTypeDefinition part in parts) {
-					ITypeResolveContext parentContextForPart = part.CreateResolveContext(context);
+					ITypeResolveContext parentContextForPart = (ITypeResolveContext)part.CreateResolveContext(context);
 					foreach (var attr in part.Attributes) {
 						result.Add(attr.CreateResolvedAttribute(parentContextForPart));
 					}
@@ -177,7 +177,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					if (output != null) {
 						return output;
 					}
-					return LazyInit.GetOrSet(ref resolvedMembers[index], unresolvedMembers[index].CreateResolved(contextPerMember[index]));
+					return LazyInit.GetOrSet(ref resolvedMembers[index], (IMember)unresolvedMembers[index].CreateResolved(contextPerMember[index]));
 				}
 				set { throw new NotSupportedException(); }
 			}
@@ -299,7 +299,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			List<PartialMethodInfo> partialMethodInfos = null;
 			bool addDefaultConstructorIfRequired = false;
 			foreach (IUnresolvedTypeDefinition part in parts) {
-				ITypeResolveContext parentContextForPart = part.CreateResolveContext(parentContext);
+				ITypeResolveContext parentContextForPart = (ITypeResolveContext)part.CreateResolveContext(parentContext);
 				ITypeResolveContext contextForPart = parentContextForPart.WithCurrentTypeDefinition(this);
 				foreach (var member in part.Members) {
 					IUnresolvedMethod method = member as IUnresolvedMethod;
@@ -334,7 +334,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				if (kind == TypeKind.Class && !this.IsStatic && !unresolvedMembers.Any(m => m.SymbolKind == SymbolKind.Constructor && !m.IsStatic)
 				    || kind == TypeKind.Enum || kind == TypeKind.Struct)
 				{
-					contextPerMember.Add(parts[0].CreateResolveContext(parentContext).WithCurrentTypeDefinition(this));
+					contextPerMember.Add((ITypeResolveContext)parts[0].CreateResolveContext(parentContext).WithCurrentTypeDefinition(this));
 					unresolvedMembers.Add(DefaultUnresolvedMethod.CreateDefaultConstructor(parts[0]));
 				}
 			}
@@ -434,9 +434,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		IType CalculateEnumUnderlyingType()
 		{
 			foreach (var part in parts) {
-				var context = part.CreateResolveContext(parentContext).WithCurrentTypeDefinition(this);
+				var context = (ITypeResolveContext)part.CreateResolveContext(parentContext).WithCurrentTypeDefinition(this);
 				foreach (var baseTypeRef in part.BaseTypes) {
-					IType type = baseTypeRef.Resolve(context);
+					IType type = (IType)baseTypeRef.Resolve(context);
 					if (type.Kind != TypeKind.Unknown)
 						return type;
 				}
@@ -545,9 +545,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			bool hasNonInterface = false;
 			if (this.Kind != TypeKind.Enum) {
 				foreach (var part in parts) {
-					var context = part.CreateResolveContext(parentContext).WithCurrentTypeDefinition(this);
+					var context = (ITypeResolveContext)part.CreateResolveContext(parentContext).WithCurrentTypeDefinition(this);
 					foreach (var baseTypeRef in part.BaseTypes) {
-						IType baseType = baseTypeRef.Resolve(context);
+						IType baseType = (IType)baseTypeRef.Resolve(context);
 						if (!(baseType.Kind == TypeKind.Unknown || result.Contains(baseType))) {
 							result.Add(baseType);
 							if (baseType.Kind != TypeKind.Interface)
@@ -654,27 +654,27 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get { return accessibility; }
 		}
 		
-		bool IHasAccessibility.IsPrivate {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPrivate {
 			get { return accessibility == Accessibility.Private; }
 		}
 		
-		bool IHasAccessibility.IsPublic {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPublic {
 			get { return accessibility == Accessibility.Public; }
 		}
 		
-		bool IHasAccessibility.IsProtected {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtected {
 			get { return accessibility == Accessibility.Protected; }
 		}
 		
-		bool IHasAccessibility.IsInternal {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsInternal {
 			get { return accessibility == Accessibility.Internal; }
 		}
 		
-		bool IHasAccessibility.IsProtectedOrInternal {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedOrInternal {
 			get { return accessibility == Accessibility.ProtectedOrInternal; }
 		}
 		
-		bool IHasAccessibility.IsProtectedAndInternal {
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedAndInternal {
 			get { return accessibility == Accessibility.ProtectedAndInternal; }
 		}
 		#endregion
@@ -710,9 +710,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		ISymbolReference ISymbol.ToReference()
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference()
 		{
-			return (ISymbolReference)ToTypeReference();
+			return (ICSharpCode.TypeSystem.ISymbolReference)ToTypeReference();
 		}
 		
 		public IEnumerable<IType> GetNestedTypes(Predicate<ITypeDefinition> filter = null, GetMemberOptions options = GetMemberOptions.None)
@@ -959,5 +959,55 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return this.ReflectionName;
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => (ICSharpCode.TypeSystem.Accessibility)(byte)Accessibility;
+		[Obsolete] ICSharpCode.TypeSystem.EntityType ICSharpCode.TypeSystem.IEntity.EntityType => (ICSharpCode.TypeSystem.EntityType)(byte)EntityType;
+		ICSharpCode.TypeSystem.TypeKind ICSharpCode.TypeSystem.IType.Kind => (ICSharpCode.TypeSystem.TypeKind)(byte)Kind;
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IEntity.DeclaringTypeDefinition => DeclaringTypeDefinition;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IEntity.DeclaringType => DeclaringType;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IEntity.ParentAssembly => ParentAssembly;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.BodyRegion => new ICSharpCode.TypeSystem.DomRegion(BodyRegion.BeginLine, BodyRegion.BeginColumn, BodyRegion.EndLine, BodyRegion.EndColumn);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IEntity.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IType.GetDefinition() => this;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.DeclaringType => DeclaringType;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.TypeArguments => new CastList<IType, ICSharpCode.TypeSystem.IType>(TypeArguments);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.AcceptVisitor(ICSharpCode.TypeSystem.TypeVisitor visitor) => visitor.VisitTypeDefinition(this);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.VisitChildren(ICSharpCode.TypeSystem.TypeVisitor visitor) => this;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.DirectBaseTypes => DirectBaseTypes.Cast<ICSharpCode.TypeSystem.IType>();
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IType.ToTypeReference() => ToTypeReference();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IType.GetSubstitution() => GetSubstitution();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IType.GetSubstitution(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> methodTypeArguments) => GetSubstitution();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.GetNestedTypes(System.Predicate<ICSharpCode.TypeSystem.ITypeDefinition> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetNestedTypes(filter != null ? (Predicate<ITypeDefinition>)(d => filter(d)) : null, (GetMemberOptions)(int)options).Cast<ICSharpCode.TypeSystem.IType>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.GetNestedTypes(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> typeArguments, System.Predicate<ICSharpCode.TypeSystem.ITypeDefinition> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetNestedTypes().Cast<ICSharpCode.TypeSystem.IType>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetConstructors(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetConstructors().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetMethods(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMethods().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetMethods(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> typeArguments, System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMethods().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IProperty> ICSharpCode.TypeSystem.IType.GetProperties(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedProperty> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetProperties().Cast<ICSharpCode.TypeSystem.IProperty>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IField> ICSharpCode.TypeSystem.IType.GetFields(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedField> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetFields().Cast<ICSharpCode.TypeSystem.IField>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IEvent> ICSharpCode.TypeSystem.IType.GetEvents(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedEvent> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetEvents().Cast<ICSharpCode.TypeSystem.IEvent>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IType.GetMembers(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMember> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMembers().Cast<ICSharpCode.TypeSystem.IMember>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetAccessors(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetAccessors().Cast<ICSharpCode.TypeSystem.IMethod>();
+		#endregion
+		#region ITypeDefinition 显式实现
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeParameter> ICSharpCode.TypeSystem.ITypeDefinition.TypeParameters => new CastList<ITypeParameter, ICSharpCode.TypeSystem.ITypeParameter>(TypeParameters);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition> ICSharpCode.TypeSystem.ITypeDefinition.Parts => new CastList<IUnresolvedTypeDefinition, ICSharpCode.TypeSystem.IUnresolvedTypeDefinition>(Parts);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.ITypeDefinition.Members => new CastList<IMember, ICSharpCode.TypeSystem.IMember>(Members);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.ITypeDefinition.NestedTypes => new CastList<ITypeDefinition, ICSharpCode.TypeSystem.ITypeDefinition>(NestedTypes);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeDefinition.EnumUnderlyingType => EnumUnderlyingType;
+		ICSharpCode.TypeSystem.KnownTypeCode ICSharpCode.TypeSystem.ITypeDefinition.KnownTypeCode => (ICSharpCode.TypeSystem.KnownTypeCode)(int)KnownTypeCode;
+		ICSharpCode.TypeSystem.FullTypeName ICSharpCode.TypeSystem.ITypeDefinition.FullTypeName => new ICSharpCode.TypeSystem.FullTypeName(FullTypeName.ReflectionName);
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.ITypeDefinition.GetInterfaceImplementation(ICSharpCode.TypeSystem.IMember interfaceMember) => GetInterfaceImplementation((IMember)interfaceMember);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.ITypeDefinition.GetInterfaceImplementation(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> interfaceMembers) => new CastList<IMember, ICSharpCode.TypeSystem.IMember>(GetInterfaceImplementation(interfaceMembers.Cast<IMember>().ToList()));
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IField> ICSharpCode.TypeSystem.ITypeDefinition.Fields => Fields.Cast<ICSharpCode.TypeSystem.IField>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.ITypeDefinition.Methods => Methods.Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IProperty> ICSharpCode.TypeSystem.ITypeDefinition.Properties => Properties.Cast<ICSharpCode.TypeSystem.IProperty>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IEvent> ICSharpCode.TypeSystem.ITypeDefinition.Events => Events.Cast<ICSharpCode.TypeSystem.IEvent>();
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeDefinition.DeclaringType => DeclaringType;
+		bool System.IEquatable<ICSharpCode.TypeSystem.IType>.Equals(ICSharpCode.TypeSystem.IType other) => this == other;
+		#endregion
 	}
 }

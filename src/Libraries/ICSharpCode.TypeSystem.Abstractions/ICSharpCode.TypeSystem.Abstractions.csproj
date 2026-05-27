@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{B1C2D3E4-F5A6-7890-BCDE-F12345678901}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ICSharpCode.TypeSystem</RootNamespace>
+    <AssemblyName>ICSharpCode.TypeSystem.Abstractions</AssemblyName>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\ICSharpCode.NRefactory\ICSharpCode.NRefactory.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>465371136</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>Full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>None</DebugType>
+    <DebugSymbols>False</DebugSymbols>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeSystem\Accessibility.cs" />
+    <Compile Include="TypeSystem\CacheManager.cs" />
+    <Compile Include="TypeSystem\DomRegion.cs" />
+    <Compile Include="TypeSystem\EntityType.cs" />
+    <Compile Include="TypeSystem\Error.cs" />
+    <Compile Include="TypeSystem\FullTypeName.cs" />
+    <Compile Include="TypeSystem\IAssembly.cs" />
+    <Compile Include="TypeSystem\IAttribute.cs" />
+    <Compile Include="TypeSystem\ICodeContext.cs" />
+    <Compile Include="TypeSystem\ICompilation.cs" />
+    <Compile Include="TypeSystem\IConstantValue.cs" />
+    <Compile Include="TypeSystem\IEntity.cs" />
+    <Compile Include="TypeSystem\IEvent.cs" />
+    <Compile Include="TypeSystem\IField.cs" />
+    <Compile Include="TypeSystem\IMember.cs" />
+    <Compile Include="TypeSystem\IMethod.cs" />
+    <Compile Include="TypeSystem\INamedElement.cs" />
+    <Compile Include="TypeSystem\INamespace.cs" />
+    <Compile Include="TypeSystem\IParameter.cs" />
+    <Compile Include="TypeSystem\IParameterizedMember.cs" />
+    <Compile Include="TypeSystem\IProjectContent.cs" />
+    <Compile Include="TypeSystem\IProperty.cs" />
+    <Compile Include="TypeSystem\ISolutionSnapshot.cs" />
+    <Compile Include="TypeSystem\IType.cs" />
+    <Compile Include="TypeSystem\ITypeDefinition.cs" />
+    <Compile Include="TypeSystem\ITypeParameter.cs" />
+    <Compile Include="TypeSystem\ITypeReference.cs" />
+    <Compile Include="TypeSystem\IUnresolvedFile.cs" />
+    <Compile Include="TypeSystem\IVariable.cs" />
+    <Compile Include="TypeSystem\KnownTypeReference.cs" />
+    <Compile Include="TypeSystem\ReflectionHelper.cs" />
+    <Compile Include="TypeSystem\ResolveResult.cs" />
+    <Compile Include="TypeSystem\SymbolKind.cs" />
+    <Compile Include="TypeSystem\TextLocation.cs" />
+    <Compile Include="TypeSystem\TopLevelTypeName.cs" />
+    <Compile Include="TypeSystem\TypeKind.cs" />
+    <Compile Include="TypeSystem\TypeParameterSubstitution.cs" />
+    <Compile Include="TypeSystem\TypeVisitor.cs" />
+    <Compile Include="Utils\EmptyList.cs" />
+    <Compile Include="Utils\TreeTraversal.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -367,7 +367,7 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			} else {
 				INamespace parent = Import(compilation, ns.ParentNamespace);
 				if (parent != null)
-					return parent.GetChildNamespace(ns.Name);
+					return (INamespace)parent.GetChildNamespace(ns.Name);
 				else
 					return null;
 			}
@@ -449,7 +449,7 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		/// </summary>
 		public static IUnresolvedMember GetMember (this IUnresolvedFile file, int line, int column)
 		{
-			return file.GetMember (new TextLocation (line, column));
+			return (IUnresolvedMember)file.GetMember (new TextLocation (line, column));
 		}
 		#endregion
 		

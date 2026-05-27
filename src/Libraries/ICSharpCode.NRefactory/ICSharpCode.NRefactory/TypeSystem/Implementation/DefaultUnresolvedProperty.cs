@@ -112,7 +112,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			ITypeReference interfaceTypeReference = null;
 			if (this.IsExplicitInterfaceImplementation && this.ExplicitInterfaceImplementations.Count == 1)
-				interfaceTypeReference = this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
+				interfaceTypeReference = (ITypeReference)this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
 			return Resolve(ExtendContextForType(context, this.DeclaringTypeDefinition), 
 			               this.SymbolKind, this.Name, interfaceTypeReference,
 			               parameterTypeReferences: this.Parameters.Select(p => p.Type).ToList());
@@ -122,5 +122,14 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return (IProperty)Resolve(context);
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IUnresolvedMethod ICSharpCode.TypeSystem.IUnresolvedProperty.Getter => Getter;
+		ICSharpCode.TypeSystem.IUnresolvedMethod ICSharpCode.TypeSystem.IUnresolvedProperty.Setter => Setter;
+		ICSharpCode.TypeSystem.IProperty ICSharpCode.TypeSystem.IUnresolvedProperty.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => (ICSharpCode.TypeSystem.IProperty)(object)Resolve((ITypeResolveContext)context);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedParameter> ICSharpCode.TypeSystem.IUnresolvedParameterizedMember.Parameters => new CastList<IUnresolvedParameter, ICSharpCode.TypeSystem.IUnresolvedParameter>(Parameters);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMemberReference> ICSharpCode.TypeSystem.IUnresolvedMember.ExplicitInterfaceImplementations => new CastList<IMemberReference, ICSharpCode.TypeSystem.IMemberReference>(ExplicitInterfaceImplementations);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.IType;
+		#endregion
 	}
 }

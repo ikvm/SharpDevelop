@@ -205,7 +205,7 @@ namespace ICSharpCode.NRefactory.Analysis
 				if (compatibility == AbiCompatibility.Incompatible && StopOnIncompatibility)
 					return AbiCompatibility.Incompatible;
 				foreach (var child in oNs.ChildNamespaces) {
-					var newChild = nNs.GetChildNamespace (child.Name);
+					var newChild = (INamespace)nNs.GetChildNamespace (child.Name);
 					if (newChild == null) {
 						OnIncompatibilityFound (new AbiEventArgs (string.Format (TranslateString ("Namespace {0} is missing."), child.FullName)));
 						if (StopOnIncompatibility)

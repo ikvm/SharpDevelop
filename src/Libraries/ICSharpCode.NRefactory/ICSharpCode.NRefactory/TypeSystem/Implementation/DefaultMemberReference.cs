@@ -99,9 +99,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			return null;
 		}
 		
-		ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
-			return ((IMemberReference)this).Resolve(context);
+			return ((IMemberReference)this).Resolve((ITypeResolveContext)context);
 		}
 		
 		int ISupportsInterning.GetHashCodeForInterning()
@@ -114,5 +114,12 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			DefaultMemberReference o = other as DefaultMemberReference;
 			return o != null && symbolKind == o.symbolKind && typeReference == o.typeReference && name == o.name && parameterTypes == o.parameterTypes;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringTypeReference;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => DeclaringTypeReference.Resolve((ITypeResolveContext)context);
+		IType ITypeReference.Resolve(ITypeResolveContext context) => DeclaringTypeReference.Resolve(context);
+		#endregion
 	}
 }

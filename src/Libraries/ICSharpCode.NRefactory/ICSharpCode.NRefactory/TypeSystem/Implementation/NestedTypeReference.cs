@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -76,9 +76,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			return new UnknownType(null, name, additionalTypeParameterCount);
 		}
 		
-		ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
-			var type = Resolve(context);
+			var type = Resolve((ITypeResolveContext)context);
 			if (type is ITypeDefinition)
 				return (ISymbol)type;
 			return null;
@@ -102,5 +102,9 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			NestedTypeReference o = other as NestedTypeReference;
 			return o != null && declaringTypeRef == o.declaringTypeRef && name == o.name && additionalTypeParameterCount == o.additionalTypeParameterCount;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 	}
 }

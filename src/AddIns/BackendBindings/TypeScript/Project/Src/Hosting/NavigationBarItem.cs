@@ -1,4 +1,4 @@
-﻿// 
+// 
 // NavigationBarItem.cs
 // 
 // Author:

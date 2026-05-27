@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -30,14 +30,14 @@ using ICSharpCode.NRefactory.Utils;
 namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 {
 	[Serializable]
-	public sealed class CSharpAttribute : IUnresolvedAttribute
+	public sealed class CSharpAttribute : IUnresolvedAttribute, ICSharpCode.TypeSystem.IUnresolvedAttribute
 	{
 		ITypeReference attributeType;
 		DomRegion region;
 		IList<IConstantValue> positionalArguments;
 		IList<KeyValuePair<string, IConstantValue>> namedCtorArguments;
 		IList<KeyValuePair<string, IConstantValue>> namedArguments;
-		
+
 		public CSharpAttribute(ITypeReference attributeType, DomRegion region,
 		                       IList<IConstantValue> positionalArguments,
 		                       IList<KeyValuePair<string, IConstantValue>> namedCtorArguments,
@@ -51,10 +51,12 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			this.namedCtorArguments = namedCtorArguments ?? EmptyList<KeyValuePair<string, IConstantValue>>.Instance;
 			this.namedArguments = namedArguments ?? EmptyList<KeyValuePair<string, IConstantValue>>.Instance;
 		}
-		
+
 		public DomRegion Region {
 			get { return region; }
 		}
+
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedAttribute.Region => Region;
 		
 		public ITypeReference AttributeType {
 			get { return attributeType; }
@@ -64,8 +66,10 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 		{
 			return new CSharpResolvedAttribute((CSharpTypeResolveContext)context, this);
 		}
+
+		ICSharpCode.TypeSystem.IAttribute ICSharpCode.TypeSystem.IUnresolvedAttribute.CreateResolvedAttribute(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolvedAttribute((ITypeResolveContext)context);
 		
-		sealed class CSharpResolvedAttribute : IAttribute
+		sealed class CSharpResolvedAttribute : IAttribute, ICSharpCode.TypeSystem.IAttribute
 		{
 			readonly CSharpTypeResolveContext context;
 			readonly CSharpAttribute unresolved;
@@ -82,7 +86,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				this.attributeType = unresolved.AttributeType.Resolve(context);
 			}
 			
-			DomRegion IAttribute.Region {
+			ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IAttribute.Region {
 				get { return unresolved.Region; }
 			}
 			
@@ -146,24 +150,36 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				}
 			}
 			
-			IList<KeyValuePair<IMember, ResolveResult>> IAttribute.NamedArguments {
-				get {
-					var namedArgs = LazyInit.VolatileRead(ref this.namedArguments);
-					if (namedArgs != null) {
-						return namedArgs;
-					} else {
-						namedArgs = new List<KeyValuePair<IMember, ResolveResult>>();
-						foreach (var pair in unresolved.namedArguments) {
-							IMember member = attributeType.GetMembers(m => (m.SymbolKind == SymbolKind.Field || m.SymbolKind == SymbolKind.Property) && m.Name == pair.Key).FirstOrDefault();
-							if (member != null) {
-								ResolveResult val = pair.Value.Resolve(context);
-								namedArgs.Add(new KeyValuePair<IMember, ResolveResult>(member, val));
-							}
+			IList<KeyValuePair<IMember, ResolveResult>> GetNamedArgumentsWithMembers()
+			{
+				var namedArgs = LazyInit.VolatileRead(ref this.namedArguments);
+				if (namedArgs != null) {
+					return namedArgs;
+				} else {
+					namedArgs = new List<KeyValuePair<IMember, ResolveResult>>();
+					foreach (var pair in unresolved.namedArguments) {
+						IMember member = attributeType.GetMembers(m => (m.SymbolKind == SymbolKind.Field || m.SymbolKind == SymbolKind.Property) && m.Name == pair.Key).FirstOrDefault();
+						if (member != null) {
+							ResolveResult val = pair.Value.Resolve(context);
+							namedArgs.Add(new KeyValuePair<IMember, ResolveResult>(member, val));
 						}
-						return LazyInit.GetOrSet(ref this.namedArguments, namedArgs);
 					}
+					return LazyInit.GetOrSet(ref this.namedArguments, namedArgs);
 				}
 			}
+
+			IList<KeyValuePair<string, ResolveResult>> IAttribute.NamedArguments {
+				get {
+					return GetNamedArgumentsWithMembers().Select(p => new KeyValuePair<string, ResolveResult>(p.Key.Name, p.Value)).ToList();
+				}
+			}
+
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IAttribute.AttributeType => attributeType;
+			ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IAttribute.Constructor => ((IAttribute)this).Constructor;
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.ResolveResult> ICSharpCode.TypeSystem.IAttribute.PositionalArguments => ((IAttribute)this).PositionalArguments.Cast<ICSharpCode.TypeSystem.ResolveResult>().ToList();
+			System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>> ICSharpCode.TypeSystem.IAttribute.NamedArguments => GetNamedArgumentsWithMembers().Select(p => new System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>(p.Key, p.Value)).ToList();
+			#endregion
 		}
 	}
 }

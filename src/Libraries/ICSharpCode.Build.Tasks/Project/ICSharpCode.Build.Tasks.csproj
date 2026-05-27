@@ -56,7 +56,6 @@
   <ItemGroup>
     <!--<Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />-->
-    <PackageReference Include="ICSharpCode.NRefactory" Version ="5.5.1" />
     <PackageReference Include="Microsoft.Build" Version ="18.0.2" />
     <PackageReference Include="Microsoft.Build.Framework" Version ="18.0.2" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version ="18.0.2" />
@@ -66,6 +65,9 @@
     <ProjectReference Include="..\..\..\Main\Core\Project\ICSharpCode.Core.csproj">
       <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
       <Name>ICSharpCode.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ICSharpCode.TypeSystem.Abstractions\ICSharpCode.TypeSystem.Abstractions.csproj">
+      <Name>ICSharpCode.TypeSystem.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
 

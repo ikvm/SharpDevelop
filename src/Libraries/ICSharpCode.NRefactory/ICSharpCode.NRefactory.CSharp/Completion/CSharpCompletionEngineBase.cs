@@ -1,4 +1,4 @@
-﻿// 
+// 
 // CSharpCompletionEngineBase.cs
 //  
 // Author:
@@ -58,7 +58,7 @@ namespace ICSharpCode.NRefactory.CSharp.Completion
 		protected ICompilation Compilation {
 			get {
 				if (compilation == null)
-					compilation = ProjectContent.Resolve (ctx).Compilation;
+					compilation = (ICompilation)ProjectContent.Resolve (ctx).Compilation;
 				return compilation;
 			}
 		}

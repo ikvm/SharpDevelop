@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -88,6 +88,10 @@ namespace ICSharpCode.NRefactory.TypeSystem
 				throw new ArgumentNullException("context");
 			return this;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => ((ITypeReference)this).Resolve((ITypeResolveContext)context);
+		#endregion
 		
 		#pragma warning disable 809
 		[Obsolete("Please compare special types using the kind property instead.")]

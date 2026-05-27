@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -230,7 +230,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			
 			ITypeReference interfaceTypeReference = null;
 			if (this.IsExplicitInterfaceImplementation && this.ExplicitInterfaceImplementations.Count == 1)
-				interfaceTypeReference = this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
+				interfaceTypeReference = (ITypeReference)this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
 			return Resolve(ExtendContextForType(context, this.DeclaringTypeDefinition),
 			               this.SymbolKind, this.Name, interfaceTypeReference,
 			               this.TypeParameters.Select(tp => tp.Name).ToList(),
@@ -283,5 +283,15 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			m.Freeze();
 			return m;
 		}
+		
+		#region 显式实现 Abstractions IUnresolvedMethod 接口成员
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedMethod.ReturnTypeAttributes => new CastList<IUnresolvedAttribute, ICSharpCode.TypeSystem.IUnresolvedAttribute>(ReturnTypeAttributes);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedTypeParameter> ICSharpCode.TypeSystem.IUnresolvedMethod.TypeParameters => new CastList<IUnresolvedTypeParameter, ICSharpCode.TypeSystem.IUnresolvedTypeParameter>(TypeParameters);
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IUnresolvedMethod.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => (ICSharpCode.TypeSystem.IMethod)(object)Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IUnresolvedMethod.AccessorOwner => AccessorOwner;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMemberReference> ICSharpCode.TypeSystem.IUnresolvedMember.ExplicitInterfaceImplementations => new CastList<IMemberReference, ICSharpCode.TypeSystem.IMemberReference>(ExplicitInterfaceImplementations);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedParameter> ICSharpCode.TypeSystem.IUnresolvedParameterizedMember.Parameters => new CastList<IUnresolvedParameter, ICSharpCode.TypeSystem.IUnresolvedParameter>(Parameters);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.IType;
+		#endregion
 	}
 }

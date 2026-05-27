@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -17,42 +17,81 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Diagnostics.Contracts;
-using ICSharpCode.NRefactory.TypeSystem;
+using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
-	public interface IUnresolvedEvent : IUnresolvedMember
+	/// <summary>
+	/// 继承自 Abstractions 中的 IUnresolvedEvent，使 NRefactory 类型同时满足两个接口。
+	/// </summary>
+	public interface IUnresolvedEvent : ICSharpCode.TypeSystem.IUnresolvedEvent, IUnresolvedMember
 	{
-		bool CanAdd { get; }
-		bool CanRemove { get; }
-		bool CanInvoke { get; }
-		
-		IUnresolvedMethod AddAccessor { get; }
-		IUnresolvedMethod RemoveAccessor { get; }
-		IUnresolvedMethod InvokeAccessor { get; }
+		/// <summary>
+		/// Gets the add accessor method.
+		/// </summary>
+		new IUnresolvedMethod AddAccessor { get; }
 		
 		/// <summary>
-		/// Resolves the member.
+		/// Gets the remove accessor method.
 		/// </summary>
-		/// <param name="context">
-		/// Context for looking up the member. The context must specify the current assembly.
-		/// A <see cref="SimpleTypeResolveContext"/> that specifies the current assembly is sufficient.
-		/// </param>
-		/// <returns>
-		/// Returns the resolved member, or <c>null</c> if the member could not be found.
-		/// </returns>
+		new IUnresolvedMethod RemoveAccessor { get; }
+		
+		/// <summary>
+		/// Gets the invoke accessor method.
+		/// </summary>
+		new IUnresolvedMethod InvokeAccessor { get; }
+		
+		/// <summary>
+		/// Resolves this member reference.
+		/// </summary>
 		new IEvent Resolve(ITypeResolveContext context);
 	}
 	
-	public interface IEvent : IMember
+	/// <summary>
+	/// 继承自 Abstractions 中的 IEvent，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
+	/// </summary>
+	public interface IEvent : ICSharpCode.TypeSystem.IEvent, IMember
 	{
-		bool CanAdd { get; }
-		bool CanRemove { get; }
-		bool CanInvoke { get; }
+		/// <summary>
+		/// Gets whether this event can be added.
+		/// </summary>
+		// CanAdd 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this event can be removed.
+		/// </summary>
+		// CanRemove 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this event can be invoked.
+		/// </summary>
+		// CanInvoke 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the add accessor method.
+		/// </summary>
+		new IMethod AddAccessor { get; }
 		
-		IMethod AddAccessor { get; }
-		IMethod RemoveAccessor { get; }
-		IMethod InvokeAccessor { get; }
+		/// <summary>
+		/// Gets the remove accessor method.
+		/// </summary>
+		new IMethod RemoveAccessor { get; }
+		
+		/// <summary>
+		/// Gets the invoke accessor method.
+		/// </summary>
+		new IMethod InvokeAccessor { get; }
+		
+		/// <summary>
+		/// Gets the member on which this member is based on.
+		/// Returns this member if it is not based on another member.
+		/// </summary>
+		new IMember MemberDefinition { get; }
+		
+		/// <summary>
+		/// Creates a member reference that can be used to rediscover this member in another compilation.
+		/// </summary>
+		new IMemberReference ToReference();
 	}
 }

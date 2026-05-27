@@ -17,83 +17,41 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Diagnostics.Contracts;
+using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents a field or constant.
+	/// 继承自 Abstractions 中的 IUnresolvedField，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface IUnresolvedField : IUnresolvedMember
+	public interface IUnresolvedField : ICSharpCode.TypeSystem.IUnresolvedField, IUnresolvedMember
 	{
 		/// <summary>
-		/// Gets whether this field is readonly.
+		/// Gets the constant value of this field.
 		/// </summary>
-		bool IsReadOnly { get; }
+		new IConstantValue ConstantValue { get; }
 		
 		/// <summary>
-		/// Gets whether this field is volatile.
+		/// Resolves this member reference.
 		/// </summary>
-		bool IsVolatile { get; }
-		
-		/// <summary>
-		/// Gets whether this field is a constant (C#-like const).
-		/// </summary>
-		bool IsConst { get; }
-
-		/// <summary>
-		/// Gets whether this field is a fixed size buffer (C#-like fixed).
-		/// If this is true, then ConstantValue contains the size of the buffer.
-		/// </summary>
-		bool IsFixed { get; }
-
-
-		IConstantValue ConstantValue { get; }
-		
-		/// <summary>
-		/// Resolves the member.
-		/// </summary>
-		/// <param name="context">
-		/// Context for looking up the member. The context must specify the current assembly.
-		/// A <see cref="SimpleTypeResolveContext"/> that specifies the current assembly is sufficient.
-		/// </param>
-		/// <returns>
-		/// Returns the resolved member, or <c>null</c> if the member could not be found.
-		/// </returns>
 		new IField Resolve(ITypeResolveContext context);
 	}
 	
 	/// <summary>
-	/// Represents a field or constant.
+	/// 继承自 Abstractions 中的 IField，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface IField : IMember, IVariable
+	public interface IField : ICSharpCode.TypeSystem.IField, IMember, IVariable
 	{
 		/// <summary>
-		/// Gets the name of the field.
+		/// Gets the member on which this member is based on.
+		/// Returns this member if it is not based on another member.
 		/// </summary>
-		new string Name { get; } // solve ambiguity between IMember.Name and IVariable.Name
+		new IMember MemberDefinition { get; }
 		
 		/// <summary>
-		/// Gets the region where the field is declared.
+		/// Creates a member reference that can be used to rediscover this member in another compilation.
 		/// </summary>
-		new DomRegion Region { get; } // solve ambiguity between IEntity.Region and IVariable.Region
-		
-		/// <summary>
-		/// Gets whether this field is readonly.
-		/// </summary>
-		bool IsReadOnly { get; }
-		
-		/// <summary>
-		/// Gets whether this field is volatile.
-		/// </summary>
-		bool IsVolatile { get; }
-
-		/// <summary>
-		/// Gets whether this field is a fixed size buffer (C#-like fixed).
-		/// If this is true, then ConstantValue contains the size of the buffer.
-		/// </summary>
-		bool IsFixed { get; }
-		
-		new IMemberReference ToReference(); // solve ambiguity between IMember.ToReference() and IVariable.ToReference()
+		new IMemberReference ToReference();
 	}
 }

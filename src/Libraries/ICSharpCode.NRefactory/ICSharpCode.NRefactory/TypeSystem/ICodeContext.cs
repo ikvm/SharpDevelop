@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -16,23 +16,21 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-using System;
 using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
-	public interface ICodeContext : ITypeResolveContext
+	/// <summary>
+	/// 继承自 Abstractions 中的 ICodeContext，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
+	/// </summary>
+	public interface ICodeContext : ICSharpCode.TypeSystem.ICodeContext, ITypeResolveContext
 	{
 		/// <summary>
-		/// Gets all currently visible local variables and lambda parameters.
-		/// Does not include method parameters.
+		/// Gets the list of local variables.
 		/// </summary>
-		IEnumerable<IVariable> LocalVariables { get; }
+		new IEnumerable<IVariable> LocalVariables { get; }
 		
-		/// <summary>
-		/// Gets whether the context is within a lambda expression or anonymous method.
-		/// </summary>
-		bool IsWithinLambdaExpression { get; }
+		// IsWithinLambdaExpression 继承自基接口，类型为 bool，无需隐藏
 	}
 }
-

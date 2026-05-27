@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 using ICSharpCode.NRefactory.Utils;
 
@@ -63,6 +64,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		}
 		
 		SymbolKind ISymbol.SymbolKind {
+			get { return SymbolKind.TypeParameter; }
+		}
+		
+		SymbolKind ITypeParameter.SymbolKind {
 			get { return SymbolKind.TypeParameter; }
 		}
 		
@@ -161,7 +166,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				if (constraint.Kind == TypeKind.Interface) {
 					result.Add(constraint);
 				} else if (constraint.Kind == TypeKind.TypeParameter) {
-					result.UnionWith(((ITypeParameter)constraint).EffectiveInterfaceSet);
+					result.UnionWith(((ITypeParameter)constraint).EffectiveInterfaceTypes);
 				}
 			}
 			return result;
@@ -170,6 +175,25 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		public abstract bool HasDefaultConstructorConstraint { get; }
 		public abstract bool HasReferenceTypeConstraint { get; }
 		public abstract bool HasValueTypeConstraint { get; }
+		
+		public virtual IList<IType> Constraints {
+			get { return EmptyList<IType>.Instance; }
+		}
+		
+		public virtual IEnumerable<IType> EffectiveInterfaceTypes {
+			get { return EffectiveInterfaceSet; }
+		}
+		
+		public virtual bool CanBeUsedAs(IType type)
+		{
+			if (type == null)
+				throw new ArgumentNullException("type");
+			return TypeVisitor.CanBeUsedAs(this, type);
+		}
+		
+		public virtual IType EffectiveBaseType {
+			get { return EffectiveBaseClass; }
+		}
 		
 		public TypeKind Kind {
 			get { return TypeKind.TypeParameter; }
@@ -207,11 +231,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get { return null; }
 		}
 		
-		int IType.TypeParameterCount {
+		int ICSharpCode.TypeSystem.IType.TypeParameterCount {
 			get { return 0; }
 		}
 
-		bool IType.IsParameterized { 
+		bool ICSharpCode.TypeSystem.IType.IsParameterized { 
 			get { return false; }
 		}
 
@@ -226,11 +250,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get { return name; }
 		}
 		
-		string INamedElement.Namespace {
+		string ICSharpCode.TypeSystem.INamedElement.Namespace {
 			get { return string.Empty; }
 		}
 		
-		string INamedElement.FullName {
+		string ICSharpCode.TypeSystem.INamedElement.FullName {
 			get { return name; }
 		}
 		
@@ -377,13 +401,47 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			if (owner == null)
 				return TypeParameterReference.Create(ownerType, index);
-			return new OwnedTypeParameterReference(owner.ToReference(), index);
+			return (ISymbolReference)new OwnedTypeParameterReference((ISymbolReference)owner.ToReference(), index);
 		}
 		
 		public override string ToString()
 		{
 			return this.ReflectionName + " (owner=" + owner + ")";
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)((ISymbol)this).SymbolKind;
+		ICSharpCode.TypeSystem.TypeKind ICSharpCode.TypeSystem.IType.Kind => (ICSharpCode.TypeSystem.TypeKind)(byte)TypeKind.TypeParameter;
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ITypeParameter.OwnerType => (ICSharpCode.TypeSystem.SymbolKind)(byte)OwnerType;
+		ICSharpCode.TypeSystem.IEntity ICSharpCode.TypeSystem.ITypeParameter.Owner => Owner;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.DeclaringType => null;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IType.GetDefinition() => null;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.AcceptVisitor(ICSharpCode.TypeSystem.TypeVisitor visitor) => visitor.VisitTypeParameter(this);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IType.VisitChildren(ICSharpCode.TypeSystem.TypeVisitor visitor) => this;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.DirectBaseTypes => DirectBaseTypes.Cast<ICSharpCode.TypeSystem.IType>();
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IType.ToTypeReference() => ToTypeReference();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IType.GetSubstitution() => GetSubstitution();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IType.GetSubstitution(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> methodTypeArguments) => GetSubstitution();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.TypeArguments => new CastList<IType, ICSharpCode.TypeSystem.IType>(emptyTypeArguments);
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.GetNestedTypes(System.Predicate<ICSharpCode.TypeSystem.ITypeDefinition> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => EmptyList<ICSharpCode.TypeSystem.IType>.Instance;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IType.GetNestedTypes(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> typeArguments, System.Predicate<ICSharpCode.TypeSystem.ITypeDefinition> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => EmptyList<ICSharpCode.TypeSystem.IType>.Instance;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetConstructors(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetConstructors().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetMethods(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMethods().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetMethods(System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> typeArguments, System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMethods().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IProperty> ICSharpCode.TypeSystem.IType.GetProperties(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedProperty> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetProperties().Cast<ICSharpCode.TypeSystem.IProperty>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IField> ICSharpCode.TypeSystem.IType.GetFields(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedField> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetFields().Cast<ICSharpCode.TypeSystem.IField>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IEvent> ICSharpCode.TypeSystem.IType.GetEvents(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedEvent> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetEvents().Cast<ICSharpCode.TypeSystem.IEvent>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IType.GetMembers(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMember> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetMembers().Cast<ICSharpCode.TypeSystem.IMember>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IMethod> ICSharpCode.TypeSystem.IType.GetAccessors(System.Predicate<ICSharpCode.TypeSystem.IUnresolvedMethod> filter, ICSharpCode.TypeSystem.GetMemberOptions options) => GetAccessors().Cast<ICSharpCode.TypeSystem.IMethod>();
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.ITypeParameter.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+		ICSharpCode.TypeSystem.VarianceModifier ICSharpCode.TypeSystem.ITypeParameter.Variance => (ICSharpCode.TypeSystem.VarianceModifier)(byte)Variance;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.ITypeParameter.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeParameter.EffectiveBaseClass => EffectiveBaseClass;
+		System.Collections.Generic.ICollection<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.ITypeParameter.EffectiveInterfaceSet => new CastList<IType, ICSharpCode.TypeSystem.IType>(new List<IType>(EffectiveInterfaceSet));
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+		bool System.IEquatable<ICSharpCode.TypeSystem.IType>.Equals(ICSharpCode.TypeSystem.IType other) => Equals(other as IType);
+		#endregion
 	}
 	
 	public sealed class OwnedTypeParameterReference : ISymbolReference
@@ -408,5 +466,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				return ((IMethod)entity).TypeParameters[index];
 			return null;
 		}
+		
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.ISymbol;
 	}
 }

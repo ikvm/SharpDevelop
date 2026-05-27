@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -25,6 +25,47 @@ namespace ICSharpCode.NRefactory.TypeSystem
 	/// </summary>
 	public abstract class TypeVisitor
 	{
+		/// <summary>
+		/// Checks if the specified type parameter can be used as the given type.
+		/// </summary>
+		public static bool CanBeUsedAs(ITypeParameter typeParameter, IType type)
+		{
+			if (typeParameter == null)
+				throw new ArgumentNullException("typeParameter");
+			if (type == null)
+				throw new ArgumentNullException("type");
+			if (typeParameter.Equals(type))
+				return true;
+			if (type.Kind == TypeKind.Unknown)
+				return true;
+			IType effectiveBaseClass = typeParameter.EffectiveBaseClass;
+			if (effectiveBaseClass != null && effectiveBaseClass.Kind != TypeKind.Unknown) {
+				if (effectiveBaseClass.Equals(type) || effectiveBaseClass.GetDefinition().IsDerivedFrom(type.GetDefinition()))
+					return true;
+			}
+			foreach (IType iface in typeParameter.EffectiveInterfaceTypes) {
+				if (iface.Equals(type))
+					return true;
+				ITypeDefinition ifaceDef = iface.GetDefinition();
+				if (ifaceDef != null && ifaceDef.IsDerivedFrom(type.GetDefinition()))
+					return true;
+			}
+			if (type.Kind == TypeKind.Class && typeParameter.HasReferenceTypeConstraint) {
+				ITypeDefinition typeDef = type.GetDefinition();
+				if (typeDef != null && typeDef.KnownTypeCode == KnownTypeCode.Object)
+					return true;
+			}
+			if (type.Kind == TypeKind.TypeParameter) {
+				var otherTP = (ITypeParameter)type;
+				if (typeParameter.HasValueTypeConstraint && !otherTP.HasValueTypeConstraint)
+					return false;
+				if (typeParameter.HasReferenceTypeConstraint && !otherTP.HasReferenceTypeConstraint)
+					return false;
+				return true;
+			}
+			return false;
+		}
+		
 		public virtual IType VisitTypeDefinition(ITypeDefinition type)
 		{
 			return type.VisitChildren(this);

@@ -69,9 +69,16 @@ namespace ICSharpCode.NRefactory.Documentation
 			return null;
 		}
 		
-		ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
-			return Resolve(context);
+			return Resolve((ITypeResolveContext)context);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringTypeReference;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => DeclaringTypeReference.Resolve((ITypeResolveContext)context);
+		IType ITypeReference.Resolve(ITypeResolveContext context) => DeclaringTypeReference.Resolve(context);
+		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -17,27 +17,19 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents a snapshot of the whole solution (multiple compilations).
+	/// 继承自 Abstractions 中的 ISolutionSnapshot，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface ISolutionSnapshot
+	public interface ISolutionSnapshot : ICSharpCode.TypeSystem.ISolutionSnapshot
 	{
 		/// <summary>
-		/// Gets the project content with the specified file name.
-		/// Returns null if no such project exists in the solution.
+		/// Gets the project contents in this solution snapshot.
+		/// NRefactory 特有成员，不存在于 Abstractions 中。
 		/// </summary>
-		/// <remarks>
-		/// This method is used by the <see cref="ProjectReference"/> class.
-		/// </remarks>
-		IProjectContent GetProjectContent(string projectFileName);
-		
-		/// <summary>
-		/// Gets the compilation for the specified project.
-		/// The project must be a part of the solution (passed to the solution snapshot's constructor).
-		/// </summary>
-		ICompilation GetCompilation(IProjectContent project);
+		IEnumerable<IProjectContent> ProjectContents { get; }
 	}
 }

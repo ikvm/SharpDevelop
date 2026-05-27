@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -423,7 +423,7 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 				attr.Arguments.Add(ConvertConstantValue(arg));
 			}
 			foreach (var pair in attribute.NamedArguments) {
-				attr.Arguments.Add(new NamedExpression(pair.Key.Name, ConvertConstantValue(pair.Value)));
+				attr.Arguments.Add(new NamedExpression(pair.Key, ConvertConstantValue(pair.Value)));
 			}
 			return attr;
 		}
@@ -507,10 +507,10 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 		Expression ConvertEnumValue(IType type, long val)
 		{
 			ITypeDefinition enumDefinition = type.GetDefinition();
-			TypeCode enumBaseTypeCode = ReflectionHelper.GetTypeCode(enumDefinition.EnumUnderlyingType);
+			TypeCode enumBaseTypeCode = ReflectionHelper.GetTypeCode((IType)enumDefinition.EnumUnderlyingType);
 			foreach (IField field in enumDefinition.Fields) {
 				if (field.IsConst && object.Equals(CSharpPrimitiveCast.Cast(TypeCode.Int64, field.ConstantValue, false), val))
-					return ConvertType(type).Member(field.Name);
+					return ConvertType(type).Member(((IMember)field).Name);
 			}
 			if (IsFlagsEnum(enumDefinition)) {
 				long enumValue = val;
@@ -538,7 +538,7 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 						continue;	// skip None enum value
 
 					if ((fieldValue & enumValue) == fieldValue) {
-						var fieldExpression = ConvertType(type).Member(field.Name);
+						var fieldExpression = ConvertType(type).Member(((IMember)field).Name);
 						if (expr == null)
 							expr = fieldExpression;
 						else
@@ -547,7 +547,7 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 						enumValue &= ~fieldValue;
 					}
 					if ((fieldValue & negatedEnumValue) == fieldValue) {
-						var fieldExpression = ConvertType(type).Member(field.Name);
+						var fieldExpression = ConvertType(type).Member(((IMember)field).Name);
 						if (negatedExpr == null)
 							negatedExpr = fieldExpression;
 						else
@@ -649,7 +649,7 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 					return ConvertDestructor((IMethod)entity);
 				case SymbolKind.Accessor:
 					IMethod accessor = (IMethod)entity;
-					return ConvertAccessor(accessor, accessor.AccessorOwner != null ? accessor.AccessorOwner.Accessibility : Accessibility.None, false);
+					return ConvertAccessor(accessor, accessor.AccessorOwner != null ? (Accessibility)accessor.AccessorOwner.Accessibility : Accessibility.None, false);
 				default:
 					throw new ArgumentException("Invalid value for SymbolKind: " + entity.SymbolKind);
 			}
@@ -722,8 +722,8 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 			if (this.ShowBaseTypes) {
 				foreach (IType baseType in typeDefinition.DirectBaseTypes) {
 					if (baseType.IsKnownType (KnownTypeCode.Enum)) {
-						if (!typeDefinition.EnumUnderlyingType.IsKnownType (KnownTypeCode.Int32)) {
-							decl.BaseTypes.Add (ConvertType (typeDefinition.EnumUnderlyingType));
+						if (!((IType)typeDefinition.EnumUnderlyingType).IsKnownType (KnownTypeCode.Int32)) {
+							decl.BaseTypes.Add (ConvertType ((IType)typeDefinition.EnumUnderlyingType));
 						}
 					} else if (!baseType.IsKnownType (KnownTypeCode.Object) &&
 						 !baseType.IsKnownType (KnownTypeCode.ValueType)) {
@@ -807,7 +807,7 @@ namespace ICSharpCode.NRefactory.CSharp.Refactoring
 			Expression initializer = null;
 			if (field.IsConst && this.ShowConstantValues)
 				initializer = ConvertConstantValue(field.Type, field.ConstantValue);
-			decl.Variables.Add(new VariableInitializer(field.Name, initializer));
+			decl.Variables.Add(new VariableInitializer(((IMember)field).Name, initializer));
 			return decl;
 		}
 		

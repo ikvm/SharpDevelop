@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -61,7 +61,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				throw new ArgumentNullException("assemblyReferences");
 			this.solutionSnapshot = solutionSnapshot;
 			this.context = new SimpleTypeResolveContext(this);
-			this.mainAssembly = mainAssembly.Resolve(context);
+			this.mainAssembly = (IAssembly)mainAssembly.Resolve(context);
 			List<IAssembly> assemblies = new List<IAssembly>();
 			assemblies.Add(this.mainAssembly);
 			List<IAssembly> referencedAssemblies = new List<IAssembly>();
@@ -164,5 +164,17 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return "[SimpleCompilation " + mainAssembly.AssemblyName + "]";
 		}
+		
+		#region 显式实现 Abstractions ICompilation 接口成员
+		ICSharpCode.TypeSystem.CacheManager ICSharpCode.TypeSystem.ICompilation.CacheManager => CacheManager;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.ICompilation.MainAssembly => MainAssembly;
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ICompilation.TypeResolveContext => TypeResolveContext;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.ICompilation.Assemblies => new CastList<IAssembly, ICSharpCode.TypeSystem.IAssembly>(Assemblies);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.ICompilation.ReferencedAssemblies => new CastList<IAssembly, ICSharpCode.TypeSystem.IAssembly>(ReferencedAssemblies);
+		ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.ICompilation.RootNamespace => RootNamespace;
+		ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.ICompilation.GetNamespaceForExternAlias(string alias) => GetNamespaceForExternAlias(alias);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ICompilation.FindType(ICSharpCode.TypeSystem.KnownTypeCode typeCode) => FindType((KnownTypeCode)(int)typeCode);
+		ICSharpCode.TypeSystem.ISolutionSnapshot ICSharpCode.TypeSystem.ICompilation.SolutionSnapshot => SolutionSnapshot;
+		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -18,63 +18,46 @@
 
 using System;
 using System.Collections.Generic;
+using ICSharpCode.NRefactory.Editor;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
-	[Obsolete("IParsedFile was renamed to IUnresolvedFile", true)]
-	public interface IParsedFile {}
-	
 	/// <summary>
-	/// Represents a single file that was parsed.
+	/// 继承自 Abstractions 中的 IUnresolvedFile，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface IUnresolvedFile
+	public interface IUnresolvedFile : ICSharpCode.TypeSystem.IUnresolvedFile
 	{
 		/// <summary>
-		/// Returns the full path of the file.
+		/// Gets the file name.
 		/// </summary>
-		string FileName { get; }
+		// FileName 继承自基接口，类型为 string，无需隐藏
+
+		/// <summary>
+		/// Gets the top-level type definitions.
+		/// </summary>
+		new IList<IUnresolvedTypeDefinition> TopLevelTypeDefinitions { get; }
 		
 		/// <summary>
-		/// Gets the time when the file was last written.
+		/// Gets the assembly attributes.
 		/// </summary>
-		DateTime? LastWriteTime { get; set; }
+		new IList<IUnresolvedAttribute> AssemblyAttributes { get; }
 		
 		/// <summary>
-		/// Gets all top-level type definitions.
+		/// Gets the attributes on the module.
 		/// </summary>
-		IList<IUnresolvedTypeDefinition> TopLevelTypeDefinitions { get; }
+		new IList<IUnresolvedAttribute> ModuleAttributes { get; }
+		
+		// UsingScopeNamespaces, UsingAliases 继承自基接口
+
+		/// <summary>
+		/// Gets the type definitions in this file.
+		/// </summary>
+		new IEnumerable<IUnresolvedTypeDefinition> GetAllTypeDefinitions();
 		
 		/// <summary>
-		/// Gets all assembly attributes that are defined in this file.
+		/// Finds the innermost type definition containing the specified location.
 		/// </summary>
-		IList<IUnresolvedAttribute> AssemblyAttributes { get; }
-		
-		/// <summary>
-		/// Gets all module attributes that are defined in this file.
-		/// </summary>
-		IList<IUnresolvedAttribute> ModuleAttributes { get; }
-		
-		/// <summary>
-		/// Gets the top-level type defined at the specified location.
-		/// Returns null if no type is defined at that location.
-		/// </summary>
-		IUnresolvedTypeDefinition GetTopLevelTypeDefinition(TextLocation location);
-		
-		/// <summary>
-		/// Gets the type (potentially a nested type) defined at the specified location.
-		/// Returns null if no type is defined at that location.
-		/// </summary>
-		IUnresolvedTypeDefinition GetInnermostTypeDefinition(TextLocation location);
-		
-		/// <summary>
-		/// Gets the member defined at the specified location.
-		/// Returns null if no member is defined at that location.
-		/// </summary>
-		IUnresolvedMember GetMember(TextLocation location);
-		
-		/// <summary>
-		/// Gets the parser errors.
-		/// </summary>
-		IList<Error> Errors { get; }
+		new IUnresolvedTypeDefinition GetInnermostTypeDefinition(TextLocation location);
 	}
 }

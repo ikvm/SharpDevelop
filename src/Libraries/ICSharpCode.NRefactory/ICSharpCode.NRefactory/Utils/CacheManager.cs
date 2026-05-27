@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -26,34 +26,10 @@ namespace ICSharpCode.NRefactory.Utils
 	/// <summary>
 	/// Allows caching values for a specific compilation.
 	/// A CacheManager consists of a for shared instances (shared among all threads working with that resolve context).
+	/// Inherits from Abstractions CacheManager so it can be used where Abstractions.CacheManager is expected.
 	/// </summary>
 	/// <remarks>This class is thread-safe</remarks>
-	public sealed class CacheManager
+	public sealed class CacheManager : ICSharpCode.TypeSystem.CacheManager
 	{
-		readonly ConcurrentDictionary<object, object> sharedDict = new ConcurrentDictionary<object, object>(ReferenceComparer.Instance);
-		// There used to be a thread-local dictionary here, but I removed it as it was causing memory
-		// leaks in some use cases.
-		
-		public object GetShared(object key)
-		{
-			object value;
-			sharedDict.TryGetValue(key, out value);
-			return value;
-		}
-		
-		public object GetOrAddShared(object key, Func<object, object> valueFactory)
-		{
-			return sharedDict.GetOrAdd(key, valueFactory);
-		}
-		
-		public object GetOrAddShared(object key, object value)
-		{
-			return sharedDict.GetOrAdd(key, value);
-		}
-		
-		public void SetShared(object key, object value)
-		{
-			sharedDict[key] = value;
-		}
 	}
 }

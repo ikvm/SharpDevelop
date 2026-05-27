@@ -88,5 +88,14 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		{
 			return new SimpleTypeResolveContext(compilation, currentAssembly, currentTypeDefinition, member);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.ITypeResolveContext.CurrentAssembly => CurrentAssembly;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.ITypeResolveContext.CurrentTypeDefinition => CurrentTypeDefinition;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.ITypeResolveContext.CurrentMember => CurrentMember;
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentTypeDefinition(ICSharpCode.TypeSystem.ITypeDefinition typeDefinition) => WithCurrentTypeDefinition(typeDefinition as ITypeDefinition);
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentMember(ICSharpCode.TypeSystem.IMember member) => WithCurrentMember(member as IMember);
+		#endregion
 	}
 }

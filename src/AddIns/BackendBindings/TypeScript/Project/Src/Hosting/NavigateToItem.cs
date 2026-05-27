@@ -1,4 +1,4 @@
-﻿// 
+// 
 // NavigateToItem.cs
 // 
 // Author:

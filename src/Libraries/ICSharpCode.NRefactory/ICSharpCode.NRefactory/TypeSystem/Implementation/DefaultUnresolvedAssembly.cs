@@ -116,20 +116,12 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get { return assemblyAttributes; }
 		}
 		
-		IEnumerable<IUnresolvedAttribute> IUnresolvedAssembly.AssemblyAttributes {
-			get { return assemblyAttributes; }
-		}
-		
 		public IList<IUnresolvedAttribute> ModuleAttributes {
 			get { return moduleAttributes; }
 		}
 		
-		IEnumerable<IUnresolvedAttribute> IUnresolvedAssembly.ModuleAttributes {
-			get { return moduleAttributes; }
-		}
-		
-		public IEnumerable<IUnresolvedTypeDefinition> TopLevelTypeDefinitions {
-			get { return typeDefinitions.Values; }
+		public IList<IUnresolvedTypeDefinition> TopLevelTypeDefinitions {
+			get { return new List<IUnresolvedTypeDefinition>(typeDefinitions.Values); }
 		}
 		
 		/// <summary>
@@ -183,6 +175,8 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			{
 				return new TypeOfResolveResult(context.Compilation.FindType(KnownTypeCode.Type), typeRef.Resolve(context));
 			}
+			
+			ICSharpCode.TypeSystem.ResolveResult ICSharpCode.TypeSystem.IConstantValue.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 		}
 		
 		public IUnresolvedTypeDefinition GetTypeDefinition(string ns, string name, int typeParameterCount)
@@ -210,10 +204,18 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IAssemblyReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		
 		public override string ToString()
 		{
 			return "[" + GetType().Name + " " + assemblyName + "]";
 		}
+		
+		#region 显式实现 Abstractions IUnresolvedAssembly 接口成员
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedAssembly.AssemblyAttributes => AssemblyAttributes.Cast<ICSharpCode.TypeSystem.IUnresolvedAttribute>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedAssembly.ModuleAttributes => ModuleAttributes.Cast<ICSharpCode.TypeSystem.IUnresolvedAttribute>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition> ICSharpCode.TypeSystem.IUnresolvedAssembly.TopLevelTypeDefinitions => TopLevelTypeDefinitions.Cast<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition>();
+		#endregion
 		
 		//[NonSerialized]
 		//List<Dictionary<TopLevelTypeName, IUnresolvedTypeDefinition>> cachedTypeDictionariesPerNameComparer;
@@ -333,6 +335,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				get { return compilation; }
 			}
 	
+			public ITypeResolveContext TypeResolveContext {
+				get { return context; }
+			}
+	
 			public bool InternalsVisibleTo(IAssembly assembly)
 			{
 				if (this == assembly)
@@ -342,6 +348,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 						return true;
 				}
 				return false;
+			}
+			
+			public ITypeDefinition GetTypeDefinition(string ns, string name, int typeParameterCount = 0)
+			{
+				return GetTypeDefinition(new TopLevelTypeName(ns ?? string.Empty, name, typeParameterCount));
 			}
 
 			volatile string[] internalsVisibleTo;
@@ -424,6 +435,17 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				return "[DefaultResolvedAssembly " + AssemblyName + "]";
 			}
 			
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.IUnresolvedAssembly ICSharpCode.TypeSystem.IAssembly.UnresolvedAssembly => UnresolvedAssembly;
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IAssembly.AssemblyAttributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(AssemblyAttributes);
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IAssembly.ModuleAttributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(ModuleAttributes);
+			ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.IAssembly.RootNamespace => RootNamespace;
+			ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+			ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IAssembly.GetTypeDefinition(ICSharpCode.TypeSystem.TopLevelTypeName topLevelTypeName) => GetTypeDefinition(new TopLevelTypeName(topLevelTypeName.Namespace, topLevelTypeName.Name, topLevelTypeName.TypeParameterCount));
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.IAssembly.TopLevelTypeDefinitions => TopLevelTypeDefinitions.Cast<ICSharpCode.TypeSystem.ITypeDefinition>();
+			bool ICSharpCode.TypeSystem.IAssembly.InternalsVisibleTo(ICSharpCode.TypeSystem.IAssembly assembly) => InternalsVisibleTo(assembly as IAssembly);
+			#endregion
+			
 			sealed class NS : INamespace
 			{
 				readonly DefaultResolvedAssembly assembly;
@@ -441,11 +463,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 						this, ns.Children, (self, c) => new NS(self.assembly, c, self));
 				}
 				
-				string INamespace.ExternAlias {
+				string ICSharpCode.TypeSystem.INamespace.ExternAlias {
 					get { return null; }
 				}
 				
-				string INamespace.FullName {
+				string ICSharpCode.TypeSystem.INamespace.FullName {
 					get { return ns.FullName; }
 				}
 				
@@ -469,7 +491,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					get { return childNamespaces; }
 				}
 				
-				INamespace INamespace.GetChildNamespace(string name)
+				ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.GetChildNamespace(string name)
 				{
 					var nameComparer = assembly.compilation.NameComparer;
 					for (int i = 0; i < childNamespaces.Count; i++) {
@@ -513,6 +535,17 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				{
 					return new NamespaceReference(new DefaultAssemblyReference(assembly.AssemblyName), ns.FullName);
 				}
+				
+				#region 显式实现 Abstractions 接口成员
+				ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind.Namespace;
+				ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.ParentNamespace => parentNamespace;
+				System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.INamespace> ICSharpCode.TypeSystem.INamespace.ChildNamespaces => childNamespaces.Cast<ICSharpCode.TypeSystem.INamespace>();
+				System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.INamespace.Types => ((INamespace)this).Types.Cast<ICSharpCode.TypeSystem.ITypeDefinition>();
+				ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.INamespace.GetTypeDefinition(string name, int typeParameterCount) => ((INamespace)this).GetTypeDefinition(name, typeParameterCount);
+				ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+				System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.INamespace.ContributingAssemblies => ((INamespace)this).ContributingAssemblies.Cast<ICSharpCode.TypeSystem.IAssembly>();
+				ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => assembly.compilation;
+				#endregion
 			}
 		}
 	}
@@ -539,12 +572,15 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			
 			int i = 0;
 			while (i < parts.Length && parent != null) {
-				parent = parent.GetChildNamespace(parts[i]);
+				parent = (INamespace)parent.GetChildNamespace(parts[i]);
 				i++;
 			}
 			
 			return parent;
 		}
+		
+		// 显式实现 Abstractions 接口
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.ISymbol;
 	}
 	
 	public sealed class MergedNamespaceReference : ISymbolReference
@@ -565,11 +601,14 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			
 			int i = 0;
 			while (i < parts.Length && parent != null) {
-				parent = parent.GetChildNamespace(parts[i]);
+				parent = (INamespace)parent.GetChildNamespace(parts[i]);
 				i++;
 			}
 			
 			return parent;
 		}
+		
+		// 显式实现 Abstractions 接口
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.ISymbol;
 	}
 }

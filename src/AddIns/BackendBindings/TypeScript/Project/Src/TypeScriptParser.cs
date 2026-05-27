@@ -1,4 +1,4 @@
-﻿// 
+// 
 // TypeScriptParser.cs
 // 
 // Author:
@@ -31,8 +31,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.Core;
-using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.TypeSystem;
+using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.SharpDevelop.Editor.Search;
 using ICSharpCode.SharpDevelop.Parser;
 using ICSharpCode.SharpDevelop.Project;

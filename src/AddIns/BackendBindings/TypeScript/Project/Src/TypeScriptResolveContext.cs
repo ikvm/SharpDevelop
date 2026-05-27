@@ -1,4 +1,4 @@
-﻿// 
+// 
 // TypeScriptResolvecontenxt.cs
 // 
 // Author:

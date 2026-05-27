@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -120,5 +120,29 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return "[" + this.SymbolKind.ToString() + " " + this.ReflectionName + "]";
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		// 这些显式接口实现使 NRefactory 类型同时满足 Abstractions 接口的要求
+		// 当 NRefactory 返回类型继承自 Abstractions 返回类型时，直接委托给现有实现
+		// 当类型不兼容（如枚举、值类型）时，进行适当的转换
+		
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => (ICSharpCode.TypeSystem.Accessibility)(byte)Accessibility;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPrivate => Accessibility == Accessibility.Private;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPublic => Accessibility == Accessibility.Public;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtected => Accessibility == Accessibility.Protected;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsInternal => Accessibility == Accessibility.Internal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedOrInternal => Accessibility == Accessibility.ProtectedOrInternal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedAndInternal => Accessibility == Accessibility.ProtectedAndInternal;
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IEntity.DeclaringTypeDefinition => DeclaringTypeDefinition;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IEntity.DeclaringType => DeclaringType;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IEntity.ParentAssembly => ParentAssembly;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.BodyRegion => new ICSharpCode.TypeSystem.DomRegion(BodyRegion.BeginLine, BodyRegion.BeginColumn, BodyRegion.EndLine, BodyRegion.EndColumn);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IEntity.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+		[Obsolete] ICSharpCode.TypeSystem.EntityType ICSharpCode.TypeSystem.IEntity.EntityType => (ICSharpCode.TypeSystem.EntityType)(byte)EntityType;
+		#endregion
 	}
 }

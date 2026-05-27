@@ -1,4 +1,4 @@
-﻿//
+//
 // ReducedExtensionMethod.cs
 //
 // Author:
@@ -36,7 +36,7 @@ namespace ICSharpCode.NRefactory.CSharp
 	/// It's used to hide the internals of extension method invocation in certain situation to simulate the
 	/// syntactic way of writing extension methods on semantic level.
 	/// </summary>
-	public class ReducedExtensionMethod : IMethod
+	public class ReducedExtensionMethod : IMethod, ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.IMethod
 	{
 		readonly IMethod baseMethod;
 
@@ -68,7 +68,7 @@ namespace ICSharpCode.NRefactory.CSharp
 		#region IMember implementation
 
 		[Serializable]
-		public sealed class ReducedExtensionMethodMemberReference : IMemberReference
+		public sealed class ReducedExtensionMethodMemberReference : IMemberReference, ICSharpCode.TypeSystem.IMemberReference, ICSharpCode.TypeSystem.ITypeReference
 		{
 			readonly IMethod baseMethod;
 
@@ -81,17 +81,27 @@ namespace ICSharpCode.NRefactory.CSharp
 			{
 				return new ReducedExtensionMethod ((IMethod)baseMethod.ToReference ().Resolve (context));
 			}
-			
-			ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+
+			ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 			{
-				return Resolve(context);
+				return Resolve((ITypeResolveContext)context);
 			}
 
 			public ITypeReference DeclaringTypeReference {
 				get {
-					return baseMethod.ToReference ().DeclaringTypeReference;
+					return (ITypeReference)baseMethod.ToReference ().DeclaringTypeReference;
 				}
 			}
+
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => throw new NotSupportedException();
+			ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringTypeReference;
+			#endregion
+
+			#region 显式实现 NRefactory 接口成员
+			IType ITypeReference.Resolve(ITypeResolveContext context) => throw new NotSupportedException();
+			#endregion
 		}
 
 		public IMemberReference ToMemberReference()
@@ -104,7 +114,7 @@ namespace ICSharpCode.NRefactory.CSharp
 			return new ReducedExtensionMethodMemberReference (baseMethod);
 		}
 		
-		ISymbolReference ISymbol.ToReference()
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference()
 		{
 			return ToReference();
 		}
@@ -168,9 +178,9 @@ namespace ICSharpCode.NRefactory.CSharp
 			return new ReducedExtensionMethod((IMethod)baseMethod.Specialize(substitution));
 		}
 		
-		IMember IMember.Specialize(TypeParameterSubstitution substitution)
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution)
 		{
-			return Specialize(substitution);
+			return Specialize((TypeParameterSubstitution)substitution);
 		}
 		
 		public bool IsParameterized {
@@ -247,9 +257,15 @@ namespace ICSharpCode.NRefactory.CSharp
 			}
 		}
 
+		public ITypeReference DeclaringTypeReference {
+			get {
+				return (ITypeReference)baseMethod.DeclaringTypeReference;
+			}
+		}
+
 		public IMember AccessorOwner {
 			get {
-				return baseMethod.AccessorOwner;
+				return (IMember)baseMethod.AccessorOwner;
 			}
 		}
 
@@ -261,7 +277,7 @@ namespace ICSharpCode.NRefactory.CSharp
 
 		public IList<IType> TypeArguments {
 			get {
-				return baseMethod.TypeArguments;
+				return baseMethod.TypeArguments.Cast<IType>().ToList();
 			}
 		}
 		#endregion
@@ -449,6 +465,49 @@ namespace ICSharpCode.NRefactory.CSharp
 			}
 		}
 
+		#endregion
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => throw new NotSupportedException();
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this;
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringTypeReference;
+		ICSharpCode.TypeSystem.EntityType ICSharpCode.TypeSystem.IEntity.EntityType => (ICSharpCode.TypeSystem.EntityType)(int)EntityType;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.Region => Region;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.BodyRegion => BodyRegion;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IEntity.DeclaringTypeDefinition => DeclaringTypeDefinition;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IEntity.DeclaringType => DeclaringType;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IEntity.ParentAssembly => ParentAssembly;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IEntity.Attributes => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute>)(object)Attributes;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.MemberDefinition => MemberDefinition;
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IMember.UnresolvedMember => UnresolvedMember;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IMember.ReturnType => ReturnType;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IMember.ImplementedInterfaceMembers => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember>)(object)ImplementedInterfaceMembers;
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToMemberReference() => ToMemberReference();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IMember.Substitution => Substitution;
+		ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => (ICSharpCode.TypeSystem.Accessibility)(byte)Accessibility;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter> ICSharpCode.TypeSystem.IParameterizedMember.Parameters => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter>)(object)Parameters;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeParameter> ICSharpCode.TypeSystem.IMethod.TypeParameters => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeParameter>)(object)TypeParameters;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IMethod.ReturnTypeAttributes => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute>)(object)ReturnTypeAttributes;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedMethod> ICSharpCode.TypeSystem.IMethod.Parts => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedMethod>)(object)Parts;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.ReducedFrom => ReducedFrom;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMethod.AccessorOwner => AccessorOwner;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IMethod.TypeArguments => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType>)(object)TypeArguments;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => Specialize((TypeParameterSubstitution)substitution);
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToReference() => ToReference();
+		#endregion
+
+		#region 显式实现 NRefactory 接口成员
+		IUnresolvedMethod IMethod.UnresolvedMember => baseMethod.UnresolvedMember;
+		IMethod IMethod.Getter => baseMethod.Getter;
+		IMethod IMethod.Setter => baseMethod.Setter;
+		IMember IMember.Specialize(TypeParameterSubstitution substitution) => Specialize(substitution);
+		Accessibility IMember.AccessibilityDomain => baseMethod.AccessibilityDomain;
+		bool IMember.IsAccessibleFrom(IAssembly assembly) => baseMethod.IsAccessibleFrom(assembly);
+		IMember IMemberReference.Resolve(ITypeResolveContext context) => this;
+		IType ITypeReference.Resolve(ITypeResolveContext context) => throw new NotSupportedException();
 		#endregion
 	}
 }

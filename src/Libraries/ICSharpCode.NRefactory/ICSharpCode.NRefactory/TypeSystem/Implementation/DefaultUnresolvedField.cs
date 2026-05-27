@@ -93,5 +93,12 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return (IField)Resolve(context);
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IConstantValue ICSharpCode.TypeSystem.IUnresolvedField.ConstantValue => ConstantValue;
+		ICSharpCode.TypeSystem.IField ICSharpCode.TypeSystem.IUnresolvedField.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => (IField)Resolve((ITypeResolveContext)context);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMemberReference> ICSharpCode.TypeSystem.IUnresolvedMember.ExplicitInterfaceImplementations => new CastList<IMemberReference, ICSharpCode.TypeSystem.IMemberReference>(ExplicitInterfaceImplementations);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.IType;
+		#endregion
 	}
 }

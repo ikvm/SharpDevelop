@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -82,11 +82,6 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				null);
 		}
 		
-		ISymbolReference ISymbol.ToReference()
-		{
-			return ToReference();
-		}
-		
 		internal static IList<ITypeReference> ToTypeReference(IList<IType> typeArguments)
 		{
 			if (typeArguments == null)
@@ -105,7 +100,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			} else {
 				var sm = accessorDefinition.Specialize(substitution);
 				//sm.AccessorOwner = this;
-				return LazyInit.GetOrSet(ref cachingField, sm);
+				return LazyInit.GetOrSet(ref cachingField, (IMethod)sm);
 			}
 		}
 		
@@ -310,6 +305,25 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			return baseMember.Specialize(TypeParameterSubstitution.Compose(newSubstitution, this.substitution));
 		}
 
+		public Accessibility AccessibilityDomain {
+			get { return baseMember.AccessibilityDomain; }
+		}
+		
+		public bool IsAccessibleFrom(IAssembly assembly)
+		{
+			return baseMember.IsAccessibleFrom(assembly);
+		}
+		
+		IMember IMemberReference.Resolve(ITypeResolveContext context)
+		{
+			return this;
+		}
+		
+		IType ITypeReference.Resolve(ITypeResolveContext context)
+		{
+			return ReturnType;
+		}
+		
 		public override bool Equals(object obj)
 		{
 			SpecializedMember other = obj as SpecializedMember;
@@ -338,6 +352,38 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			b.Append(']');
 			return b.ToString();
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => (ICSharpCode.TypeSystem.Accessibility)(byte)Accessibility;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPrivate => IsPrivate;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPublic => IsPublic;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtected => IsProtected;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsInternal => IsInternal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedOrInternal => IsProtectedOrInternal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedAndInternal => IsProtectedAndInternal;
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IEntity.DeclaringTypeDefinition => DeclaringTypeDefinition;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IEntity.DeclaringType => DeclaringType;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IEntity.ParentAssembly => ParentAssembly;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.BodyRegion => new ICSharpCode.TypeSystem.DomRegion(BodyRegion.BeginLine, BodyRegion.BeginColumn, BodyRegion.EndLine, BodyRegion.EndColumn);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IEntity.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+		[Obsolete] ICSharpCode.TypeSystem.EntityType ICSharpCode.TypeSystem.IEntity.EntityType => (ICSharpCode.TypeSystem.EntityType)(byte)EntityType;
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IMember.UnresolvedMember => UnresolvedMember;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IMember.ReturnType => ReturnType;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.MemberDefinition => MemberDefinition;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IMember.ImplementedInterfaceMembers => new CastList<IMember, ICSharpCode.TypeSystem.IMember>(ImplementedInterfaceMembers);
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToReference() => ToReference() as ICSharpCode.TypeSystem.IMemberReference ?? ToMemberReference();
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToMemberReference() => ToMemberReference();
+		ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IMember.Substitution => Substitution;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => Specialize(substitution);
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference() as ICSharpCode.TypeSystem.ISymbolReference ?? (ICSharpCode.TypeSystem.ISymbolReference)ToMemberReference();
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringType?.ToTypeReference();
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this;
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => this as ICSharpCode.TypeSystem.ISymbol;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => ReturnType as ICSharpCode.TypeSystem.IType ?? ReturnType;
+		#endregion
 	}
 	
 	public abstract class SpecializedParameterizedMember : SpecializedMember, IParameterizedMember
@@ -386,6 +432,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				return Array.AsReadOnly(parameters);
 			}
 		}
+		
+		#region 显式实现 Abstractions IParameterizedMember 接口成员
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter> ICSharpCode.TypeSystem.IParameterizedMember.Parameters => new CastList<IParameter, ICSharpCode.TypeSystem.IParameter>(Parameters);
+		#endregion
 		
 		public override string ToString()
 		{

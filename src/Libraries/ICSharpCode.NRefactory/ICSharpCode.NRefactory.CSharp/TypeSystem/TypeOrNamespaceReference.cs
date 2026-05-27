@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -59,22 +59,24 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				ctx = new CSharpTypeResolveContext(context.CurrentAssembly ?? context.Compilation.MainAssembly, null, context.CurrentTypeDefinition, context.CurrentMember);
 			}
 			return ResolveType(new CSharpResolver(ctx));
-			
+
 			// A potential issue might be this scenario:
-			
+
 			// Assembly 1:
 			//  class A { public class Nested {} }
-			
+
 			// Assembly 2: (references asm 1)
 			//  class B : A {}
-			
+
 			// Assembly 3: (references asm 1 and 2)
 			//  class C { public B.Nested Field; }
-			
+
 			// Assembly 4: (references asm 1 and 3, but not 2):
 			//  uses C.Field;
-			
+
 			// Here we would not be able to resolve 'B.Nested' in the compilation of assembly 4, as type B is missing there.
 		}
+
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => ((ITypeReference)this).Resolve((ITypeResolveContext)context);
 	}
 }

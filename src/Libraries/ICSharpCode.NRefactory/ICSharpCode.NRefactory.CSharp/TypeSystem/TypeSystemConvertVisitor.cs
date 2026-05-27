@@ -725,7 +725,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				Debug.Assert(p.ExplicitInterfaceImplementations.Count == 1);
 				a.ExplicitInterfaceImplementations.Add(interningProvider.Intern(new DefaultMemberReference(
 					SymbolKind.Accessor,
-					p.ExplicitInterfaceImplementations[0].DeclaringTypeReference,
+					(ITypeReference)p.ExplicitInterfaceImplementations[0].DeclaringTypeReference,
 					a.Name, 0, GetParameterTypes(a.Parameters)
 				)));
 			}

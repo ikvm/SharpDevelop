@@ -95,5 +95,14 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return (IEvent)Resolve(context);
 		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IUnresolvedMethod ICSharpCode.TypeSystem.IUnresolvedEvent.AddAccessor => AddAccessor;
+		ICSharpCode.TypeSystem.IUnresolvedMethod ICSharpCode.TypeSystem.IUnresolvedEvent.RemoveAccessor => RemoveAccessor;
+		ICSharpCode.TypeSystem.IUnresolvedMethod ICSharpCode.TypeSystem.IUnresolvedEvent.InvokeAccessor => InvokeAccessor;
+		ICSharpCode.TypeSystem.IEvent ICSharpCode.TypeSystem.IUnresolvedEvent.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => (ICSharpCode.TypeSystem.IEvent)(object)Resolve((ITypeResolveContext)context);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMemberReference> ICSharpCode.TypeSystem.IUnresolvedMember.ExplicitInterfaceImplementations => new CastList<IMemberReference, ICSharpCode.TypeSystem.IMemberReference>(ExplicitInterfaceImplementations);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as ICSharpCode.TypeSystem.IType;
+		#endregion
 	}
 }

@@ -17,46 +17,76 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents a property or indexer.
+	/// 继承自 Abstractions 中的 IUnresolvedProperty，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface IUnresolvedProperty : IUnresolvedParameterizedMember
+	public interface IUnresolvedProperty : ICSharpCode.TypeSystem.IUnresolvedProperty, IUnresolvedParameterizedMember
 	{
-		bool CanGet { get; }
-		bool CanSet { get; }
-		
-		IUnresolvedMethod Getter { get; }
-		IUnresolvedMethod Setter { get; }
-		
-		bool IsIndexer { get; }
+		/// <summary>
+		/// Gets the getter method.
+		/// </summary>
+		new IUnresolvedMethod Getter { get; }
 		
 		/// <summary>
-		/// Resolves the member.
+		/// Gets the setter method.
 		/// </summary>
-		/// <param name="context">
-		/// Context for looking up the member. The context must specify the current assembly.
-		/// A <see cref="SimpleTypeResolveContext"/> that specifies the current assembly is sufficient.
-		/// </param>
-		/// <returns>
-		/// Returns the resolved member, or <c>null</c> if the member could not be found.
-		/// </returns>
+		new IUnresolvedMethod Setter { get; }
+		
+		/// <summary>
+		/// Resolves this member reference.
+		/// </summary>
 		new IProperty Resolve(ITypeResolveContext context);
 	}
 	
 	/// <summary>
-	/// Represents a property or indexer.
+	/// 继承自 Abstractions 中的 IProperty，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface IProperty : IParameterizedMember
+	public interface IProperty : ICSharpCode.TypeSystem.IProperty, IParameterizedMember
 	{
-		bool CanGet { get; }
-		bool CanSet { get; }
+		/// <summary>
+		/// Gets whether this property can be read.
+		/// </summary>
+		// CanGet 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this property can be set.
+		/// </summary>
+		// CanSet 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the getter method.
+		/// </summary>
+		new IMethod Getter { get; }
 		
-		IMethod Getter { get; }
-		IMethod Setter { get; }
+		/// <summary>
+		/// Gets the setter method.
+		/// </summary>
+		new IMethod Setter { get; }
 		
-		bool IsIndexer { get; }
+		/// <summary>
+		/// Gets whether this property is an indexer.
+		/// </summary>
+		// IsIndexer 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets whether this is a WinRT property.
+		/// </summary>
+		// IsWinRtProperty 继承自基接口，类型为 bool，无需隐藏
+
+		/// <summary>
+		/// Gets the member on which this member is based on.
+		/// Returns this member if it is not based on another member.
+		/// </summary>
+		new IMember MemberDefinition { get; }
+		
+		/// <summary>
+		/// Creates a member reference that can be used to rediscover this member in another compilation.
+		/// </summary>
+		new IMemberReference ToReference();
 	}
 }

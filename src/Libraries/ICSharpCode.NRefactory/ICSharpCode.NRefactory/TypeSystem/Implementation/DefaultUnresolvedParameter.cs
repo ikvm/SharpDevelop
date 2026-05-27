@@ -223,6 +223,17 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
+		#region 显式实现 Abstractions IUnresolvedParameter 接口成员
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IUnresolvedParameter.Type => Type;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedParameter.Attributes => new CastList<IUnresolvedAttribute, ICSharpCode.TypeSystem.IUnresolvedAttribute>(Attributes);
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedParameter.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		bool ICSharpCode.TypeSystem.IUnresolvedParameter.IsRef => IsRef;
+		bool ICSharpCode.TypeSystem.IUnresolvedParameter.IsOut => IsOut;
+		bool ICSharpCode.TypeSystem.IUnresolvedParameter.IsParams => IsParams;
+		bool ICSharpCode.TypeSystem.IUnresolvedParameter.IsOptional => IsOptional;
+		ICSharpCode.TypeSystem.IParameter ICSharpCode.TypeSystem.IUnresolvedParameter.CreateResolvedParameter(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolvedParameter((ITypeResolveContext)context);
+		#endregion
+		
 		sealed class ResolvedParameterWithDefaultValue : IParameter
 		{
 			readonly IConstantValue defaultValue;
@@ -244,7 +255,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			public bool IsOut { get; internal set; }
 			public bool IsParams { get; internal set; }
 			public bool IsOptional { get { return true; } }
-			bool IVariable.IsConst { get { return false; } }
+			public bool IsConst => false;
 			
 			ResolveResult resolvedDefaultValue;
 			
@@ -270,6 +281,20 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					return new ParameterReference(Type.ToTypeReference(), Name, Region, IsRef, IsOut, IsParams, true, ConstantValue);
 				return new OwnedParameterReference(Owner.ToReference(), Owner.Parameters.IndexOf(this));
 			}
+			
+			#region 显式实现 Abstractions IParameter 接口成员
+			ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind.Parameter;
+			ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IVariable.Type => Type;
+			object ICSharpCode.TypeSystem.IVariable.ConstantValue => ConstantValue;
+			ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IVariable.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IParameter.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+			bool ICSharpCode.TypeSystem.IParameter.IsRef => IsRef;
+			bool ICSharpCode.TypeSystem.IParameter.IsOut => IsOut;
+			bool ICSharpCode.TypeSystem.IParameter.IsParams => IsParams;
+			bool ICSharpCode.TypeSystem.IParameter.IsOptional => IsOptional;
+			ICSharpCode.TypeSystem.IParameterizedMember ICSharpCode.TypeSystem.IParameter.Owner => Owner;
+			#endregion
 		}
 	}
 }

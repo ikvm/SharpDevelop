@@ -1,4 +1,4 @@
-﻿//
+//
 // BlobReader.cs
 //
 // Author:
@@ -221,7 +221,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			ITypeDefinition underlyingType;
 			if (elementType.Kind == TypeKind.Enum) {
-				underlyingType = elementType.GetDefinition().EnumUnderlyingType.GetDefinition();
+				underlyingType = (ITypeDefinition)elementType.GetDefinition().EnumUnderlyingType.GetDefinition();
 			} else {
 				underlyingType = elementType.GetDefinition();
 			}

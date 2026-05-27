@@ -59,5 +59,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		public IMethod InvokeAccessor {
 			get { return WrapAccessor(ref this.invokeAccessor, eventDefinition.InvokeAccessor); }
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IEvent.AddAccessor => AddAccessor;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IEvent.RemoveAccessor => RemoveAccessor;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IEvent.InvokeAccessor => InvokeAccessor;
+		#endregion
 	}
 }

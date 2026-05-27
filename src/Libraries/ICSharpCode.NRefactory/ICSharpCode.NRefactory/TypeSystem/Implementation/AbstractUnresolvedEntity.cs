@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -293,29 +293,26 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		bool IHasAccessibility.IsPrivate {
-			get { return accessibility == Accessibility.Private; }
-		}
-		
-		bool IHasAccessibility.IsPublic {
-			get { return accessibility == Accessibility.Public; }
-		}
-		
-		bool IHasAccessibility.IsProtected {
-			get { return accessibility == Accessibility.Protected; }
-		}
-		
-		bool IHasAccessibility.IsInternal {
-			get { return accessibility == Accessibility.Internal; }
-		}
-		
-		bool IHasAccessibility.IsProtectedOrInternal {
-			get { return accessibility == Accessibility.ProtectedOrInternal; }
-		}
-		
-		bool IHasAccessibility.IsProtectedAndInternal {
-			get { return accessibility == Accessibility.ProtectedAndInternal; }
-		}
+		#region 显式实现 Abstractions 接口成员
+		// 枚举类型需要通过底层 byte 类型转换
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.IUnresolvedEntity.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		// DomRegion 是值类型，需要构造新实例
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedEntity.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedEntity.BodyRegion => new ICSharpCode.TypeSystem.DomRegion(BodyRegion.BeginLine, BodyRegion.BeginColumn, BodyRegion.EndLine, BodyRegion.EndColumn);
+		// 接口类型通过继承关系直接返回
+		ICSharpCode.TypeSystem.IUnresolvedTypeDefinition ICSharpCode.TypeSystem.IUnresolvedEntity.DeclaringTypeDefinition => DeclaringTypeDefinition;
+		ICSharpCode.TypeSystem.IUnresolvedFile ICSharpCode.TypeSystem.IUnresolvedEntity.UnresolvedFile => UnresolvedFile;
+		// IList 不支持协变，使用 CastList 包装
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedAttribute> ICSharpCode.TypeSystem.IUnresolvedEntity.Attributes => new CastList<IUnresolvedAttribute, ICSharpCode.TypeSystem.IUnresolvedAttribute>(Attributes);
+		// Accessibility 枚举需要转换
+		ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => (ICSharpCode.TypeSystem.Accessibility)(byte)Accessibility;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPrivate => accessibility == Accessibility.Private;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsPublic => accessibility == Accessibility.Public;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtected => accessibility == Accessibility.Protected;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsInternal => accessibility == Accessibility.Internal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedOrInternal => accessibility == Accessibility.ProtectedOrInternal;
+		bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedAndInternal => accessibility == Accessibility.ProtectedAndInternal;
+		#endregion
 		
 		public override string ToString()
 		{

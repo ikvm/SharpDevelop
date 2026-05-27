@@ -150,6 +150,10 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			else
 				return new ArrayType(compilation, e, dimensions);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		#endregion
 	}
 	
 	[Serializable]
@@ -196,5 +200,9 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			ArrayTypeReference o = other as ArrayTypeReference;
 			return o != null && elementType == o.elementType && dimensions == o.dimensions;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 	}
 }

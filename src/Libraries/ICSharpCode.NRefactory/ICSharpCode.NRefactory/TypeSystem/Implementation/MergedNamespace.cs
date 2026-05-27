@@ -160,5 +160,17 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return new MergedNamespaceReference(externAlias, FullName);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.GetChildNamespace(string name) => GetChildNamespace(name);
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.INamespace.GetTypeDefinition(string name, int typeParameterCount) => GetTypeDefinition(name, typeParameterCount);
+		ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.ParentNamespace => ParentNamespace;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.INamespace> ICSharpCode.TypeSystem.INamespace.ChildNamespaces => ChildNamespaces;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.INamespace.Types => Types;
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.INamespace.ContributingAssemblies => ContributingAssemblies;
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		#endregion
 	}
 }

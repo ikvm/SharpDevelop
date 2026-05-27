@@ -247,6 +247,11 @@
       <Name>ICSharpCode.TreeView</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ICSharpCode.TypeSystem.Abstractions\ICSharpCode.TypeSystem.Abstractions.csproj">
+      <Project>{B1C2D3E4-F5A6-7890-BCDE-F12345678901}</Project>
+      <Name>ICSharpCode.TypeSystem.Abstractions</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Project\ICSharpCode.SharpDevelop.csproj">
       <Project>{2748AD25-9C63-4E12-877B-4DCE96FBED54}</Project>
       <Name>ICSharpCode.SharpDevelop</Name>

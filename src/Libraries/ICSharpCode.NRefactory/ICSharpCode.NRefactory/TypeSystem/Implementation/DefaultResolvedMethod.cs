@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -180,7 +180,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		bool IMethod.IsParameterized {
+		bool ICSharpCode.TypeSystem.IMethod.IsParameterized {
 			get { return false; }
 		}
 
@@ -228,9 +228,25 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get {
 				var reference = ((IUnresolvedMethod)unresolved).AccessorOwner;
 				if (reference != null)
-					return reference.Resolve(context);
+					return (IMember)reference.Resolve(context);
 				else
 					return null;
+			}
+		}
+		
+		IMethod IMethod.Getter {
+			get {
+				if (IsAccessor && AccessorOwner is IProperty p)
+					return p.Getter;
+				return null;
+			}
+		}
+		
+		IMethod IMethod.Setter {
+			get {
+				if (IsAccessor && AccessorOwner is IProperty p)
+					return p.Setter;
+				return null;
 			}
 		}
 		
@@ -263,11 +279,6 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					substitution = new TypeParameterSubstitution(substitution.ClassTypeArguments, EmptyList<IType>.Instance);
 			}
 			return new SpecializedMethod(this, substitution);
-		}
-		
-		IMethod IMethod.Specialize(TypeParameterSubstitution substitution)
-		{
-			return (IMethod)Specialize(substitution);
 		}
 		
 		public override string ToString()
@@ -323,5 +334,24 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			var resolvedCtor = GetDummyConstructor(compilation);
 			return new SpecializedMethod(resolvedCtor, TypeParameterSubstitution.Identity) { DeclaringType = declaringType };
 		}
+		
+		#region 显式实现 Abstractions IMethod 接口成员
+		IMember IMethod.MemberDefinition => this;
+		IUnresolvedMethod IMethod.UnresolvedMember => (IUnresolvedMethod)UnresolvedMember;
+		IMemberReference IMethod.ToReference() => (IMemberReference)ToReference();
+		ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IMember.UnresolvedMember => UnresolvedMember;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.MemberDefinition => this;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IMember.ReturnType => ReturnType;
+		ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToReference() => ToReference() as ICSharpCode.TypeSystem.IMemberReference ?? ToMemberReference();
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => Specialize(substitution);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IMethod.ReturnTypeAttributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(ReturnTypeAttributes);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeParameter> ICSharpCode.TypeSystem.IMethod.TypeParameters => new CastList<ITypeParameter, ICSharpCode.TypeSystem.ITypeParameter>(TypeParameters);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IType> ICSharpCode.TypeSystem.IMethod.TypeArguments => new CastList<IType, ICSharpCode.TypeSystem.IType>(TypeArguments);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedMethod> ICSharpCode.TypeSystem.IMethod.Parts => new CastList<IUnresolvedMethod, ICSharpCode.TypeSystem.IUnresolvedMethod>(Parts);
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMethod.AccessorOwner => AccessorOwner;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.ReducedFrom => ((IMember)this).MemberDefinition as IMethod;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IMethod.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => (IMethod)Specialize((TypeParameterSubstitution)substitution);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter> ICSharpCode.TypeSystem.IParameterizedMember.Parameters => new CastList<IParameter, ICSharpCode.TypeSystem.IParameter>(Parameters);
+		#endregion
 	}
 }

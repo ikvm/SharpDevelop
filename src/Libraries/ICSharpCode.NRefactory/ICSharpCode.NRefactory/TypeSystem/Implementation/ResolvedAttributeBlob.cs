@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.Utils;
@@ -61,9 +62,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			this.ctorParameterTypes = EmptyList<ITypeReference>.Instance;
 		}
 		
-		DomRegion IAttribute.Region {
-			get { return DomRegion.Empty; }
-		}
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IAttribute.Region => ICSharpCode.TypeSystem.DomRegion.Empty;
 		
 		public IType AttributeType {
 			get { return attributeType; }
@@ -172,5 +171,13 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				Debug.WriteLine("Crash during blob decoding: " + ex);
 			}
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IAttribute.AttributeType => AttributeType;
+		ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IAttribute.Constructor => Constructor;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ResolveResult> ICSharpCode.TypeSystem.IAttribute.PositionalArguments => new CastList<ResolveResult, ICSharpCode.TypeSystem.ResolveResult>(PositionalArguments);
+		System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>> ICSharpCode.TypeSystem.IAttribute.NamedArguments => NamedArguments.Select(p => new System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>(p.Key, p.Value)).ToList();
+		System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<string, ResolveResult>> IAttribute.NamedArguments => NamedArguments.Select(p => new System.Collections.Generic.KeyValuePair<string, ResolveResult>(p.Key.Name, p.Value)).ToList();
+		#endregion
 	}
 }

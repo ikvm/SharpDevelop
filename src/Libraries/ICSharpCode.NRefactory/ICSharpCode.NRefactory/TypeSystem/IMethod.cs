@@ -18,153 +18,95 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using ICSharpCode.NRefactory.TypeSystem;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
-	public interface IUnresolvedMethod : IUnresolvedParameterizedMember
+	/// <summary>
+	/// 继承自 Abstractions 中的 IUnresolvedMethod，使 NRefactory 类型同时满足两个接口。
+	/// </summary>
+	public interface IUnresolvedMethod : ICSharpCode.TypeSystem.IUnresolvedMethod, IUnresolvedParameterizedMember
 	{
 		/// <summary>
-		/// Gets the attributes associated with the return type. (e.g. [return: MarshalAs(...)])
+		/// Gets the type parameters of this method.
 		/// </summary>
-		IList<IUnresolvedAttribute> ReturnTypeAttributes { get; }
-		
-		IList<IUnresolvedTypeParameter> TypeParameters { get; }
-		
-		bool IsConstructor { get; }
-		bool IsDestructor { get; }
-		bool IsOperator { get; }
+		new IList<IUnresolvedTypeParameter> TypeParameters { get; }
 		
 		/// <summary>
-		/// Gets whether the method is a C#-style partial method.
-		/// Check <see cref="HasBody"/> to test if it is a partial method declaration or implementation.
+		/// Gets the attributes on the return type.
 		/// </summary>
-		bool IsPartial { get; }
-
-		/// <summary>
-		/// Gets whether the method is a C#-style async method.
-		/// </summary>
-		bool IsAsync { get; }
-
-		bool IsExtensionMethod { get; }
-
-		[Obsolete("Use IsPartial && !HasBody instead")]
-		bool IsPartialMethodDeclaration { get; }
-		
-		[Obsolete("Use IsPartial && HasBody instead")]
-		bool IsPartialMethodImplementation { get; }
+		new IList<IUnresolvedAttribute> ReturnTypeAttributes { get; }
 		
 		/// <summary>
-		/// Gets whether the method has a body.
-		/// This property returns <c>false</c> for <c>abstract</c> or <c>extern</c> methods,
-		/// or for <c>partial</c> methods without implementation.
+		/// Resolves this member reference.
 		/// </summary>
-		bool HasBody { get; }
-		
-		/// <summary>
-		/// If this method is an accessor, returns a reference to the corresponding property/event.
-		/// Otherwise, returns null.
-		/// </summary>
-		IUnresolvedMember AccessorOwner { get; }
-		
-		/// <summary>
-		/// Resolves the member.
-		/// </summary>
-		/// <param name="context">
-		/// Context for looking up the member. The context must specify the current assembly.
-		/// A <see cref="SimpleTypeResolveContext"/> that specifies the current assembly is sufficient.
-		/// </param>
-		/// <returns>
-		/// Returns the resolved member, or <c>null</c> if the member could not be found.
-		/// </returns>
 		new IMethod Resolve(ITypeResolveContext context);
 	}
 	
 	/// <summary>
-	/// Represents a method, constructor, destructor or operator.
+	/// 继承自 Abstractions 中的 IMethod，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
 	/// </summary>
-	public interface IMethod : IParameterizedMember
+	public interface IMethod : ICSharpCode.TypeSystem.IMethod, IParameterizedMember
 	{
 		/// <summary>
-		/// Gets the unresolved method parts.
-		/// For partial methods, this returns all parts.
-		/// Otherwise, this returns an array with a single element (new[] { UnresolvedMember }).
-		/// NOTE: The type will change to IReadOnlyList&lt;IUnresolvedMethod&gt; in future versions.
+		/// Gets the unresolved method from which this method was created.
 		/// </summary>
-		IList<IUnresolvedMethod> Parts { get; }
+		new IUnresolvedMethod UnresolvedMember { get; }
 		
 		/// <summary>
-		/// Gets the attributes associated with the return type. (e.g. [return: MarshalAs(...)])
-		/// NOTE: The type will change to IReadOnlyList&lt;IAttribute&gt; in future versions.
+		/// Gets the type parameters of this method.
 		/// </summary>
-		IList<IAttribute> ReturnTypeAttributes { get; }
-
-		/// <summary>
-		/// Gets the type parameters of this method; or an empty list if the method is not generic.
-		/// NOTE: The type will change to IReadOnlyList&lt;ITypeParameter&gt; in future versions.
-		/// </summary>
-		IList<ITypeParameter> TypeParameters { get; }
-
-		/// <summary>
-		/// Gets whether this is a generic method that has been parameterized.
-		/// </summary>
-		bool IsParameterized { get; }
+		new IList<ITypeParameter> TypeParameters { get; }
 		
 		/// <summary>
-		/// Gets the type arguments passed to this method.
-		/// If the method is generic but not parameterized yet, this property returns the type parameters,
-		/// as if the method was parameterized with its own type arguments (<c>void M&lt;T&gt;() { M&lt;T&gt;(); }</c>).
-		/// 
-		/// NOTE: The type will change to IReadOnlyList&lt;IType&gt; in future versions.
+		/// Gets the attributes on the return type.
 		/// </summary>
-		IList<IType> TypeArguments { get; }
-
-		bool IsExtensionMethod { get; }
-		bool IsConstructor { get; }
-		bool IsDestructor { get; }
-		bool IsOperator { get; }
+		new IList<IAttribute> ReturnTypeAttributes { get; }
 		
 		/// <summary>
-		/// Gets whether the method is a C#-style partial method.
-		/// A call to such a method is ignored by the compiler if the partial method has no body.
+		/// Gets whether this is a generic method.
 		/// </summary>
-		/// <seealso cref="HasBody"/>
-		bool IsPartial { get; }
+		// IsGenericMethod 继承自基接口，类型为 bool，无需隐藏
 
 		/// <summary>
-		/// Gets whether the method is a C#-style async method.
+		/// Gets the member on which this member is based on.
+		/// Returns this member if it is not based on another member.
 		/// </summary>
-		bool IsAsync { get; }
+		new IMember MemberDefinition { get; }
+		
+		/// <summary>
+		/// Gets whether this method is an extension method.
+		/// </summary>
+		// IsExtensionMethod 继承自基接口，类型为 bool，无需隐藏
 
 		/// <summary>
-		/// Gets whether the method has a body.
-		/// This property returns <c>false</c> for <c>abstract</c> or <c>extern</c> methods,
-		/// or for <c>partial</c> methods without implementation.
+		/// Gets whether this method is a local function.
 		/// </summary>
-		bool HasBody { get; }
-		
-		/// <summary>
-		/// Gets whether the method is a property/event accessor.
-		/// </summary>
-		bool IsAccessor { get; }
-		
-		/// <summary>
-		/// If this method is an accessor, returns the corresponding property/event.
-		/// Otherwise, returns null.
-		/// </summary>
-		IMember AccessorOwner { get; }
+		// IsLocalFunction 继承自基接口，类型为 bool，无需隐藏
 
 		/// <summary>
-		/// If this method is reduced from an extension method return the original method, <c>null</c> otherwise.
-		/// A reduced method doesn't contain the extension method parameter. That means that has one parameter less than it's definition.
+		/// If this method reduces another method, gets the reduced method definition.
 		/// </summary>
-		IMethod ReducedFrom { get; }
+		new IMethod ReducedFrom { get; }
 		
 		/// <summary>
-		/// Specializes this method with the given substitution.
-		/// If this method is already specialized, the new substitution is composed with the existing substition.
+		/// Gets the accessor method for the getter.
 		/// </summary>
-		new IMethod Specialize(TypeParameterSubstitution substitution);
+		new IMethod Getter { get; }
+		
+		/// <summary>
+		/// Gets the accessor method for the setter.
+		/// </summary>
+		new IMethod Setter { get; }
+		
+		/// <summary>
+		/// Gets the list of unresolved method parts (for partial methods).
+		/// </summary>
+		new IList<IUnresolvedMethod> Parts { get; }
+		
+		/// <summary>
+		/// Creates a member reference that can be used to rediscover this member in another compilation.
+		/// </summary>
+		new IMemberReference ToReference();
 	}
 }

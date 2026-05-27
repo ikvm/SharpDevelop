@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -104,10 +104,6 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			get { return type; }
 		}
 		
-		bool IVariable.IsConst {
-			get { return false; }
-		}
-		
 		public object ConstantValue {
 			get { return defaultValue; }
 		}
@@ -145,6 +141,21 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				return new ParameterReference(type.ToTypeReference(), name, region, isRef, isOut, isParams, isOptional, defaultValue);
 			return new OwnedParameterReference(owner.ToReference(), owner.Parameters.IndexOf(this));
 		}
+		
+		#region 显式实现 Abstractions IParameter 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind.Parameter;
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IVariable.Type => Type;
+		bool ICSharpCode.TypeSystem.IVariable.IsConst => false;
+		object ICSharpCode.TypeSystem.IVariable.ConstantValue => ConstantValue;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IVariable.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IParameter.Attributes => new CastList<IAttribute, ICSharpCode.TypeSystem.IAttribute>(Attributes);
+		bool ICSharpCode.TypeSystem.IParameter.IsRef => IsRef;
+		bool ICSharpCode.TypeSystem.IParameter.IsOut => IsOut;
+		bool ICSharpCode.TypeSystem.IParameter.IsParams => IsParams;
+		bool ICSharpCode.TypeSystem.IParameter.IsOptional => IsOptional;
+		ICSharpCode.TypeSystem.IParameterizedMember ICSharpCode.TypeSystem.IParameter.Owner => Owner;
+		#endregion
 	}
 	
 	sealed class OwnedParameterReference : ISymbolReference
@@ -168,6 +179,8 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			else
 				return null;
 		}
+		
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 	}
 	
 	public sealed class ParameterReference : ISymbolReference
@@ -198,5 +211,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return new DefaultParameter(type.Resolve(context), name, region: region, isRef: isRef, isOut: isOut, isParams: isParams, isOptional: isOptional, defaultValue: defaultValue);
 		}
+		
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 	}
 }

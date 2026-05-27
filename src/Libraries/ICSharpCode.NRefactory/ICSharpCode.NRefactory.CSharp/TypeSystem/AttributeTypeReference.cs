@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -53,6 +53,8 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			IType t2 = withSuffix.Resolve(context);
 			return PreferAttributeTypeWithSuffix(t1, t2, context.Compilation) ? t2 : t1;
 		}
+
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 		
 		internal static bool PreferAttributeTypeWithSuffix(IType t1, IType t2, ICompilation compilation)
 		{

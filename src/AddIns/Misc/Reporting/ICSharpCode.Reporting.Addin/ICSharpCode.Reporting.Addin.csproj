@@ -156,9 +156,6 @@
 
   <ItemGroup>
 	<PackageReference Include="ICSharpCode.NRefactory" Version="5.5.1" />
-    <!--<Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\..\..\..\packages\ICSharpCode.NRefactory.5.5.1\lib\Net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>-->
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing.Design" />
 	<PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
@@ -195,6 +192,9 @@
     <ProjectReference Include="..\ICSharpCode.Reporting\ICSharpCode.Reporting.csproj">
       <Project>{40CA84D4-ACFC-4646-9CDD-B87262D34093}</Project>
       <Name>ICSharpCode.Reporting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Libraries\ICSharpCode.TypeSystem.Abstractions\ICSharpCode.TypeSystem.Abstractions.csproj">
+      <Name>ICSharpCode.TypeSystem.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
 

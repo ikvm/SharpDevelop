@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -42,7 +42,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 		/// </summary>
 		public static CSharpOperators Get(ICompilation compilation)
 		{
-			CacheManager cache = compilation.CacheManager;
+			ICSharpCode.TypeSystem.CacheManager cache = compilation.CacheManager;
 			CSharpOperators operators = (CSharpOperators)cache.GetShared(typeof(CSharpOperators));
 			if (operators == null) {
 				operators = (CSharpOperators)cache.GetOrAddShared(typeof(CSharpOperators), new CSharpOperators(compilation));
@@ -90,7 +90,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 			throw new ArgumentException();
 		}
 		
-		internal class OperatorMethod : IParameterizedMember
+		internal class OperatorMethod : IParameterizedMember, ICSharpCode.TypeSystem.IMember
 		{
 			readonly ICompilation compilation;
 			readonly IList<IParameter> parameters = new List<IParameter>();
@@ -135,15 +135,15 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 				get { return EmptyList<IMember>.Instance; }
 			}
 			
-			bool IMember.IsVirtual {
+			bool ICSharpCode.TypeSystem.IMember.IsVirtual {
 				get { return false; }
 			}
-			
-			bool IMember.IsOverride {
+
+			bool ICSharpCode.TypeSystem.IMember.IsOverride {
 				get { return false; }
 			}
-			
-			bool IMember.IsOverridable {
+
+			bool ICSharpCode.TypeSystem.IMember.IsOverridable {
 				get { return false; }
 			}
 			
@@ -176,51 +176,51 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 				get { return Accessibility.Public; }
 			}
 			
-			bool IEntity.IsStatic {
+			bool ICSharpCode.TypeSystem.IEntity.IsStatic {
 				get { return true; }
 			}
-			
-			bool IEntity.IsAbstract {
+
+			bool ICSharpCode.TypeSystem.IEntity.IsAbstract {
 				get { return false; }
 			}
-			
-			bool IEntity.IsSealed {
+
+			bool ICSharpCode.TypeSystem.IEntity.IsSealed {
 				get { return false; }
 			}
-			
-			bool IEntity.IsShadowing {
+
+			bool ICSharpCode.TypeSystem.IEntity.IsShadowing {
 				get { return false; }
 			}
-			
-			bool IEntity.IsSynthetic {
+
+			bool ICSharpCode.TypeSystem.IEntity.IsSynthetic {
 				get { return true; }
 			}
-			
-			bool IHasAccessibility.IsPrivate {
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsPrivate {
 				get { return false; }
 			}
-			
-			bool IHasAccessibility.IsPublic {
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsPublic {
 				get { return true; }
 			}
-			
-			bool IHasAccessibility.IsProtected {
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtected {
+				get { return false; }
+			}
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsInternal {
+				get { return false; }
+			}
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedOrInternal {
+				get { return false; }
+			}
+
+			bool ICSharpCode.TypeSystem.IHasAccessibility.IsProtectedAndInternal {
 				get { return false; }
 			}
 			
-			bool IHasAccessibility.IsInternal {
-				get { return false; }
-			}
-			
-			bool IHasAccessibility.IsProtectedOrInternal {
-				get { return false; }
-			}
-			
-			bool IHasAccessibility.IsProtectedAndInternal {
-				get { return false; }
-			}
-			
-			bool IMember.IsExplicitInterfaceImplementation {
+			bool ICSharpCode.TypeSystem.IMember.IsExplicitInterfaceImplementation {
 				get { return false; }
 			}
 			
@@ -233,12 +233,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 				throw new NotSupportedException();
 			}
 			
-			ISymbolReference ISymbol.ToReference()
-			{
-				throw new NotSupportedException();
-			}
-			
-			IMemberReference IMember.ToReference()
+			ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference()
 			{
 				throw new NotSupportedException();
 			}
@@ -256,22 +251,56 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 				throw new NotSupportedException();
 			}
 
-			string INamedElement.FullName {
+			string ICSharpCode.TypeSystem.INamedElement.FullName {
 				get { return "operator"; }
 			}
-			
+
 			public string Name {
 				get { return "operator"; }
 			}
-			
-			string INamedElement.Namespace {
+
+			string ICSharpCode.TypeSystem.INamedElement.Namespace {
 				get { return string.Empty; }
 			}
-			
-			string INamedElement.ReflectionName {
+
+			string ICSharpCode.TypeSystem.INamedElement.ReflectionName {
 				get { return "operator"; }
 			}
 			
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+			ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => ICSharpCode.TypeSystem.SymbolKind.Operator;
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => throw new NotSupportedException();
+			ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => throw new NotSupportedException();
+			ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => throw new NotSupportedException();
+			ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToMemberReference() => throw new NotSupportedException();
+			ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => null;
+			ICSharpCode.TypeSystem.EntityType ICSharpCode.TypeSystem.IEntity.EntityType => ICSharpCode.TypeSystem.EntityType.Operator;
+			ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.Region => ICSharpCode.TypeSystem.DomRegion.Empty;
+			ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IEntity.BodyRegion => ICSharpCode.TypeSystem.DomRegion.Empty;
+			ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.IEntity.DeclaringTypeDefinition => null;
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IEntity.DeclaringType => null;
+			ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IEntity.ParentAssembly => compilation.MainAssembly;
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute> ICSharpCode.TypeSystem.IEntity.Attributes => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IAttribute>)(object)EmptyList<IAttribute>.Instance;
+			ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.MemberDefinition => this;
+			ICSharpCode.TypeSystem.IUnresolvedMember ICSharpCode.TypeSystem.IMember.UnresolvedMember => null;
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IMember.ReturnType => ReturnType;
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember> ICSharpCode.TypeSystem.IMember.ImplementedInterfaceMembers => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMember>)(object)EmptyList<IMember>.Instance;
+			ICSharpCode.TypeSystem.TypeParameterSubstitution ICSharpCode.TypeSystem.IMember.Substitution => TypeParameterSubstitution.Identity;
+			ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMember.Specialize(ICSharpCode.TypeSystem.TypeParameterSubstitution substitution) => (ICSharpCode.TypeSystem.IMember)((IMember)this).Specialize((TypeParameterSubstitution)substitution);
+			ICSharpCode.TypeSystem.IMemberReference ICSharpCode.TypeSystem.IMember.ToReference() => throw new NotSupportedException();
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter> ICSharpCode.TypeSystem.IParameterizedMember.Parameters => (System.Collections.Generic.IList<ICSharpCode.TypeSystem.IParameter>)(object)Parameters;
+			ICSharpCode.TypeSystem.Accessibility ICSharpCode.TypeSystem.IHasAccessibility.Accessibility => ICSharpCode.TypeSystem.Accessibility.Public;
+			#endregion
+
+			#region 显式实现 NRefactory 接口成员
+			Accessibility IMember.AccessibilityDomain => Accessibility.Public;
+			bool IMember.IsAccessibleFrom(IAssembly assembly) => true;
+			IMemberReference IMember.ToReference() => throw new NotSupportedException();
+			IMember IMemberReference.Resolve(ITypeResolveContext context) => throw new NotSupportedException();
+			IType ITypeReference.Resolve(ITypeResolveContext context) => throw new NotSupportedException();
+			#endregion
+
 			public override string ToString()
 			{
 				StringBuilder b = new StringBuilder();

@@ -43,10 +43,14 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			var solution = context.Compilation.SolutionSnapshot;
 			var pc = solution.GetProjectContent(projectFileName);
 			if (pc != null)
-				return pc.Resolve(context);
+				return (IAssembly)pc.Resolve(context);
 			else
 				return null;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IAssemblyReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 		
 		public override string ToString()
 		{

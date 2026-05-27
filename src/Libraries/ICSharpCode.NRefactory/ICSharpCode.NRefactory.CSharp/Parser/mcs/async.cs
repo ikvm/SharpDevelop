@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using System.Threading.Tasks;
 
 #if STATIC
 using IKVM.Reflection;
@@ -954,12 +955,12 @@ namespace ICSharpCode.NRefactory.MonoCSharp
 
 		public bool IsAvailableForReuse {
 			get {
-				var field = (Field) spec.MemberDefinition;
-				return field.IsAvailableForReuse;
+				var @field = (Field) spec.MemberDefinition;
+				return @field.IsAvailableForReuse;
 			}
 			set {
-				var field = (Field) spec.MemberDefinition;
-				field.IsAvailableForReuse = value;
+				var @field = (Field) spec.MemberDefinition;
+				@field.IsAvailableForReuse = value;
 			}
 		}
 

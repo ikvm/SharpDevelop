@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -203,7 +203,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 					IType[] inferredTypes;
 					if (CSharpResolver.IsEligibleExtensionMethod(this.TargetType, method, true, out inferredTypes)) {
 						if (substituteInferredTypes && inferredTypes != null) {
-							outputGroup.Add(method.Specialize(new TypeParameterSubstitution(null, inferredTypes)));
+							outputGroup.Add((IMethod)method.Specialize(new TypeParameterSubstitution(null, inferredTypes)));
 						} else {
 							outputGroup.Add(method);
 						}

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -225,6 +225,16 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		public static bool operator !=(DomRegion left, DomRegion right)
 		{
 			return !left.Equals(right);
+		}
+
+		public static implicit operator ICSharpCode.TypeSystem.DomRegion(DomRegion region)
+		{
+			return new ICSharpCode.TypeSystem.DomRegion(region.FileName, region.BeginLine, region.BeginColumn, region.EndLine, region.EndColumn);
+		}
+
+		public static implicit operator DomRegion(ICSharpCode.TypeSystem.DomRegion region)
+		{
+			return new DomRegion(region.FileName, region.BeginLine, region.BeginColumn, region.EndLine, region.EndColumn);
 		}
 	}
 }

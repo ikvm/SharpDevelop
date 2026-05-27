@@ -137,7 +137,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		ITypeReference IMemberReference.DeclaringTypeReference {
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference {
 			get { return this.DeclaringTypeDefinition; }
 		}
 		
@@ -148,13 +148,13 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			ITypeReference interfaceTypeReference = null;
 			if (this.IsExplicitInterfaceImplementation && this.ExplicitInterfaceImplementations.Count == 1)
-				interfaceTypeReference = this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
+				interfaceTypeReference = (ITypeReference)this.ExplicitInterfaceImplementations[0].DeclaringTypeReference;
 			return Resolve(ExtendContextForType(context, this.DeclaringTypeDefinition), this.SymbolKind, this.Name, interfaceTypeReference);
 		}
 		
-		ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
-			return ((IUnresolvedMember)this).Resolve(context);
+			return ((ICSharpCode.TypeSystem.IUnresolvedMember)this).Resolve(context);
 		}
 		
 		protected static ITypeResolveContext ExtendContextForType(ITypeResolveContext assemblyContext, IUnresolvedTypeDefinition typeDef)
@@ -167,7 +167,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			else
 				parentContext = assemblyContext;
 			ITypeDefinition resolvedTypeDef = typeDef.Resolve(assemblyContext).GetDefinition();
-			return typeDef.CreateResolveContext(parentContext).WithCurrentTypeDefinition(resolvedTypeDef);
+			return (ITypeResolveContext)typeDef.CreateResolveContext(parentContext).WithCurrentTypeDefinition(resolvedTypeDef);
 		}
 		
 		public static IMember Resolve(ITypeResolveContext context,
@@ -268,5 +268,32 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		#endregion
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IUnresolvedMember.ReturnType => ReturnType;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IUnresolvedMember.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IUnresolvedMember.CreateResolved(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolved((ITypeResolveContext)context);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IMemberReference> ICSharpCode.TypeSystem.IUnresolvedMember.ExplicitInterfaceImplementations => new CastList<IMemberReference, ICSharpCode.TypeSystem.IMemberReference>(ExplicitInterfaceImplementations);
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context) as IType;
+		#endregion
+		
+		// NRefactory IUnresolvedMember.CreateResolvedMember
+		public virtual IMember CreateResolvedMember(ITypeResolveContext context)
+		{
+			return CreateResolved(context);
+		}
+		
+		// NRefactory ITypeReference.Resolve
+		IType ITypeReference.Resolve(ITypeResolveContext context)
+		{
+			return null;
+		}
+		
+		// NRefactory IMemberReference.Resolve
+		IMember IMemberReference.Resolve(ITypeResolveContext context)
+		{
+			return Resolve(context);
+		}
 	}
 }

@@ -36,21 +36,28 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		}
 		
 		public ITypeReference DeclaringTypeReference {
-			get { return accessorReference.DeclaringTypeReference; }
+			get { return (ITypeReference)accessorReference.DeclaringTypeReference; }
 		}
 		
 		public IMember Resolve(ITypeResolveContext context)
 		{
 			IMethod method = accessorReference.Resolve(context) as IMethod;
 			if (method != null)
-				return method.AccessorOwner;
+				return (IMember)method.AccessorOwner;
 			else
 				return null;
 		}
 		
-		ISymbol ISymbolReference.Resolve(ITypeResolveContext context)
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context)
 		{
-			return ((IMemberReference)this).Resolve(context);
+			return ((IMemberReference)this).Resolve((ITypeResolveContext)context);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.IMemberReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.ITypeReference ICSharpCode.TypeSystem.IMemberReference.DeclaringTypeReference => DeclaringTypeReference;
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => DeclaringTypeReference.Resolve((ITypeResolveContext)context);
+		IType ITypeReference.Resolve(ITypeResolveContext context) => DeclaringTypeReference.Resolve(context);
+		#endregion
 	}
 }

@@ -108,5 +108,9 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			ByReferenceTypeReference brt = other as ByReferenceTypeReference;
 			return brt != null && this.elementType == brt.elementType;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -288,6 +288,16 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 				return localVariableStack.Where(v => v != null);
 			}
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.ITypeResolveContext.CurrentAssembly => CurrentTypeResolveContext.CurrentAssembly;
+		ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.ITypeResolveContext.CurrentTypeDefinition => CurrentTypeDefinition;
+		ICSharpCode.TypeSystem.IMember ICSharpCode.TypeSystem.ITypeResolveContext.CurrentMember => CurrentMember;
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentTypeDefinition(ICSharpCode.TypeSystem.ITypeDefinition typeDefinition) => WithCurrentTypeDefinition((ITypeDefinition)typeDefinition);
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.ITypeResolveContext.WithCurrentMember(ICSharpCode.TypeSystem.IMember member) => WithCurrentMember((IMember)member);
+		IEnumerable<ICSharpCode.TypeSystem.IVariable> ICSharpCode.TypeSystem.ICodeContext.LocalVariables => LocalVariables;
+		#endregion
 		#endregion
 		
 		#region Object Initializer Context
@@ -934,7 +944,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 		IType GetEnumUnderlyingType(IType enumType)
 		{
 			ITypeDefinition def = enumType.GetDefinition();
-			return def != null ? def.EnumUnderlyingType : SpecialType.UnknownType;
+			return def != null ? (IType)def.EnumUnderlyingType : SpecialType.UnknownType;
 		}
 		
 		/// <summary>
@@ -1608,7 +1618,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 			// first look for a namespace
 			int k = typeArguments.Count;
 			if (k == 0) {
-				INamespace childNamespace = n.GetChildNamespace(identifier);
+				INamespace childNamespace = (INamespace)n.GetChildNamespace(identifier);
 				if (childNamespace != null) {
 					if (usingScope != null && usingScope.HasAlias(identifier))
 						return new AmbiguousTypeResolveResult(new UnknownType(null, identifier));
@@ -1732,7 +1742,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 		ResolveResult ResolveMemberAccessOnNamespace(NamespaceResolveResult nrr, string identifier, IList<IType> typeArguments, bool parameterizeResultType)
 		{
 			if (typeArguments.Count == 0) {
-				INamespace childNamespace = nrr.Namespace.GetChildNamespace(identifier);
+				INamespace childNamespace = (INamespace)nrr.Namespace.GetChildNamespace(identifier);
 				if (childNamespace != null)
 					return new NamespaceResolveResult(childNamespace);
 			}
@@ -1844,13 +1854,13 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 					if (typeArguments != null && typeArguments.Count > 0) {
 						if (method.TypeParameters.Count != typeArguments.Count)
 							continue;
-						var sm = method.Specialize(new TypeParameterSubstitution(null, typeArguments));
-						if (IsEligibleExtensionMethod(compilation, conversions, targetType, sm, false, out inferredTypes))
-							outputGroup.Add(sm);
+						var sm = (IMethod)method.Specialize(new TypeParameterSubstitution(null, typeArguments));
+						if (IsEligibleExtensionMethod(compilation, conversions, targetType, (IMethod)sm, false, out inferredTypes))
+							outputGroup.Add((IMethod)sm);
 					} else {
 						if (IsEligibleExtensionMethod(compilation, conversions, targetType, method, true, out inferredTypes)) {
 							if (substituteInferredTypes && inferredTypes != null) {
-								outputGroup.Add(method.Specialize(new TypeParameterSubstitution(null, inferredTypes)));
+								outputGroup.Add((IMethod)method.Specialize(new TypeParameterSubstitution(null, inferredTypes)));
 							} else {
 								outputGroup.Add(method);
 							}
@@ -2292,7 +2302,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 		{
 			IType int32 = compilation.FindType(KnownTypeCode.Int32);
 			int? size = null;
-			var typeForConstant = (type.Kind == TypeKind.Enum) ? type.GetDefinition().EnumUnderlyingType : type;
+			var typeForConstant = (type.Kind == TypeKind.Enum) ? (IType)type.GetDefinition().EnumUnderlyingType : type;
 
 			switch (ReflectionHelper.GetTypeCode(typeForConstant)) {
 				case TypeCode.Boolean:
@@ -2489,7 +2499,7 @@ namespace ICSharpCode.NRefactory.CSharp.Resolver
 			if (typeDef == null)
 				return null;
 			if (typeDef.Kind == TypeKind.Enum) {
-				typeDef = typeDef.EnumUnderlyingType.GetDefinition();
+				typeDef = ((IType)typeDef.EnumUnderlyingType).GetDefinition();
 				if (typeDef == null)
 					return null;
 			}

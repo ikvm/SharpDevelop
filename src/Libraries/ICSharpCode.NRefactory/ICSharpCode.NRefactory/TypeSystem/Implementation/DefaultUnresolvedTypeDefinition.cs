@@ -197,27 +197,27 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			}
 		}
 		
-		public IEnumerable<IUnresolvedMethod> Methods {
+		public IList<IUnresolvedMethod> Methods {
 			get {
-				return Members.OfType<IUnresolvedMethod> ();
+				return Members.OfType<IUnresolvedMethod> ().ToList();
 			}
 		}
 		
-		public IEnumerable<IUnresolvedProperty> Properties {
+		public IList<IUnresolvedProperty> Properties {
 			get {
-				return Members.OfType<IUnresolvedProperty> ();
+				return Members.OfType<IUnresolvedProperty> ().ToList();
 			}
 		}
 		
-		public IEnumerable<IUnresolvedField> Fields {
+		public IList<IUnresolvedField> Fields {
 			get {
-				return Members.OfType<IUnresolvedField> ();
+				return Members.OfType<IUnresolvedField> ().ToList();
 			}
 		}
 		
-		public IEnumerable<IUnresolvedEvent> Events {
+		public IList<IUnresolvedEvent> Events {
 			get {
-				return Members.OfType<IUnresolvedEvent> ();
+				return Members.OfType<IUnresolvedEvent> ().ToList();
 			}
 		}
 		
@@ -236,5 +236,26 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return parentContext;
 		}
+		
+		public ITypeDefinition CreateResolvedTypeDefinition(ITypeResolveContext context)
+		{
+			return new DefaultResolvedTypeDefinition(context, this);
+		}
+		
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.FullTypeName ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.FullTypeName => new ICSharpCode.TypeSystem.FullTypeName(FullTypeName.ReflectionName);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedTypeParameter> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.TypeParameters => new CastList<IUnresolvedTypeParameter, ICSharpCode.TypeSystem.IUnresolvedTypeParameter>(TypeParameters);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedTypeDefinition> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.NestedTypes => new CastList<IUnresolvedTypeDefinition, ICSharpCode.TypeSystem.IUnresolvedTypeDefinition>(NestedTypes);
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.ITypeReference> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.BaseTypes => new CastList<ITypeReference, ICSharpCode.TypeSystem.ITypeReference>(BaseTypes);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		ICSharpCode.TypeSystem.TypeKind ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Kind => (ICSharpCode.TypeSystem.TypeKind)(byte)Kind;
+		System.Collections.Generic.IList<ICSharpCode.TypeSystem.IUnresolvedMember> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Members => new CastList<IUnresolvedMember, ICSharpCode.TypeSystem.IUnresolvedMember>(Members);
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedMethod> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Methods => Methods.Cast<ICSharpCode.TypeSystem.IUnresolvedMethod>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedProperty> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Properties => Properties.Cast<ICSharpCode.TypeSystem.IUnresolvedProperty>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedField> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Fields => Fields.Cast<ICSharpCode.TypeSystem.IUnresolvedField>();
+		System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IUnresolvedEvent> ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.Events => Events.Cast<ICSharpCode.TypeSystem.IUnresolvedEvent>();
+		ICSharpCode.TypeSystem.ITypeResolveContext ICSharpCode.TypeSystem.IUnresolvedTypeDefinition.CreateResolveContext(ICSharpCode.TypeSystem.ITypeResolveContext parentContext) => CreateResolveContext((ITypeResolveContext)parentContext);
+		#endregion
 	}
 }

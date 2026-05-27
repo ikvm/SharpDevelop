@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -22,83 +22,42 @@ using System.Diagnostics.Contracts;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
-	public interface IUnresolvedParameter
+	/// <summary>
+	/// 继承自 Abstractions 中的 IUnresolvedParameter，使 NRefactory 类型同时满足两个接口。
+	/// </summary>
+	public interface IUnresolvedParameter : ICSharpCode.TypeSystem.IUnresolvedParameter
 	{
-		/// <summary>
-		/// Gets the name of the variable.
-		/// </summary>
-		string Name { get; }
-		
-		/// <summary>
-		/// Gets the declaration region of the variable.
-		/// </summary>
-		DomRegion Region { get; }
-		
 		/// <summary>
 		/// Gets the type of the variable.
 		/// </summary>
-		ITypeReference Type { get; }
+		new ITypeReference Type { get; }
 		
 		/// <summary>
 		/// Gets the list of attributes.
 		/// </summary>
-		IList<IUnresolvedAttribute> Attributes { get; }
+		new IList<IUnresolvedAttribute> Attributes { get; }
 		
 		/// <summary>
-		/// Gets whether this parameter is a C# 'ref' parameter.
+		/// Creates the resolved parameter.
 		/// </summary>
-		bool IsRef { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is a C# 'out' parameter.
-		/// </summary>
-		bool IsOut { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is a C# 'params' parameter.
-		/// </summary>
-		bool IsParams { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is optional.
-		/// </summary>
-		bool IsOptional { get; }
-		
-		IParameter CreateResolvedParameter(ITypeResolveContext context);
+		new IParameter CreateResolvedParameter(ITypeResolveContext context);
 	}
 	
-	public interface IParameter : IVariable
+	/// <summary>
+	/// 继承自 Abstractions 中的 IParameter，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
+	/// </summary>
+	public interface IParameter : ICSharpCode.TypeSystem.IParameter, IVariable
 	{
 		/// <summary>
 		/// Gets the list of attributes.
 		/// </summary>
-		IList<IAttribute> Attributes { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is a C# 'ref' parameter.
-		/// </summary>
-		bool IsRef { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is a C# 'out' parameter.
-		/// </summary>
-		bool IsOut { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is a C# 'params' parameter.
-		/// </summary>
-		bool IsParams { get; }
-		
-		/// <summary>
-		/// Gets whether this parameter is optional.
-		/// The default value is given by the <see cref="IVariable.ConstantValue"/> property.
-		/// </summary>
-		bool IsOptional { get; }
+		new IList<IAttribute> Attributes { get; }
 		
 		/// <summary>
 		/// Gets the owner of this parameter.
 		/// May return null; for example when parameters belong to lambdas or anonymous methods.
 		/// </summary>
-		IParameterizedMember Owner { get; }
+		new IParameterizedMember Owner { get; }
 	}
 }

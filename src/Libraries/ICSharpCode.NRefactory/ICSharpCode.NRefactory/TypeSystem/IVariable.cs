@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+﻿﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -17,38 +17,19 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents a variable (name/type pair).
+	/// 继承自 Abstractions 中的 IVariable，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface IVariable : ISymbol
+	public interface IVariable : ICSharpCode.TypeSystem.IVariable, ISymbol
 	{
-		/// <summary>
-		/// Gets the name of the variable.
-		/// </summary>
+		/// <summary>使用 new 因为 Name 在 Abstractions 中返回 string（相同类型），但 ISymbol 也有 Name</summary>
 		new string Name { get; }
 		
-		/// <summary>
-		/// Gets the declaration region of the variable.
-		/// </summary>
-		DomRegion Region { get; }
-		
-		/// <summary>
-		/// Gets the type of the variable.
-		/// </summary>
-		IType Type { get; }
-		
-		/// <summary>
-		/// Gets whether this variable is a constant (C#-like const).
-		/// </summary>
-		bool IsConst { get; }
-		
-		/// <summary>
-		/// If this field is a constant, retrieves the value.
-		/// For parameters, this is the default value.
-		/// </summary>
-		object ConstantValue { get; }
+		/// <summary>使用 new 因为 IType 不支持协变返回类型在属性中</summary>
+		new IType Type { get; }
 	}
 }

@@ -217,5 +217,9 @@ namespace ICSharpCode.NRefactory.TypeSystem
 		{
 			return new AnonymousType(context.Compilation, unresolvedProperties);
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.ITypeReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 	}
 }

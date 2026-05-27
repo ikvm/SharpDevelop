@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICSharpCode.NRefactory.Semantics;
 using ICSharpCode.NRefactory.Utils;
 
@@ -118,6 +119,11 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return new DefaultResolvedAttribute(this, context);
 		}
+		
+		#region 显式实现 Abstractions IUnresolvedAttribute 接口成员
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IUnresolvedAttribute.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		ICSharpCode.TypeSystem.IAttribute ICSharpCode.TypeSystem.IUnresolvedAttribute.CreateResolvedAttribute(ICSharpCode.TypeSystem.ITypeResolveContext context) => CreateResolvedAttribute((ITypeResolveContext)context);
+		#endregion
 		
 		int ISupportsInterning.GetHashCodeForInterning()
 		{
@@ -278,6 +284,16 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 				else
 					return "[" + attributeType.ToString() + "(...)]";
 			}
+			
+			#region 显式实现 Abstractions IAttribute 接口成员
+			ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IAttribute.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+			ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IAttribute.AttributeType => AttributeType;
+			ICSharpCode.TypeSystem.IMethod ICSharpCode.TypeSystem.IAttribute.Constructor => Constructor;
+			System.Collections.Generic.IList<ICSharpCode.TypeSystem.ResolveResult> ICSharpCode.TypeSystem.IAttribute.PositionalArguments => new CastList<ResolveResult, ICSharpCode.TypeSystem.ResolveResult>(PositionalArguments);
+			System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>> ICSharpCode.TypeSystem.IAttribute.NamedArguments => NamedArguments.Select(p => new System.Collections.Generic.KeyValuePair<ICSharpCode.TypeSystem.IMember, ICSharpCode.TypeSystem.ResolveResult>(p.Key, p.Value)).ToList();
+			System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<string, ResolveResult>> IAttribute.NamedArguments => NamedArguments.Select(p => new System.Collections.Generic.KeyValuePair<string, ResolveResult>(p.Key.Name, p.Value)).ToList();
+			ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => Compilation;
+			#endregion
 		}
 	}
 }

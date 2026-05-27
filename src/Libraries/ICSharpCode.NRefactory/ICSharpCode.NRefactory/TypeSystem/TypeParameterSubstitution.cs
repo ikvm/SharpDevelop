@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ICSharpCode.NRefactory.TypeSystem
@@ -188,6 +189,24 @@ namespace ICSharpCode.NRefactory.TypeSystem
 			}
 			b.Append(']');
 			return b.ToString();
+		}
+
+		public static implicit operator ICSharpCode.TypeSystem.TypeParameterSubstitution(TypeParameterSubstitution sub)
+		{
+			if (sub == null) return null;
+			return new ICSharpCode.TypeSystem.TypeParameterSubstitution(
+				sub.classTypeArguments != null ? new Implementation.CastList<IType, ICSharpCode.TypeSystem.IType>(sub.classTypeArguments) : null,
+				sub.methodTypeArguments != null ? new Implementation.CastList<IType, ICSharpCode.TypeSystem.IType>(sub.methodTypeArguments) : null
+			);
+		}
+
+		public static implicit operator TypeParameterSubstitution(ICSharpCode.TypeSystem.TypeParameterSubstitution sub)
+		{
+			if (sub == null) return null;
+			return new TypeParameterSubstitution(
+				sub.ClassTypeArguments != null ? sub.ClassTypeArguments.Cast<IType>().ToList() : null,
+				sub.MethodTypeArguments != null ? sub.MethodTypeArguments.Cast<IType>().ToList() : null
+			);
 		}
 	}
 }

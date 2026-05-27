@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -22,107 +22,77 @@ using System.Collections.Generic;
 namespace ICSharpCode.NRefactory.TypeSystem
 {
 	/// <summary>
-	/// Represents an unresolved assembly.
+	/// 继承自 Abstractions 中的 IAssemblyReference，使 NRefactory 类型同时满足两个接口。
+	/// Resolve 方法参数类型不同，是独立方法。
 	/// </summary>
-	public interface IUnresolvedAssembly : IAssemblyReference
+	public interface IAssemblyReference : ICSharpCode.TypeSystem.IAssemblyReference
 	{
 		/// <summary>
-		/// Gets the assembly name (short name).
-		/// </summary>
-		string AssemblyName { get; }
-		
-		/// <summary>
-		/// Gets the full assembly name (including public key token etc.)
-		/// </summary>
-		string FullAssemblyName { get; }
-		
-		/// <summary>
-		/// Gets the path to the assembly location. 
-		/// For projects it is the same as the output path.
-		/// </summary>
-		string Location { get; }
-
-		/// <summary>
-		/// Gets the list of all assembly attributes in the project.
-		/// </summary>
-		IEnumerable<IUnresolvedAttribute> AssemblyAttributes { get; }
-		
-		/// <summary>
-		/// Gets the list of all module attributes in the project.
-		/// </summary>
-		IEnumerable<IUnresolvedAttribute> ModuleAttributes { get; }
-		
-		/// <summary>
-		/// Gets all non-nested types in the assembly.
-		/// </summary>
-		IEnumerable<IUnresolvedTypeDefinition> TopLevelTypeDefinitions { get; }
-	}
-	
-	public interface IAssemblyReference
-	{
-		/// <summary>
-		/// Resolves this assembly.
+		/// Resolves this assembly reference.
+		/// 使用 NRefactory 的 ITypeResolveContext 和 IAssembly 类型。
 		/// </summary>
 		IAssembly Resolve(ITypeResolveContext context);
 	}
 	
 	/// <summary>
-	/// Represents an assembly.
+	/// 继承自 Abstractions 中的 IUnresolvedAssembly，使 NRefactory 类型同时满足两个接口。
 	/// </summary>
-	public interface IAssembly : ICompilationProvider
+	public interface IUnresolvedAssembly : ICSharpCode.TypeSystem.IUnresolvedAssembly
 	{
 		/// <summary>
-		/// Gets the original unresolved assembly.
+		/// Gets the assembly attributes.
+		/// 使用 NRefactory 的 IUnresolvedAttribute 类型。
 		/// </summary>
-		IUnresolvedAssembly UnresolvedAssembly { get; }
+		new IList<IUnresolvedAttribute> AssemblyAttributes { get; }
 		
 		/// <summary>
-		/// Gets whether this assembly is the main assembly of the compilation.
+		/// Gets the top-level type definitions.
+		/// 使用 NRefactory 的 IUnresolvedTypeDefinition 类型。
 		/// </summary>
-		bool IsMainAssembly { get; }
+		new IList<IUnresolvedTypeDefinition> TopLevelTypeDefinitions { get; }
+	}
+	
+	/// <summary>
+	/// 继承自 Abstractions 中的 IAssembly，使 NRefactory 类型同时满足两个接口。
+	/// 使用 new 关键字隐藏返回 NRefactory 特定类型的成员。
+	/// </summary>
+	public interface IAssembly : ICSharpCode.TypeSystem.IAssembly, ICompilationProvider
+	{
+		/// <summary>
+		/// Gets the unresolved assembly from which this assembly was created.
+		/// </summary>
+		new IUnresolvedAssembly UnresolvedAssembly { get; }
 		
 		/// <summary>
-		/// Gets the assembly name (short name).
+		/// Gets the type resolve context for this assembly.
+		/// NRefactory 特有成员，不存在于 Abstractions 中。
 		/// </summary>
-		string AssemblyName { get; }
+		ITypeResolveContext TypeResolveContext { get; }
 		
 		/// <summary>
-		/// Gets the full assembly name (including public key token etc.)
+		/// Gets the assembly attributes.
 		/// </summary>
-		string FullAssemblyName { get; }
+		new IList<IAttribute> AssemblyAttributes { get; }
 		
 		/// <summary>
-		/// Gets the list of all assembly attributes in the project.
+		/// Gets the top-level type definitions.
 		/// </summary>
-		IList<IAttribute> AssemblyAttributes { get; }
+		new IEnumerable<ITypeDefinition> TopLevelTypeDefinitions { get; }
 		
 		/// <summary>
-		/// Gets the list of all module attributes in the project.
+		/// Gets the root namespace.
 		/// </summary>
-		IList<IAttribute> ModuleAttributes { get; }
+		new INamespace RootNamespace { get; }
 		
 		/// <summary>
-		/// Gets whether the internals of this assembly are visible in the specified assembly.
+		/// Gets a type definition by its full type name.
 		/// </summary>
-		bool InternalsVisibleTo(IAssembly assembly);
+		new ITypeDefinition GetTypeDefinition(TopLevelTypeName fullTypeName);
 		
 		/// <summary>
-		/// Gets the root namespace for this assembly.
+		/// Gets a type definition by its full type name (as a string).
+		/// NRefactory 特有成员，不存在于 Abstractions 中。
 		/// </summary>
-		/// <remarks>
-		/// This always is the namespace without a name - it's unrelated to the 'root namespace' project setting.
-		/// </remarks>
-		INamespace RootNamespace { get; }
-		
-		/// <summary>
-		/// Gets the type definition for a top-level type.
-		/// </summary>
-		/// <remarks>This method uses ordinal name comparison, not the compilation's name comparer.</remarks>
-		ITypeDefinition GetTypeDefinition(TopLevelTypeName topLevelTypeName);
-		
-		/// <summary>
-		/// Gets all non-nested types in the assembly.
-		/// </summary>
-		IEnumerable<ITypeDefinition> TopLevelTypeDefinitions { get; }
+		ITypeDefinition GetTypeDefinition(string ns, string name, int typeParameterCount = 0);
 	}
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -78,6 +78,13 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return new VariableReference(type.ToTypeReference(), name, region, isConst, constantValue);
 		}
+		
+		#region 显式实现 Abstractions IVariable 接口成员
+		ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind;
+		ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+		ICSharpCode.TypeSystem.IType ICSharpCode.TypeSystem.IVariable.Type => Type;
+		ICSharpCode.TypeSystem.DomRegion ICSharpCode.TypeSystem.IVariable.Region => new ICSharpCode.TypeSystem.DomRegion(Region.BeginLine, Region.BeginColumn, Region.EndLine, Region.EndColumn);
+		#endregion
 	}
 	
 	public sealed class VariableReference : ISymbolReference
@@ -105,5 +112,7 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 		{
 			return new DefaultVariable(variableTypeReference.Resolve(context), name, region, isConst, constantValue);
 		}
+		
+		ICSharpCode.TypeSystem.ISymbol ICSharpCode.TypeSystem.ISymbolReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
 	}
 }

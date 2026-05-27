@@ -71,6 +71,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 			DefaultAssemblyReference o = other as DefaultAssemblyReference;
 			return o != null && shortName == o.shortName;
 		}
+
+		#region 显式实现 Abstractions 接口成员
+		ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IAssemblyReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+		#endregion
 		
 		[Serializable]
 		sealed class CurrentAssemblyReference : IAssemblyReference
@@ -82,6 +86,10 @@ namespace ICSharpCode.NRefactory.TypeSystem.Implementation
 					throw new ArgumentException("A reference to the current assembly cannot be resolved in the compilation's global type resolve context.");
 				return asm;
 			}
+
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.IAssembly ICSharpCode.TypeSystem.IAssemblyReference.Resolve(ICSharpCode.TypeSystem.ITypeResolveContext context) => Resolve((ITypeResolveContext)context);
+			#endregion
 		}
 	}
 }

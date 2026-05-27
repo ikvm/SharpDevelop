@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
+// Copyright (c) 2010-2013 AlphaSierraPapa for the SharpDevelop Team
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
@@ -70,7 +70,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 					return result;
 				} else {
 					if (parentContext.CurrentUsingScope != null) {
-						result = parentContext.CurrentUsingScope.Namespace.GetChildNamespace(usingScope.ShortNamespaceName);
+						result = (INamespace)parentContext.CurrentUsingScope.Namespace.GetChildNamespace(usingScope.ShortNamespaceName);
 						if (result == null)
 							result = new DummyNamespace(parentContext.CurrentUsingScope.Namespace, usingScope.ShortNamespaceName);
 					} else {
@@ -146,7 +146,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			return usingScope.HasAlias(identifier);
 		}
 		
-		sealed class DummyNamespace : INamespace
+		sealed class DummyNamespace : INamespace, ICSharpCode.TypeSystem.INamespace
 		{
 			readonly INamespace parentNamespace;
 			readonly string name;
@@ -159,7 +159,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			
 			public string ExternAlias { get; set; }
 			
-			string INamespace.FullName {
+			string ICSharpCode.TypeSystem.INamespace.FullName {
 				get { return NamespaceDeclaration.BuildQualifiedName(parentNamespace.FullName, name); }
 			}
 			
@@ -191,7 +191,7 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 				get { return parentNamespace.Compilation; }
 			}
 			
-			INamespace INamespace.GetChildNamespace(string name)
+			ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.GetChildNamespace(string name)
 			{
 				return null;
 			}
@@ -205,6 +205,17 @@ namespace ICSharpCode.NRefactory.CSharp.TypeSystem
 			{
 				return new MergedNamespaceReference(ExternAlias, ((INamespace)this).FullName);
 			}
+
+			#region 显式实现 Abstractions 接口成员
+			ICSharpCode.TypeSystem.ICompilation ICSharpCode.TypeSystem.ICompilationProvider.Compilation => parentNamespace.Compilation;
+			ICSharpCode.TypeSystem.SymbolKind ICSharpCode.TypeSystem.ISymbol.SymbolKind => (ICSharpCode.TypeSystem.SymbolKind)(byte)SymbolKind.Namespace;
+			ICSharpCode.TypeSystem.ISymbolReference ICSharpCode.TypeSystem.ISymbol.ToReference() => ToReference();
+			ICSharpCode.TypeSystem.INamespace ICSharpCode.TypeSystem.INamespace.ParentNamespace => parentNamespace;
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.INamespace> ICSharpCode.TypeSystem.INamespace.ChildNamespaces => EmptyList<INamespace>.Instance;
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.ITypeDefinition> ICSharpCode.TypeSystem.INamespace.Types => EmptyList<ITypeDefinition>.Instance;
+			System.Collections.Generic.IEnumerable<ICSharpCode.TypeSystem.IAssembly> ICSharpCode.TypeSystem.INamespace.ContributingAssemblies => EmptyList<IAssembly>.Instance;
+			ICSharpCode.TypeSystem.ITypeDefinition ICSharpCode.TypeSystem.INamespace.GetTypeDefinition(string name, int typeParameterCount) => null;
+			#endregion
 		}
 	}
 }
